@@ -1,0 +1,6 @@
+QMAKE_PRL_BUILD_DIR = /Users/ata2/Developer/skelcollapse/starlab/external/qglviewer/QGLViewer-build-desktop-Desktop_Qt_4_8_0_RC_for_GCC__Qt_SDK__Release
+QMAKE_PRO_INPUT = QGLViewer.pro
+QMAKE_PRL_TARGET = libQGLViewer.a
+QMAKE_PRL_CONFIG = include_source_dir lex yacc warn_on uic resources sdk rez qt warn_on release app_bundle incremental global_init_link_order lib_version_first plugin_no_soname link_prl def_files_disabled exceptions no_mocdepend stl qt_framework x86_64 release opengl create_prl rtti no_keywords staticlib objective_c x86_64 static staticlib moc thread opengl
+QMAKE_PRL_VERSION = 2.3.15
+QMAKE_PRL_LIBS = -L/Developer/QtSDK/Desktop/Qt/4.8.0/gcc/lib -F/Developer/QtSDK/Desktop/Qt/4.8.0/gcc/lib -framework OpenGL -framework AGL -framework QtXml -framework QtOpenGL -framework QtGui -framework QtCore  

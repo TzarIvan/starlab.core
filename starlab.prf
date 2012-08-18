@@ -1,0 +1,133 @@
+# DOC: http://developer.qt.nokia.com/doc/qt-4.8/qmake-variable-reference.html
+
+# $$PWD gives the location of *this* file on disk
+ROOT = $$PWD
+
+# Where will the library be deployed? You can change
+# this by using an environment variable: "STARLAB_DEPLOYPATH"
+DEPLOYPATH = $$(STARLAB_DEPLOYPATH)
+isEmpty(DEPLOYPATH) {
+    macx{
+        DEPLOYPATH = /Applications
+    }
+    win32{
+        CONFIG(debug, debug|release) {
+            DEPLOYPATH = $$[BUILD_PATH]/StarlabPackageDebug
+        } else {
+            DEPLOYPATH = $$[BUILD_PATH]/StarlabPackage
+        }
+    } 
+    linux{
+        error("fix deploy rules")
+        DEPLOYPATH = $$PWD/StarlabPackage
+    }
+}
+
+defineTest( myprintf ){ 
+    system( echo \"$$1\" ) 
+}
+
+#----------------------- STARLAB_TEMPLATE -----------------------------------
+equals(STARLAB_TEMPLATE,"dynamic"){
+    LIBNAME = $$basename(_PRO_FILE_PWD_)
+
+    TEMPLATE = lib
+    CONFIG *= dynamiclib
+    OTHER_FILES *= *.prf
+    DEFINES *= $$upper($$LIBNAME)_SHARED_EXPORT
+    INCLUDEPATH += .
+    DEPENDPATH  += .
+
+    macx{
+        # library file deploys to lib folder
+        # NOTE: fixes broken install_name, so we can run from anywhere
+        DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/lib/
+        LIBS += -install_name @executable_path/../lib/lib"$$LIBNAME".1.dylib
+
+        #---------------- DEPLOY HEADERS ----------------
+        # copy all (DECLARED!!) headers in the include folder
+        # use -c "checksum" to decide if file has changed
+        # HEADERS_DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/include/$$LIBNAME/
+        # QMAKE_POST_LINK = mkdir -p $$HEADERS_DESTDIR && cd $$_PRO_FILE_PWD_ && rsync -cR $$HEADERS $$HEADERS_DESTDIR
+    }
+
+    win32{
+        DESTDIR = $$DEPLOYPATH
+    }
+
+    unix:!macx{
+        DESTDIR = $$DEPLOYPATH
+    }
+}
+
+equals(STARLAB_TEMPLATE,"plugin"){
+    STARLAB_DEPENDS *= common parameters
+    TEMPLATE = lib
+    CONFIG += plugin
+    macx: DESTDIR = $$DEPLOYPATH/Starlab.app/plugins
+    win32: DESTDIR = \"$$DEPLOYPATH/plugins\"
+    unix:!macx: error(TODO)
+}
+
+
+#----- appbundle -----
+equals(STARLAB_TEMPLATE,"appbundle"){
+    TEMPLATE = app
+    TARGET = starlab
+
+    macx{
+        DESTDIR = $$DEPLOYPATH
+        # Copy data & PRF into app bundle
+        DATAPATH = $$DEPLOYPATH/Starlab.app/data
+        QMAKE_POST_LINK = mkdir -p $$DATAPATH  && cd $$DATAPATH && cp -r $$ROOT/data/* $$DATAPATH && cp $$ROOT/starlab.prf $$DEPLOYPATH/Starlab.app/
+        # Correct broke "make clean"
+        macx:QMAKE_CLEAN  += $$PWD/../distrib/starlab.app/Contents/MacOS/starlab
+        macx:QMAKE_CLEAN  += $$PWD/../distrib/plugins/*.dylib
+    } 
+    win32{
+        DESTDIR = $$DEPLOYPATH
+    }
+}
+
+#------------------------ STARLAB_DEPENDS --------------------------------------
+STARLAB_DEPENDS = $$unique(STARLAB_DEPENDS)
+for(lib, STARLAB_DEPENDS){
+    
+    # Loads the library preferences from a PRF file
+    PRFFILENAME = $$ROOT/libraries/$$lib/"$$lib".prf
+    exists($$PRFFILENAME) : load($$PRFFILENAME)
+
+    
+    #---------------------- COMPILE TIME ---------------------------------------
+    DIRNAME = $$dirname(lib)
+    isEmpty(DIRNAME) {
+        INCLUDEPATH *= $$ROOT/libraries/$$lib/
+        DEPENDPATH  *= $$ROOT/libraries/$$lib/
+    } else {
+        INCLUDEPATH *= $$_PRO_FILE_PWD_/$$lib
+        DEPENDPATH  *= $$_PRO_FILE_PWD_/$$lib
+        lib = $$basename(lib)
+    }
+
+    # Link time depends
+    mac{
+        LIBS *= -L$$DEPLOYPATH/Starlab.app/Contents/lib
+        LIBS *= -l"$$lib"
+    }
+    win32{
+        LIBS *= $$DEPLOYPATH/"$$lib".lib
+    }
+    unix:!macx{
+        LIBS *= -L$$ROOT/distrib
+        LIBS *= -l"$$lib"
+        QMAKE_LFLAGS += -Wl,--rpath=.
+    }
+}
+
+#------------------------ STARLAB_EXTERNALS -----------------------------------
+STARLAB_EXTERNAL = $$unique(STARLAB_EXTERNAL)
+for(lib, STARLAB_EXTERNAL){
+    PRFFILENAME = $$ROOT/external/$$lib/"$$lib".prf
+    exists( $$PRFFILENAME ) : load($$PRFFILENAME)
+    !exists( $$PRFFILENAME ) : error("Cannot find '"$$lib".prf'")
+}

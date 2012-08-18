@@ -1,0 +1,7 @@
+<!DOCTYPE StarlabProject>
+<StarlabProject>
+ <Layers>
+  <SurfaceMeshModel path="sphere.off"/>
+  <SurfaceMeshModel path="cuboid.obj"/>
+ </Layers>
+</StarlabProject>

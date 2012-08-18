@@ -1,0 +1,6 @@
+#--- This is a template library, no libs needed
+INCLUDEPATH *= $$PWD/include
+DEPENDPATH  *= $$PWD/include
+
+export(INCLUDEPATH)
+export(DEPENDPATH)

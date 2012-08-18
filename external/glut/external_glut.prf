@@ -1,0 +1,6 @@
+win32{
+    GLUTDIR = $$PWD/win32
+    INCLUDEPATH += $$GLUTDIR/include
+    DEPENDPATH  += $$GLUTDIR/include
+    LIBS += $$GLUTDIR/lib/glut32.lib
+}
