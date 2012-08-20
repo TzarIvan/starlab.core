@@ -35,7 +35,9 @@ bool project_io_starlab::open(const QString& path, StarlabApplication& applicati
                     /// Request a model to be opened
                     /// @todo right now the default opener is employed, in the project file we could encode
                     ///       which data structure it's supposed to be used
-                    application.loadModel(path);
+                    bool retstatus = application.loadModel(path);
+                    if(retstatus==false)
+                        qDebug() << "[WARNING] cannot open model" << path;
                 }
             }
         }
