@@ -6,12 +6,6 @@ STARLAB_EXTERNAL += qglviewer
 #SetupStarlabLibrary(dynamic)
 #ImportStarlabLibrary(dynamic_parameters)
 
-# Needed to define DrawArea
-QT += opengl
-
-#DEFINES += DEBUG_PLUGINMANAGER
-#DEFINES += DEBUG_STARAPP
-
 include(qt3d/qt3d.pri)
 include(QCommandLine/QCommandLine.pri)
 include(interfaces/interfaces.pri)

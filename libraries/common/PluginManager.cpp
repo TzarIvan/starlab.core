@@ -10,7 +10,6 @@
 #include "interfaces/FilterPlugin.h"
 #include "interfaces/GuiPlugin.h"
 #include "interfaces/ModePlugin.h"
-#include "interfaces/DrawAreaPlugin.h"
 
 #if defined(Q_OS_WIN)
     QString LIB_EXTENSION_FILTER("*.dll");
@@ -98,7 +97,6 @@ void PluginManager::loadPlugins() {
         loadok |= load_DecoratePlugin(plugin);
         loadok |= load_GuiPlugin(plugin);        
         loadok |= load_EditPlugin(plugin);
-        loadok |= load_DrawAreaPlugin(plugin);
         loadok |= load_RenderPlugin(plugin);
         if( !loadok ) 
             throw StarlabException("plugin "+fileName+" was not recognized as one of the declared Starlab plugin!!"); // +failurecauses_starlabplugin));
@@ -195,13 +193,6 @@ bool PluginManager::load_EditPlugin(QObject* _plugin){
     return true;
 }
  
-bool PluginManager::load_DrawAreaPlugin(QObject *_plugin){
-    DrawAreaPlugin* plugin = qobject_cast<DrawAreaPlugin*>(_plugin);
-    if(!plugin) return false;
-    drawAreaPlugins.insert(plugin->name(), plugin);    
-    return true;
-}
-
 bool PluginManager::load_RenderPlugin(QObject *_plugin){
     RenderPlugin* plugin = qobject_cast<RenderPlugin*>(_plugin);
     if(!plugin) return false;

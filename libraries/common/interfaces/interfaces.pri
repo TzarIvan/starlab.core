@@ -1,4 +1,4 @@
-HEADERS+=   interfaces/DrawAreaPlugin.h \
+HEADERS+=   \
             interfaces/StarlabPlugin.h \
             interfaces/RenderPlugin.h \
             interfaces/InputOutputPlugin.h \

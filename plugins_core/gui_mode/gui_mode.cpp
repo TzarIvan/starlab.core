@@ -1,7 +1,6 @@
 #include "gui_mode.h"
 #include "interfaces/ModePlugin.h"
 #include "StarlabMainWindow.h"
-#include "StarlabDrawArea.h"
 
 void gui_mode::load(){
     QActionGroup* modeActionGroup = new QActionGroup(mainWindow()->modeMenu);

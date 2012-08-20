@@ -2,7 +2,6 @@
 
 void gui_view::load(){
     /// @todo re-enable them
-    load_selectdrawarea();
     // load_viewfrom();
     // load_fullscreen();
     // load_copypasteviewmatrix();
@@ -29,17 +28,7 @@ void gui_view::load_copypasteviewmatrix(){
         menu->addAction(action);
     }
 }
-
-void gui_view::load_selectdrawarea(){
-    QMenu* menu = mainWindow()->viewMenu->addMenu("DrawArea");
-    QActionGroup* group =  new QActionGroup(this);
-    group->setExclusive(true);
-    foreach(DrawAreaPlugin* plugin, mainWindow()->pluginManager()->drawAreaPlugins)
-        menu->addAction( new QAction(plugin->name(),group) );
-    connect(group, SIGNAL(triggered(QAction *)), this, SLOT(selectDrawArea(QAction *)));
-    menu->setEnabled(true);
-}
-    
+   
 void gui_view::load_fullscreen(){
     QAction* action = new QAction (tr("&Toggle FullScreen"), this);
     action->setCheckable(true);
@@ -69,17 +58,6 @@ void gui_view::load_viewfrom(){
     connect(group, SIGNAL(triggered(QAction *)), drawArea(), SLOT(viewFrom(QAction *)));
 
     viewFromMenu->setEnabled(true);
-}
-
-void gui_view::selectDrawArea(QAction* action){
-    Q_ASSERT(action!=NULL);
-    QString pluginName = action->text();
-    DrawAreaPlugin* drawAreaPlugin = pluginManager()->drawAreaPlugins.value(pluginName,NULL);
-    if(!drawAreaPlugin) throw StarlabException("Requested drawArea not found"); 
-    mainWindow()->setupDrawArea(drawAreaPlugin);
-    
-    /// Store in the setting as default value
-    settings()->set("DefaultDrawAreaPlugin",pluginName);
 }
 
 Q_EXPORT_PLUGIN(gui_view)

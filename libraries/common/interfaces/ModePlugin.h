@@ -31,7 +31,7 @@ public:
        
     /// @{ @name Rendering events (optional)
     public: 
-        virtual bool paintEvent(QPaintEvent* ){ return false; }
+        virtual void decorate(){}
     /// @} 
 
     /// @{ @name User Input Callbacks (optional)

@@ -1,4 +1,5 @@
 #include "gui_selection.h"
+#include "StarlabDrawArea.h"
 
 /// Since we depend on the selected model, the load is minimal
 void gui_selection::load(){

@@ -6,6 +6,7 @@ void cloud_render_points::render(){
     QColor& c = model()->color;
     glColor3f(c.redF(),c.greenF(),c.blueF());
     glDisable(GL_LIGHTING);
+    glPointSize(3);
     glBegin(GL_POINTS);
         foreach(QVector4D v, cloud->points)
             glVertex3d(v.x(), v.y(), v.z());

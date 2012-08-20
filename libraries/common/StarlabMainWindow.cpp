@@ -7,40 +7,27 @@
 #include <QUrl> /// Drag&Drop
 
 #include "interfaces/GuiPlugin.h"
-#include "interfaces/DrawAreaPlugin.h"
 #include "StarlabDrawArea.h"
 
-/// This is the default plugin that gets loaded when no other plugin exists!
-class DefaultDrawAreaPlugin : public DrawAreaPlugin{
-    StarlabDrawArea* load(){ return new DummyDrawArea(mainWindow()); }
-
-    class DummyDrawArea : public StarlabDrawArea{
-    public:
-        DummyDrawArea(StarlabMainWindow* mw)  : StarlabDrawArea(mw){
-            _widget = new MyGLWidget();
-        }
-    private:
-        class MyGLWidget : public QGLWidget{
-        protected:
-            virtual void paintGL(){ 
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-            }
-        } *_widget;
-    public:
-        QGLWidget* widget(){ return _widget; }    
-        void resetViewport(){}        
-    };
-};
-
 StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
-    _application(_application)
+    _application(_application), _activeMode(NULL)
 {
-    _drawArea = NULL;
-    _activeMode = NULL;
+    /// Setup central widget
+    {
+        // Anti-aliasing when using QGLWidget or subclasses
+        QGLFormat glf = QGLFormat::defaultFormat();
+        glf.setSamples(8);
+        QGLFormat::setDefaultFormat(glf);
+
+        _drawArea = new StarlabDrawArea(this);
+        this->setCentralWidget(_drawArea);
+        _drawArea->setAcceptDrops(true);
+    }
     
     /// Register all plugins access functionality
     foreach(StarlabPlugin* plugin, pluginManager()->plugins())
         plugin->_mainWindow = this;
+    
     
     /// Sets window icon/name
     {
@@ -111,28 +98,7 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     {
         setAcceptDrops(true);
     }
-    
-    /// Install the DrawArea plugins
-    {
-        DrawAreaPlugin* plugin = NULL;
-        if(pluginManager()->drawAreaPlugins.size()==0){
-            // throw StarlabException("Critical error: Not a single DrawAreaPlugin was loaded!");
-            plugin = new DefaultDrawAreaPlugin();
-        } else {
-            QString preferred = settings()->getString("DefaultDrawAreaPlugin");        
-            if( !pluginManager()->drawAreaPlugins.contains(preferred) ){
-                plugin = pluginManager()->drawAreaPlugins.begin().value();
-                if(!plugin) throw StarlabException("Error setting default drawarea");
-                qDebug() << "Preferred DrawAreaPlugin " << preferred << " was not found."; 
-                qDebug() << "The first available plugin " << plugin->name() << " was chosen instead.";
-            } else
-                plugin = pluginManager()->drawAreaPlugins[preferred];            
-        }
-        
-        /// Load and Show the Draw Window
-        this->setupDrawArea( plugin );
-    }
-    
+       
     /// Connect document changes to view changes
     {
         connect(document(),SIGNAL(resetViewport()), drawArea(),SLOT(resetViewport()));
@@ -228,7 +194,7 @@ void StarlabMainWindow::update(){
 }
 
 void StarlabMainWindow::updateDrawArea(){
-    _drawArea->widget()->update();
+    _drawArea->update();
 }
 
 void StarlabMainWindow::statusBarMessage(QString message, float timeout){
@@ -248,23 +214,4 @@ void StarlabMainWindow::hideToolbarOnEmptyMessage(QString /*message*/){
     // qDebug() << "NEW MESSAGE: " << message;
     /// @todo disabled as it's annoying to see it popping in/out
     // if(message.isEmpty())  _statusBar->hide();
-}
-
-void StarlabMainWindow::setupDrawArea(DrawAreaPlugin* plugin){
-    plugin->_mainWindow = this;
-    StarlabDrawArea* drawArea = plugin->load();
-    Q_ASSERT( drawArea );
-    if(drawArea->widget()==NULL)
-        throw StarlabException("The DrawAreaPlugin you are attempting to load does not specify a widget");
-    StarlabDrawArea* oldDrawArea = _drawArea;
-    if(oldDrawArea != NULL) delete oldDrawArea; 
-    _drawArea = drawArea;
-    _drawArea->widget()->setParent(this);
-    _drawArea->widget()->setAcceptDrops(true);
-    /// All events of "widget" get forwarded to StarlabDrawArea
-    _drawArea->widget()->installEventFilter(_drawArea); 
-    this->setCentralWidget(_drawArea->widget());
-    _drawArea->widget()->show();
-    /// IBRAHEEM: what should we call to have the stuff 
-    /// refresh immediately??    
 }

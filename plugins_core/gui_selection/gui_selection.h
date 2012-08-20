@@ -2,7 +2,6 @@
 #include <QToolBar>
 
 #include "StarlabMainWindow.h"
-#include "StarlabDrawArea.h"
 #include "interfaces/GuiPlugin.h"
 #include "interfaces/RenderPlugin.h"
 #include "interfaces/DecoratePlugin.h"

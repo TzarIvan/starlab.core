@@ -3,9 +3,10 @@
 #include <QList>
 #include <QVector3D>
 #include <QColor>
-#include "dynamic_common_global.h"
 
+#include <qglviewer.h>
 #include "interfaces/RenderPlugin.h"
+#include "dynamic_common_global.h"
 #include "RenderObject.h"
 #include "StarlabMainWindow.h"
 
@@ -22,7 +23,7 @@ class Model;
 /// On aftertought this makes sense, as for example we are not allowed to modify 
 /// GLArea from meshlab, but nothing stops us from having a wrapper around it!!!
 /// Doing a wrapper also gives us the chance of using it as a Q_OBJECT
-class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QObject{
+class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QGLViewer{
     Q_OBJECT
     
     /// @{ core
@@ -30,7 +31,7 @@ class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QObject{
         /// Constructor
         StarlabDrawArea(StarlabMainWindow* mainWindow);
         /// Polymorphic destructor
-        virtual ~StarlabDrawArea();
+        ~StarlabDrawArea();
     private:
         StarlabMainWindow* const _mainWindow;
     public:
@@ -39,15 +40,16 @@ class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QObject{
         StarlabSettings* settings(){ return _mainWindow->settings(); }
         PluginManager* pluginManager(){ return _mainWindow->pluginManager(); }
     /// @}
-       
-    /// @{
+        
+    /// @{ Rendering specification
     public:
-        /// A draw area must specify a render widget
-        /// @note Do not "return new QGLWidget()"!!
-        virtual QGLWidget* widget(){ return NULL; }
+        void resetViewport(); /// Restores the default view camera
+    private:
+        void init(); 
+        void draw(); ///< Draws the whole scene
+        void drawWithNames();
     /// @}
         
-
     /// @{ ModePlugin management
     private:
         bool eventFilter(QObject *object, QEvent *event);
@@ -74,17 +76,16 @@ class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QObject{
         RenderObject::Point&    drawPoint(QVector3D p1, float size=1, QColor color=Qt::red);
         RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
         RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
+    
     protected:        
         /// Handles to additional render objects, created by draw??() methods, deleted by ~StarlabDrawArea()
         QList<RenderObject::Base*> renderObjectList;
     /// @}
-        
               
 public slots:
-    /// Restores the default view settings (normalizeTrackball in meshlab)
-    virtual void resetViewport() = 0;
+            
     /// Updates the draw area
-    virtual void update();
+    void update();
 };
 
 /// Old implementation

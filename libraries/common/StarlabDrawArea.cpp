@@ -64,17 +64,75 @@ void StarlabDrawArea::update(){
         renderer->init();
     
     /// This will force a "paint" of the GL window
-    widget()->update();
+    updateGL();
 }
 
 StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow) 
-    : _mainWindow(mainWindow){}
+    : _mainWindow(mainWindow){
+
+    /// Determines which events are forwarded to Mode plugins
+    installEventFilter(this);
+    
+    setGridIsDrawn(false);
+    
+    // Keyboard + Mouse behavior
+    // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+}
+
+void StarlabDrawArea::resetViewport(){
+    qglviewer::Vec center(0,0,0);
+    QBox3D largestBBox;
+    largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
+
+    foreach(Model* m, document()->models()){
+        const QBox3D bbox = m->getBoundingBox();
+        if(bbox.intersects(largestBBox))
+            largestBBox = bbox;
+        /*Vector3 c = (m->bbox.minimum() + m->bbox.maximum()) * 0.5;
+        center = qglviewer::Vec(c[0],c[1],c[2]);
+        radius = (m->bbox.maximum() - m->bbox.minimum()).norm() * 0.5;*/
+    }
+
+    QVector3D extent(largestBBox.size());
+    double radius = qMax(extent.x(), qMax(extent.y(), extent.z()));
+
+    camera()->setSceneRadius(radius * 2);
+    camera()->showEntireScene();
+    camera()->setUpVector(qglviewer::Vec(0,0,1));
+    camera()->setPosition(qglviewer::Vec(radius,radius,radius) + center);
+    camera()->lookAt(center);
+}
+
+void StarlabDrawArea::init(){
+    setBackgroundColor(QColor(255,255,255));   
+    resetViewport();
+}
+
+void StarlabDrawArea::draw(){
+    glEnable(GL_MULTISAMPLE); ///< Enables anti-aliasing
+
+    /// Render each Model
+    foreach(RenderPlugin* renderer, renderers()){
+        glPushMatrix();
+            glMultMatrixd( document()->transform.data() );
+            renderer->render();
+        glPopMatrix();        
+    }   
+
+    /// @todo Render decoration plugins
+    
+    /// Render mode decoration
+    if( mainWindow()->hasActiveMode() )
+        mainWindow()->activeMode()->decorate();       
+}
+
+void StarlabDrawArea::drawWithNames()
+{
+}
 
 StarlabDrawArea::~StarlabDrawArea(){
     // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
     deleteAllRenderObjects();
-    if(widget()!=NULL)
-        delete widget();
 }
 
 void StarlabDrawArea::deleteAllRenderObjects(){
@@ -127,7 +185,6 @@ bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
         case QEvent::MouseMove:          return mode->mouseMoveEvent((QMouseEvent*)event); break;
         case QEvent::KeyPress:           return mode->keyPressEvent((QKeyEvent*)event); break;
         case QEvent::Wheel:              return mode->wheelEvent((QWheelEvent*)event); break;
-        case QEvent::Paint:              return mode->paintEvent((QPaintEvent*)event); break;
         default: return true; ///< Any other event is blocked!!
     }  
 }

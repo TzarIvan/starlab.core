@@ -51,7 +51,6 @@ public:
 
     /// @{ Store the loaded plugins by name
         QMap<QString,GuiPlugin*> guiPlugins;
-        QMap<QString,DrawAreaPlugin*> drawAreaPlugins;
         QMap<QString,FilterPlugin*> filterPlugins;
         QMap<QString,ModePlugin*> editPlugins;
         QMap<QString,DecoratePlugin*> decoratePlugins;

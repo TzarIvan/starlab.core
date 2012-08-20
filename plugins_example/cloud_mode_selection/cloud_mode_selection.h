@@ -13,12 +13,14 @@ class cloud_mode_selection : public ModePlugin{
     
     bool mousePressEvent(QMouseEvent*);
     bool mouseMoveEvent(QMouseEvent*);
-    bool paintEvent(QPaintEvent*);
+    bool mouseReleaseEvent(QMouseEvent*);
+
+    void decorate();
+    void drawSelectionRectangle();
 
     bool isDragging;
     QPoint start;
     QPoint cur;
     QPoint prev;
     
-    void drawSelectionRectangle();
 };

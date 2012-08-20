@@ -21,11 +21,6 @@ int main_(int argc, char *argv[]) {
             
     //qDebug() << qPrintable(settings);
     
-    // Anti-aliasing when using QGLWidget or subclasses
-    QGLFormat glf = QGLFormat::defaultFormat();
-    glf.setSamples(8);
-    QGLFormat::setDefaultFormat(glf);
-
 #if 0
     /// Lists filters if requested
     if(application.document()->getString("action")=="list-filters"){

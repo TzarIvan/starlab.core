@@ -1,3 +1,4 @@
+QT += opengl xml
 INCLUDEPATH += $$PWD/src
 
 win32{
@@ -13,11 +14,11 @@ macx{
     # INCLUDEPATH *= $$PWD/QGLViewer.framework/Headers
     # QMAKE_LFLAGS *= -F$$PWD
     # LIBS *= -framework QGLViewer
-    
+
     #--- Static setup
     LIBS += $$PWD/macx/libQGLViewer.a
 }
 
-unix:!macx{
+linux{
     LIBS += $$PWD/unix/libQGLViewer.a
 }
