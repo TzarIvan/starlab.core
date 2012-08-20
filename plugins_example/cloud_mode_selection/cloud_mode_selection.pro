@@ -4,6 +4,6 @@ STARLAB_DEPENDS += ../cloud
 
 QT += opengl
 
-HEADERS += cloud_mode_selection.h
+HEADERS += cloud_mode_selection.h 
 SOURCES += cloud_mode_selection.cpp
-
+RESOURCES += cloud_mode_selection.qrc
