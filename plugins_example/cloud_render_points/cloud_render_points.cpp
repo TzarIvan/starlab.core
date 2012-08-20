@@ -14,7 +14,7 @@ void cloud_render_points::render(){
 }
 
 bool cloud_render_points::isApplicable(Model *model){
-
+    return isA(model);
 }
 
 Q_EXPORT_PLUGIN(cloud_render_points)
