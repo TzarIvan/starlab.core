@@ -13,8 +13,4 @@ void cloud_render_points::render(){
     glEnable(GL_LIGHTING);
 }
 
-bool cloud_render_points::isApplicable(Model *model){
-    return isA(model);
-}
-
 Q_EXPORT_PLUGIN(cloud_render_points)
