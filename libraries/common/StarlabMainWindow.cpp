@@ -147,19 +147,6 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         }
     }
     
-    /// Default window size
-    {
-//        QDesktopWidget* desk = QApplication::desktop();
-//        QRect geom = desk->screenGeometry();
-//        int scrw = geom.width();
-//        int scrh = geom.height();
-//        geom.setTop( scrh/5);
-//        geom.setLeft( scrw/4);
-//        geom.setHeight( scrh/2 );
-//        geom.setWidth( scrw/2 );
-//        this->setGeometry(geom);
-    }
-    
     /// Makes the window steal the focus (@see QWidget::activateWindow())
     {                          
         showNormal();
@@ -184,14 +171,8 @@ void StarlabMainWindow::dropEvent(QDropEvent* event) {
 QSize StarlabMainWindow::sizeHint() const{
     QRect geom = QApplication::desktop()->screenGeometry();
     int scrw = geom.width();
-    int scrh = geom.height();
-//    geom.setTop( scrh/5);
-//    geom.setLeft( scrw/4);
-//    geom.setHeight( scrh/2 );
-//    geom.setWidth( scrw/2 );
-//    this->setGeometry(geom);
-    
-    return QSize(scrh/2,scrw/2);
+    int scrh = geom.height();   
+    return QSize(scrw/2,scrh/2);
 }
 
 void StarlabMainWindow::triggerFilterByName(QString name){

@@ -122,6 +122,7 @@ public:
         virtual void dragEnterEvent(QDragEnterEvent* event){ event->accept(); }
     /// @}
         
+    public:
     /// Determines default window size
     QSize sizeHint() const;
 };
