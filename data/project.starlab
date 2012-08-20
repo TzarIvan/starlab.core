@@ -2,6 +2,6 @@
 <StarlabProject>
  <Layers>
   <SurfaceMeshModel path="sphere.pts"/>
-  <SurfaceMeshModel path="cuboid.pts"/>
+  <SurfaceMeshModel path="torus.pts"/>
  </Layers>
 </StarlabProject>
