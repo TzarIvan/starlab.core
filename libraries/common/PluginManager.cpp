@@ -233,8 +233,9 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
     RenderPlugin* newplugin = plugin->factory();
     newplugin->_mainWindow = plugin->_mainWindow;
     newplugin->_application = plugin->_application;
-    newplugin->_action = plugin->_action;
     newplugin->_model = model;
+    /// Parent remains the original plugin!!    
+    newplugin->_action = plugin->_action;
     return newplugin;
 }
 
@@ -256,8 +257,8 @@ QList<QAction *> PluginManager::getRenderPluginsActions(Model* model){
     QList<QAction*> retval;
     if(model==NULL) return retval;
     foreach(RenderPlugin* plugin, renderPlugins.values()){
-        plugin->isApplicable(model);
-        retval.append(plugin->action());
+        if( plugin->isApplicable(model) )
+            retval.append(plugin->action());
     }
     return retval;
 }
