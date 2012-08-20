@@ -1,12 +1,13 @@
 CONFIG += starlab
 STARLAB_TEMPLATE = dynamic
 STARLAB_DEPENDS += parameters 
+STARLAB_EXTERNAL += qglviewer
 
 #SetupStarlabLibrary(dynamic)
 #ImportStarlabLibrary(dynamic_parameters)
 
 # Needed to define DrawArea
-QT *= opengl
+QT += opengl
 
 #DEFINES += DEBUG_PLUGINMANAGER
 #DEFINES += DEBUG_STARAPP

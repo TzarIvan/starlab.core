@@ -10,21 +10,16 @@ class gui_mode : public GuiPlugin{
     Q_INTERFACES(GuiPlugin)
     
 public:    
+
+    QAction* defaultModeAction; 
+    gui_mode(){ 
+        defaultModeAction = new QAction (QIcon(":/images/no_edit.png"),"Default", this);
+    }
+
     /// plugin constructor
     virtual void load();
     
-private:   
-    /// the action for the suspend mode (::load)
-    // QAction* suspendEditModeAct;
-    /// Stores the actions (menu entries and buttons) associated with a plugin
-    QMap<StarlabPlugin*, QAction*> pluginToActionMap;       
-    /// Keeps track of the active plugin to avoid duplicated GUI
-    /// This field is NULL unless a suspended Edit plugin exists
-    ModePlugin* activeEditPlugin;
-    
 public slots:
     /// Starts an edit plugin, popping up its default GUI (also manages the suspend)
-    void startEdit();
-    void endEdit();
-    void suspendEdit();
+    void startMode(QAction *);
 };

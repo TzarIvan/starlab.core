@@ -52,7 +52,7 @@ public:
     /// @{ action management
     public:
         /// @brief assembles an action from name+icon
-        /// does not claim ownership of action
+        /// @note the action's parent is the plugin!!
         QAction* action(); 
     protected:
         QAction* _action;

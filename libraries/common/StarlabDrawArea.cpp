@@ -1,8 +1,12 @@
+#include <QGLWidget>
+#include <QMouseEvent>
+
 #include "StarlabDrawArea.h"
 #include "Document.h"
-#include <QGLWidget>
 #include "StarlabException.h"
 #include "RenderObject.h"
+#include "interfaces/ModePlugin.h"
+
 
 QList<RenderPlugin*> StarlabDrawArea::renderers(){
     QList<RenderPlugin*> retval; ///< in order
@@ -63,8 +67,8 @@ void StarlabDrawArea::update(){
     widget()->update();
 }
 
-StarlabDrawArea::StarlabDrawArea(StarlabApplication* app) 
-    : _application(app){}
+StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow) 
+    : _mainWindow(mainWindow){}
 
 StarlabDrawArea::~StarlabDrawArea(){
     // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
@@ -110,7 +114,25 @@ RenderObject::Ray& StarlabDrawArea::drawRay(QVector3D orig, QVector3D dir, float
     return *edge;
 }
 
+/// @internal returning true will prevent the drawArea plugin from intercepting the events!!!
+bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
+    /// If a mode is not open, pass *everything* to the drawArea plugin
+    if(!mainWindow()->hasActiveMode()) return false;
+
+    /// If it is open, pass it to the handlers
+    ModePlugin* mode = mainWindow()->activeMode();
+    switch(event->type()){
+        case QEvent::MouseButtonRelease: return mode->mouseReleaseEvent((QMouseEvent*)event); break;
+        case QEvent::MouseButtonPress:   return mode->mousePressEvent((QMouseEvent*)event); break;
+        case QEvent::MouseMove:          return mode->mouseMoveEvent((QMouseEvent*)event); break;
+        case QEvent::KeyPress:           return mode->keyPressEvent((QKeyEvent*)event); break;
+        case QEvent::Wheel:              return mode->wheelEvent((QWheelEvent*)event); break;
+        case QEvent::Paint:              return mode->paintEvent((QPaintEvent*)event); break;
+        default: return true; ///< Any other event is blocked!!
+    }  
+}
+
 void StarlabDrawArea::deleteRenderObject(RenderObject* /*object*/){
     /// @todo 
-    throw StarlabException("invalid");
+    throw StarlabException("TODO: StarlabDrawArea::deleteRenderObject");
 }

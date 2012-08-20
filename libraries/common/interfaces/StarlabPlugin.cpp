@@ -21,6 +21,7 @@ QAction *StarlabPlugin::action(){
         _action = new QAction(icon(),name(),NULL);
         _action->setToolTip(description());
         _action->setShortcut(shortcut());
+        _action->setParent(this);        
     }
     return _action;
 }

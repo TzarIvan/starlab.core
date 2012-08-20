@@ -9,9 +9,8 @@ class MeshlabDrawArea : public StarlabDrawArea{
     private: 
         GLArea* _widget;
     public:
-        MeshlabDrawArea(StarlabApplication* app) 
-            : StarlabDrawArea( app ){
-            _widget = new GLArea(this,app->document(),app->settings());
+        MeshlabDrawArea(StarlabMainWindow* mw) : StarlabDrawArea( mw ){
+            _widget = new GLArea(this,mw->document(),mw->settings());
         }
         
         void resetViewport(){ 
@@ -34,7 +33,7 @@ StarlabDrawArea* drawarea_meshlab::load(){
     settings()->setDefault("glarea/pointsize",1.0);    
     settings()->setDefault("glarea/twosidedface",false);  
     
-    MeshlabDrawArea* drawArea = new MeshlabDrawArea(application());
+    MeshlabDrawArea* drawArea = new MeshlabDrawArea(mainWindow());
     
     /// Create actions & add them to menu
     /// Parent menu entries with drawarea so they are removed on a drawarea switch

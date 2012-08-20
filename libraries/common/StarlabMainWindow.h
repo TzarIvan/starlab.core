@@ -5,6 +5,7 @@
 #include <QStatusBar>
 #include <QProgressBar>
 #include <QDragEnterEvent>
+#include <QToolBar>
 
 #include "StarlabException.h"
 #include "StarlabSettings.h"
@@ -18,6 +19,22 @@ class DrawAreaPlugin;
 /// The basic structure of the stalab window to which plugins (i.e. GUI plugins) interface
 class DYNAMIC_COMMON_EXPORT StarlabMainWindow : public QMainWindow{
     Q_OBJECT
+    
+    /// @{ Core
+    public:
+        StarlabMainWindow(StarlabApplication *_application);
+    public: 
+        StarlabApplication* application(){ return _application; }
+        /// The global settings of the application
+        StarlabSettings* settings(){ return application()->settings(); }
+        /// Contains the document (extracted from application)
+        Document* document(){ return application()->document(); }
+        /// Contains the loaded plugins (extracted from application)
+        PluginManager* pluginManager(){ return application()->pluginManager(); }   
+    private:
+        /// Contains common (non-gui) functionalities
+        StarlabApplication* const _application;
+    /// @}
 
     /// @{ DrawArea Management (Center of Starlab window) 
     private:
@@ -29,23 +46,17 @@ class DYNAMIC_COMMON_EXPORT StarlabMainWindow : public QMainWindow{
         /// Setup the StarlabDrawAreas loaded by a DrawAreaPlugins
         void setupDrawArea(DrawAreaPlugin *plugin);
     /// @}
-        
-public:
-    /// Contains common (non-gui) functionalities
-    StarlabApplication* const _application;
-        
-    StarlabApplication* application(){ return _application; }
-    /// The global settings of the application
-    StarlabSettings* settings(){ return application()->settings(); }
-    /// Contains the document (extracted from application)
-    Document* document(){ return application()->document(); }
-    /// Contains the loaded plugins (extracted from application)
-    PluginManager* pluginManager(){ return application()->pluginManager(); }    
+               
+    /// @{ edit plugin management
+    private:
+        ModePlugin* _activeMode;
+    public:
+        bool hasActiveMode(){ return _activeMode!=NULL; }
+        void setActiveMode(ModePlugin* mode){ _activeMode=mode; }
+        ModePlugin* activeMode(){ return _activeMode; }
+    /// @}
     
-public:
-    /// @note this is the only method allowed not to have a trivial implementation in here
-    StarlabMainWindow(StarlabApplication *_application);
-    
+public:   
     /// @{ @name Window's menus (in order)
     public:
         QMenu *preferencesMenu; ///< @todo settings menu, refer to MeshLab
@@ -111,6 +122,8 @@ public:
         virtual void dragEnterEvent(QDragEnterEvent* event){ event->accept(); }
     /// @}
         
+    /// Determines default window size
+    QSize sizeHint() const;
 };
  
 Q_DECLARE_INTERFACE(StarlabMainWindow, "starlab.StarlabMainWindow/1.0")

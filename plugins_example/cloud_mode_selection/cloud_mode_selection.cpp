@@ -1,48 +1,59 @@
+#include <QMouseEvent>
 #include "cloud_mode_selection.h"
+#include "StarlabDrawArea.h"
 #include <qgl.h>
+#include "glu.h"
 
-#if 0
-void cloud_mode_selection::DrawXORRect(){  
-
-  bool doubleDraw = false;
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0,gla->curSiz.width(),gla->curSiz.height(),0,-1,1);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
-  glEnable(GL_COLOR_LOGIC_OP);
-  glLogicOp(GL_XOR);
-  glColor3f(1,1,1);
-  if(doubleDraw)
-  {
-    glBegin(GL_LINE_LOOP);
-      glVertex2f(start.x(),start.y());
-      glVertex2f(prev.x(),start.y());
-      glVertex2f(prev.x(),prev.y());
-      glVertex2f(start.x(),prev.y());
-    glEnd();
-  }
-  glBegin(GL_LINE_LOOP);
-    glVertex2f(start.x(),start.y());
-    glVertex2f(cur.x(),start.y());
-    glVertex2f(cur.x(),cur.y());
-    glVertex2f(start.x(),cur.y());
-  glEnd();
-  glDisable(GL_LOGIC_OP);
-  
-  // Closing 2D
-  glPopAttrib();
-    glPopMatrix(); // restore modelview
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
+bool cloud_mode_selection::mousePressEvent(QMouseEvent* event){
+    // qDebug() << "cloud_mode_selection::mousePressEvent()";
+    start=event->pos();
+    cur=start;    
+    return true;
 }
-#endif
+
+bool cloud_mode_selection::mouseMoveEvent(QMouseEvent* event){
+    // qDebug() << "cloud_mode_selection::mouseMoveEvent()";
+    prev=cur;
+    cur=event->pos();
+    isDragging = true;
+    drawArea()->widget()->update();
+    return true;
+}
+
+bool cloud_mode_selection::paintEvent(QPaintEvent *){
+    qDebug() << "cloud_mode_selection::paintEvent";
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawSelectionRectangle();
+    drawArea()->widget()->swapBuffers();
+    return true;
+}
+
+void cloud_mode_selection::drawSelectionRectangle(){  
+    qDebug() << "cloud_mode_selection::drawTest()";
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    int width = drawArea()->widget()->width();
+    int height = drawArea()->widget()->height();
+    glOrtho(0,width,height,0,-1,1);
+        
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glColor3f(1, 1, 1);
+    glBegin(GL_QUADS); 
+        glBegin(GL_LINE_LOOP);
+            glVertex2f(start.x(),start.y());
+            glVertex2f(cur.x(),start.y());
+            glVertex2f(cur.x(),cur.y());
+            glVertex2f(start.x(),cur.y());
+        glEnd();
+    glEnd();   
+}
+
 
 Q_EXPORT_PLUGIN(cloud_mode_selection)

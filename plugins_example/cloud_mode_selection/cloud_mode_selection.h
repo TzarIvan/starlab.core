@@ -4,10 +4,21 @@
 class cloud_mode_selection : public ModePlugin{
     Q_OBJECT
     Q_INTERFACES(ModePlugin)
-
+    
+    QIcon icon(){ return QIcon(":/icons/select_points.png"); }   
+    
     /// Functions part of the EditPlugin system
-    virtual void createEdit(){}
-    virtual void destroyEdit(){}    
+    void createEdit(){}
+    void destroyEdit(){}    
+    
+    bool mousePressEvent(QMouseEvent*);
+    bool mouseMoveEvent(QMouseEvent*);
+    bool paintEvent(QPaintEvent*);
 
-    void DrawXORRect();
+    bool isDragging;
+    QPoint start;
+    QPoint cur;
+    QPoint prev;
+    
+    void drawSelectionRectangle();
 };

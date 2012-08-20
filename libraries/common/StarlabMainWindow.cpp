@@ -2,8 +2,9 @@
 
 #include <QGLWidget>
 #include <QFileOpenEvent>
-#include <QUrl> /// Drag&Drop
 #include <QToolBar>
+#include <QDesktopWidget>
+#include <QUrl> /// Drag&Drop
 
 #include "interfaces/GuiPlugin.h"
 #include "interfaces/DrawAreaPlugin.h"
@@ -11,11 +12,11 @@
 
 /// This is the default plugin that gets loaded when no other plugin exists!
 class DefaultDrawAreaPlugin : public DrawAreaPlugin{
-    StarlabDrawArea* load(){  return new DummyDrawArea( application() ); }
+    StarlabDrawArea* load(){ return new DummyDrawArea(mainWindow()); }
 
     class DummyDrawArea : public StarlabDrawArea{
     public:
-        DummyDrawArea(StarlabApplication* app)  : StarlabDrawArea(app){
+        DummyDrawArea(StarlabMainWindow* mw)  : StarlabDrawArea(mw){
             _widget = new MyGLWidget();
         }
     private:
@@ -35,7 +36,8 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     _application(_application)
 {
     _drawArea = NULL;
-
+    _activeMode = NULL;
+    
     /// Register all plugins access functionality
     foreach(StarlabPlugin* plugin, pluginManager()->plugins())
         plugin->_mainWindow = this;
@@ -145,8 +147,21 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         }
     }
     
+    /// Default window size
+    {
+//        QDesktopWidget* desk = QApplication::desktop();
+//        QRect geom = desk->screenGeometry();
+//        int scrw = geom.width();
+//        int scrh = geom.height();
+//        geom.setTop( scrh/5);
+//        geom.setLeft( scrw/4);
+//        geom.setHeight( scrh/2 );
+//        geom.setWidth( scrw/2 );
+//        this->setGeometry(geom);
+    }
+    
     /// Makes the window steal the focus (@see QWidget::activateWindow())
-    {   
+    {                          
         showNormal();
         activateWindow();
         raise();
@@ -164,6 +179,19 @@ void StarlabMainWindow::dropEvent(QDropEvent* event) {
     if(data->hasUrls())
         foreach(QUrl url, data->urls())
             QApplication::sendEvent(application(), new QFileOpenEvent(url));    
+}
+
+QSize StarlabMainWindow::sizeHint() const{
+    QRect geom = QApplication::desktop()->screenGeometry();
+    int scrw = geom.width();
+    int scrh = geom.height();
+//    geom.setTop( scrh/5);
+//    geom.setLeft( scrw/4);
+//    geom.setHeight( scrh/2 );
+//    geom.setWidth( scrw/2 );
+//    this->setGeometry(geom);
+    
+    return QSize(scrh/2,scrw/2);
 }
 
 void StarlabMainWindow::triggerFilterByName(QString name){
@@ -244,19 +272,18 @@ void StarlabMainWindow::hideToolbarOnEmptyMessage(QString /*message*/){
 void StarlabMainWindow::setupDrawArea(DrawAreaPlugin* plugin){
     plugin->_mainWindow = this;
     StarlabDrawArea* drawArea = plugin->load();
-    
     Q_ASSERT( drawArea );
     if(drawArea->widget()==NULL)
         throw StarlabException("The DrawAreaPlugin you are attempting to load does not specify a widget");
     StarlabDrawArea* oldDrawArea = _drawArea;
-    if(oldDrawArea != NULL)
-        delete oldDrawArea; 
+    if(oldDrawArea != NULL) delete oldDrawArea; 
     _drawArea = drawArea;
     _drawArea->widget()->setParent(this);
     _drawArea->widget()->setAcceptDrops(true);
+    /// All events of "widget" get forwarded to StarlabDrawArea
+    _drawArea->widget()->installEventFilter(_drawArea); 
     this->setCentralWidget(_drawArea->widget());
     _drawArea->widget()->show();
     /// IBRAHEEM: what should we call to have the stuff 
     /// refresh immediately??    
 }
-

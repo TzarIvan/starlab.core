@@ -29,21 +29,24 @@ public:
         virtual void destroyEdit()=0;
     /// @} 
        
-    /// @{ @name Decorating events (optional)
+    /// @{ @name Rendering events (optional)
     public: 
-        virtual void Decorate(QPainter* /*p*/){}
+        virtual bool paintEvent(QPaintEvent* ){ return false; }
     /// @} 
 
     /// @{ @name User Input Callbacks (optional)
     public: 
-        virtual bool mousePressEvent    (QMouseEvent*  /*event*/) { return false; }
-        virtual bool mouseMoveEvent     (QMouseEvent*  /*event*/) { return false; }
-        virtual bool mouseReleaseEvent  (QMouseEvent*  /*event*/) { return false; }
-        virtual bool keyReleaseEvent    (QKeyEvent*    /*event*/) { return false; }
-        virtual bool keyPressEvent      (QKeyEvent*    /*event*/) { return false; }
-        virtual bool tabletEvent        (QTabletEvent* /*event*/) { return false; }
-        virtual bool wheelEvent         (QWheelEvent*  /*event*/) { return false; }
+        virtual bool mousePressEvent    (QMouseEvent* ) { return false; }
+        virtual bool mouseMoveEvent     (QMouseEvent* ) { return false; }
+        virtual bool mouseReleaseEvent  (QMouseEvent* ) { return false; }
+        virtual bool keyReleaseEvent    (QKeyEvent*   ) { return false; }
+        virtual bool keyPressEvent      (QKeyEvent*   ) { return false; }
+        virtual bool tabletEvent        (QTabletEvent*) { return false; }
+        virtual bool wheelEvent         (QWheelEvent* ) { return false; }
     /// @}
+    
+    /// Access to properties
+    using StarlabPlugin::drawArea;
 };
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/1.0")

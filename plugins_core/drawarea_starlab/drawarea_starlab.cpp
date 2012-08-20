@@ -15,7 +15,7 @@ using namespace std;
 
 class MyQGLViewer : public StarlabDrawArea, public QGLViewer{
 public:
-    MyQGLViewer(StarlabApplication* app) : StarlabDrawArea(app){}
+    MyQGLViewer(StarlabMainWindow* mw) : StarlabDrawArea(mw){}
         
     virtual void resetViewport(){ setupDefaultCamera(); }
     virtual QGLWidget* widget(){return this;}
@@ -73,7 +73,7 @@ public:
 };
 
 StarlabDrawArea* drawarea_starlab::load(){
-    return new MyQGLViewer(application());
+    return new MyQGLViewer(mainWindow());
 }
 
 Q_EXPORT_PLUGIN(drawarea_starlab)
