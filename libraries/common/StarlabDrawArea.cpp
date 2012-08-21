@@ -125,7 +125,7 @@ void StarlabDrawArea::setIsoProjection(){
     }
 
     // Move camera such that entire scene is visisble
-    double mx = 2*max(largestBBox.maximum().x(), max(largestBBox.maximum().y(), largestBBox.maximum().z()));
+    double mx = 2*qMax(largestBBox.maximum().x(), qMax(largestBBox.maximum().y(), largestBBox.maximum().z()));
     Frame f(Vec(mx,-mx,mx), Quaternion());
     f.rotate(Quaternion(Vec(0,0,1), M_PI / 4.0));
     f.rotate(Quaternion(Vec(1,0,0), M_PI / 3.3));
@@ -196,8 +196,9 @@ void StarlabDrawArea::draw(){
         mainWindow()->activeMode()->decorate();       
 }
 
-void StarlabDrawArea::drawWithNames()
-{
+void StarlabDrawArea::drawWithNames(){
+    if(mainWindow()->hasActiveMode())
+        mainWindow()->activeMode()->drawWithNames();
 }
 
 StarlabDrawArea::~StarlabDrawArea(){
