@@ -2,9 +2,8 @@
 #include <qgl.h>
 
 void cloud_render_points::render(){
+    glColor3f(model()->color.redF(),model()->color.greenF(),model()->color.blueF());
     CloudModel* cloud = qobject_cast<CloudModel*>(model());
-    QColor& c = model()->color;
-    glColor3f(c.redF(),c.greenF(),c.blueF());
     glDisable(GL_LIGHTING);
     glPointSize(3);
     glBegin(GL_POINTS);

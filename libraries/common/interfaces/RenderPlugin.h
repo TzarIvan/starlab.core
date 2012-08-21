@@ -6,8 +6,6 @@
 class RenderPlugin : public StarlabPlugin{
     /// @{ available for the plugin
     public:
-        /// @brief Render the model
-        virtual void render()=0;
         /// @brief Can this plugin render the model?
         /// @note known: model!=NULL 
         virtual bool isApplicable(Model* model)=0;
@@ -15,6 +13,8 @@ class RenderPlugin : public StarlabPlugin{
         /// - initialize GL memory buffer
         /// - read shader specification from file
         virtual void init(){}
+        /// @brief Render the model, default implementation only sets glColor
+        virtual void render() = 0;    
         /// @brief Clean up resources (destructor)
         virtual void finalize(){}    
     protected:

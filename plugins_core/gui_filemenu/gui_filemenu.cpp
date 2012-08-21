@@ -1,6 +1,6 @@
+#include <QFileInfo>
 #include "gui_filemenu.h"
 #include "OSQuery.h"
-
 const static QString all_files = "All Files (*.*)";
 
 void gui_filemenu::open(){
@@ -75,7 +75,8 @@ void gui_filemenu::save(){
             }
             
             if(success){
-                mainWindow()->statusBarMessage("Saved model at path: " + model->path,2.0f);
+                QFileInfo finfo(model->path);
+                mainWindow()->statusBarMessage("Saved model at path: " + finfo.absoluteFilePath(),2.0f);
             } else {            
                 mainWindow()->statusBarMessage("Save operation failed...",2.0f);
             }
@@ -93,7 +94,7 @@ void gui_filemenu::reload_selection(){
         Model* selection = mainWindow()->document()->selectedModel();
         if(selection==NULL) return;
         QFileInfo fi(selection->path);
-        if(!fi.exists()) 
+        if(!fi.exists())
             throw StarlabException("Cannot reload mode, file %s cannot be found.",selection->path.toStdString().c_str());
     
         /// Guess open plugin by extension    

@@ -31,7 +31,7 @@ public:
     /// => Printed at the top of the parameter window
     /// => You can use html formatting tags (like <br> <b> and <i>) to improve readability.
     /// => Used in the "About plugin" and to create the filter list page.
-    virtual QString description() { return "description not available"; }
+    virtual QString description() { return name(); }
 
     /// The very short string (a few words) describing each filtering action
     /// This string is used also to define the menu entry. The defaut name
