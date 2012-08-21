@@ -14,7 +14,7 @@ QBox3D Document::bbox() {
     QBox3D box;
     /// @todo rotate bbox of model by its custom transfrom like meshlab was doing in box.Add(m->transform,m->bbox)
     foreach(Model* m, _models)
-        box.unite(m->getBoundingBox());
+        box.unite(m->bbox());
     return box;
 }
 

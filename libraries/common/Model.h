@@ -41,7 +41,6 @@ public:
         
     /// @{ Basic geometry, needed for rendering
     public:
-        const QBox3D& getBoundingBox(){ return _bbox; } ///< @obsolete
         const QBox3D& bbox(){ return _bbox; }
     protected: 
         QBox3D _bbox;          /// Per-model bounding box (before transform is applied)

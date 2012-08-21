@@ -86,7 +86,7 @@ void StarlabDrawArea::resetViewport(){
     largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
 
     foreach(Model* m, document()->models()){
-        const QBox3D bbox = m->getBoundingBox();
+        const QBox3D bbox = m->bbox();
         if(bbox.intersects(largestBBox))
             largestBBox = bbox;
         /*Vector3 c = (m->bbox.minimum() + m->bbox.maximum()) * 0.5;
@@ -119,7 +119,7 @@ void StarlabDrawArea::setIsoProjection(){
     QBox3D largestBBox;
     largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
     foreach(Model* m, document()->models()){
-        const QBox3D bbox = m->getBoundingBox();
+        const QBox3D bbox = m->bbox();
         if(bbox.intersects(largestBBox))
             largestBBox = bbox;
     }

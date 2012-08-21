@@ -24,10 +24,10 @@ void cloud_filter_example::applyFilter(RichParameterSet* pars){
     bool normalize = pars->getBool("normalize");
     if(normalize){
         qDebug() << "Normalizing...";
-        qDebug() << "Old bounding box: " << printBounding(cloud->getBoundingBox());
-        QVector3D s = cloud->getBoundingBox().size();
+        qDebug() << "Old bounding box: " << printBounding(cloud->bbox());
+        QVector3D s = cloud->bbox().size();
         float scale = qMax(s.x(),qMax(s.y(),s.z()));
-        QVector3D offset = cloud->getBoundingBox().center();
+        QVector3D offset = cloud->bbox().center();
         
         for(int i=0; i<cloud->points.size(); i++){
             QVector4D& pt = cloud->points[i];
@@ -36,7 +36,7 @@ void cloud_filter_example::applyFilter(RichParameterSet* pars){
             pt.setZ( (pt.z() - offset.z())/scale );
         }
         cloud->updateBoundingBox();
-        qDebug() << "New bounding box: " << printBounding(cloud->getBoundingBox());
+        qDebug() << "New bounding box: " << printBounding(cloud->bbox());
     }       
         
 #if 0

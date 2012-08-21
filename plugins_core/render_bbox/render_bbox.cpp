@@ -3,7 +3,7 @@
 
 void render_bbox::render(){
     /// Setup BBOX color
-    QBox3D bbox = model()->getBoundingBox();
+    QBox3D bbox = model()->bbox();
     QColor& c = model()->color;
     glColor3f(c.redF(),c.greenF(),c.blueF());
     
