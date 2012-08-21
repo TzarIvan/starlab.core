@@ -61,8 +61,7 @@ void gui_view::load_viewfrom(){
     viewFromMenu->setEnabled(true);
 }
 
-void gui_view::load_toggleCameraProjection()
-{
+void gui_view::load_toggleCameraProjection(){
     QMenu* menu = mainWindow()->viewMenu->addMenu("Camera projection");
     {
         QAction* action = new QAction (tr("Perspective"), this);
@@ -76,7 +75,7 @@ void gui_view::load_toggleCameraProjection()
     }
     {
         // uses Orthographic projection + moves camera position
-        QAction* action = new QAction (tr("Isometric"), this);
+        QAction* action = new QAction (tr("Isometric View"), this);
         connect(action, SIGNAL(triggered()), drawArea(), SLOT(setIsoProjection()));
         menu->addAction(action);
     }

@@ -48,7 +48,7 @@ void CmdLineParser::optionFound(const QString & name, const QVariant & value){
     if(name=="filter") settings->set("filter", value.toString());
 }
 
-void CmdLineParser::paramFound(const QString & name, const QVariant & value){
+void CmdLineParser::paramFound(const QString& /*name*/, const QVariant & value){
     // qWarning() << "Parameter:" << name << value.toString();
     QStringList pars = settings->getStringList("inputs");
     pars.append(value.toString());

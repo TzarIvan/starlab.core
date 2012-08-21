@@ -6,7 +6,6 @@
 CONFIG += starlab
 STARLAB_TEMPLATE = appbundle
 STARLAB_DEPENDS += common parameters
-STARLAB_EXTERNAL_DEPENDS += glut
 
 SOURCES += main.cpp
 SOURCES += CmdLineParser.cpp

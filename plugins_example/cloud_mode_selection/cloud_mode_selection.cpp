@@ -40,27 +40,29 @@ void cloud_mode_selection::drawWithNames(){
 }
 
 void cloud_mode_selection::drawSelectionRectangle(){  
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
-    
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    int width = drawArea()->width();
-    int height = drawArea()->height();
-    glOrtho(0,width,height,0,-1,1);
+    glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT | GL_LIGHTING_BIT );
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_LIGHTING);
         
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glColor4d(1.0, 0.0, 0.0, 0.2);
-    glBegin(GL_LINE_STRIP);
-        glVertex2f(start.x(),start.y());
-        glVertex2f(cur.x(),start.y());
-        glVertex2f(cur.x(),cur.y());
-        glVertex2f(start.x(),cur.y());
-        glVertex2f(start.x(),start.y());
-    glEnd();
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        int width = drawArea()->width();
+        int height = drawArea()->height();
+        glOrtho(0,width,height,0,-1,1);
+            
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glColor4d(1.0, 0.0, 0.0, 0.2);
+        glBegin(GL_LINE_STRIP);
+            glVertex2f(start.x(),start.y());
+            glVertex2f(cur.x(),start.y());
+            glVertex2f(cur.x(),cur.y());
+            glVertex2f(start.x(),cur.y());
+            glVertex2f(start.x(),start.y());
+        glEnd();
+    glPopAttrib();
 }
 
 Q_EXPORT_PLUGIN(cloud_mode_selection)

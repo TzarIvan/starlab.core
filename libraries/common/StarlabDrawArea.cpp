@@ -72,7 +72,12 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
     /// Determines which events are forwarded to Mode plugins
     installEventFilter(this);
     
-    setGridIsDrawn(false);
+    /// Default camera
+    camera()->setType(Camera::ORTHOGRAPHIC);
+    
+    this->setFPSIsDisplayed(true);
+    // this->setAnimationPeriod(0);
+    // setGridIsDrawn(false);
     
     // Keyboard + Mouse behavior
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);

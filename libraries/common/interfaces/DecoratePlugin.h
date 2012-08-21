@@ -11,11 +11,13 @@ class StarlabDrawArea;
 class DecoratePlugin : public StarlabPlugin{
 public:
     /// This is similar to a render loop, thus it's called repeteadly
-    virtual void decorate(Model* /*model*/, StarlabDrawArea* /*parent*/, QPainter* /*p*/) = 0;
+    virtual void decorate() = 0;
     /// Allocate/Initialize anything needed in here
-    virtual void startDecorate(Model* /*model*/, StarlabDrawArea* /*parent*/){}
+    virtual void startDecorate(){}
     /// Free resources?
-    virtual void endDecorate(Model* /*model*/, StarlabDrawArea* /*parent*/) {}
+    virtual void endDecorate() {}
+    /// @brief allows you to retrieve current this->model()
+    using StarlabPlugin::model;
     
 public:
     /// @internal A decorator plugin can either be enabled or disabled thus we make its action "Checkable"

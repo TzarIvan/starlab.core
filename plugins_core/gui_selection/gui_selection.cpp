@@ -93,6 +93,11 @@ void gui_selection::triggerSetDefaultRenderer(){
     // qDebug() << "gui_selection::triggerSetDefaultRenderer()";
     RenderPlugin* renderer = drawArea()->activeRenderer(model());
     pluginManager()->setPreferredRenderer(model(),renderer);
+    QString message;
+    message.sprintf("Preferred renderer for '%s' set to '%s'",
+                    qPrintable(model()->metaObject()->className()),
+                    qPrintable(renderer->name()));
+    mainWindow()->statusBarMessage(message);
 }
 
 void gui_selection::triggerRenderModeAction(QAction* action){
