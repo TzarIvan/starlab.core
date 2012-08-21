@@ -18,7 +18,8 @@ public:
       * specified by the xml options file 
       */
     StarlabSettings();
-
+    void sync(){ qsettings.sync(); }
+    
     /// Sets hardcoded default setting value (writes only if value is not already defined)
     void setDefault(const QString& key, const QVariant& value);
     void set(const QString& key, const QVariant& value);

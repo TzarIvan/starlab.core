@@ -90,6 +90,7 @@ void gui_selection::toggleDecorator(QAction* action){
 }
 
 void gui_selection::triggerSetDefaultRenderer(){
+    // qDebug() << "gui_selection::triggerSetDefaultRenderer()";
     RenderPlugin* renderer = drawArea()->activeRenderer(model());
     pluginManager()->setPreferredRenderer(model(),renderer);
 }

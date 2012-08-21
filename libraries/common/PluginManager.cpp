@@ -220,7 +220,7 @@ QString PluginManager::getFilterStrings(){
 RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
     Q_ASSERT(model!=NULL);
     RenderPlugin *plugin = renderPlugins.value(pluginName,NULL);
-    if(plugin==NULL) throw StarlabException("Internal Error");  
+    if(plugin==NULL) throw StarlabException("Attempted to load plugin '%s' but I couldn't find one loaded!!",qPrintable(pluginName));  
     RenderPlugin* newplugin = plugin->factory();
     newplugin->_mainWindow = plugin->_mainWindow;
     newplugin->_application = plugin->_application;
@@ -233,8 +233,15 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
 
 QString PluginManager::getPreferredRenderer(Model *model){
     QString key = "DefaultRenderer/"+QString(model->metaObject()->className());
+    /// By default use the bounding box renderer
     settings()->setDefault(key,"Bounding Box");
-    return settings()->getString(key);
+    /// Deal with a non-existent preferred plugin
+    QString rendererName = settings()->getString(key);
+    if(!renderPlugins.contains(rendererName)){
+        settings()->set(key,"Bounding Box");
+        return "Bounding Box";
+    }
+    return rendererName;
 }
 
 void PluginManager::setPreferredRenderer(Model *model, RenderPlugin* plugin){
@@ -242,6 +249,7 @@ void PluginManager::setPreferredRenderer(Model *model, RenderPlugin* plugin){
     Q_ASSERT(plugin!=NULL);
     QString key = "DefaultRenderer/"+QString(model->metaObject()->className());
     settings()->set(key,plugin->name());
+    settings()->sync();
 }
 
 QList<QAction *> PluginManager::getRenderPluginsActions(Model* model){
