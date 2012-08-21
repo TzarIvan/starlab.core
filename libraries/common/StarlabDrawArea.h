@@ -15,6 +15,10 @@ class StarlabSettings;
 class QGLWidget;
 class Model;
 
+#ifndef GL_MULTISAMPLE
+#define GL_MULTISAMPLE  0x809D
+#endif
+
 /// @brief The default behavior that ANY DrawArea plugin should expose to the system
 ///
 /// @internal The problem needs to be solved with encapsulation. Unfortunately
@@ -44,6 +48,7 @@ class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QGLViewer{
     /// @{ Rendering specification
     public:
         void resetViewport(); /// Restores the default view camera
+
     private:
         void init(); 
         void draw(); ///< Draws the whole scene
@@ -86,6 +91,14 @@ public slots:
             
     /// Updates the draw area
     void update();
+
+    /// Camera projection modes
+    void setPerspectiveProjection();
+    void setOrthoProjection();
+    void setIsoProjection();
+
+    /// Preset camera viewpoints
+    void viewFrom(QAction *);
 };
 
 /// Old implementation

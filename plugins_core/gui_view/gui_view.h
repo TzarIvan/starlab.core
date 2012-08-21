@@ -15,5 +15,7 @@ class gui_view : public GuiPlugin{
         void load_viewfrom();
         void load_fullscreen();
         void load_copypasteviewmatrix();
+
+        void load_toggleCameraProjection();
     /// @}    
 };

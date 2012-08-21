@@ -2,7 +2,6 @@
 #include "cloud_mode_selection.h"
 #include "StarlabDrawArea.h"
 #include <qgl.h>
-#include "glu.h"
 
 bool cloud_mode_selection::mousePressEvent(QMouseEvent* event){
     // qDebug() << "cloud_mode_selection::mousePressEvent()";
@@ -45,7 +44,7 @@ void cloud_mode_selection::drawSelectionRectangle(){
         
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glColor4f(1.0, 0.0, 0.0, 0.2);
+    glColor4d(1.0, 0.0, 0.0, 0.2);
     glBegin(GL_LINE_STRIP);
         glVertex2f(start.x(),start.y());
         glVertex2f(cur.x(),start.y());

@@ -7,6 +7,7 @@
 #include "RenderObject.h"
 #include "interfaces/ModePlugin.h"
 
+using namespace qglviewer;
 
 QList<RenderPlugin*> StarlabDrawArea::renderers(){
     QList<RenderPlugin*> retval; ///< in order
@@ -80,7 +81,7 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
 }
 
 void StarlabDrawArea::resetViewport(){
-    qglviewer::Vec center(0,0,0);
+    Vec center(0,0,0);
     QBox3D largestBBox;
     largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
 
@@ -89,7 +90,7 @@ void StarlabDrawArea::resetViewport(){
         if(bbox.intersects(largestBBox))
             largestBBox = bbox;
         /*Vector3 c = (m->bbox.minimum() + m->bbox.maximum()) * 0.5;
-        center = qglviewer::Vec(c[0],c[1],c[2]);
+        center = Vec(c[0],c[1],c[2]);
         radius = (m->bbox.maximum() - m->bbox.minimum()).norm() * 0.5;*/
     }
 
@@ -98,9 +99,78 @@ void StarlabDrawArea::resetViewport(){
 
     camera()->setSceneRadius(radius * 2);
     camera()->showEntireScene();
-    camera()->setUpVector(qglviewer::Vec(0,0,1));
-    camera()->setPosition(qglviewer::Vec(radius,radius,radius) + center);
+    camera()->setUpVector(Vec(0,0,1));
+    camera()->setPosition(Vec(radius,radius,radius) + center);
     camera()->lookAt(center);
+}
+
+void StarlabDrawArea::setPerspectiveProjection(){
+    camera()->setType(Camera::PERSPECTIVE); updateGL();
+}
+
+void StarlabDrawArea::setOrthoProjection(){
+    camera()->setType(Camera::ORTHOGRAPHIC); updateGL();
+}
+
+void StarlabDrawArea::setIsoProjection(){
+    setOrthoProjection();
+
+    // Find largest bounding box
+    QBox3D largestBBox;
+    largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
+    foreach(Model* m, document()->models()){
+        const QBox3D bbox = m->getBoundingBox();
+        if(bbox.intersects(largestBBox))
+            largestBBox = bbox;
+    }
+
+    // Move camera such that entire scene is visisble
+    double mx = 2*max(largestBBox.maximum().x(), max(largestBBox.maximum().y(), largestBBox.maximum().z()));
+    Frame f(Vec(mx,-mx,mx), Quaternion());
+    f.rotate(Quaternion(Vec(0,0,1), M_PI / 4.0));
+    f.rotate(Quaternion(Vec(1,0,0), M_PI / 3.3));
+    camera()->interpolateTo(f,0.25);
+}
+
+void StarlabDrawArea::viewFrom(QAction * a)
+{
+    QStringList list;
+    list << "Top" << "Bottom" << "Left" << "Right" << "Front" << "Back";
+
+    double e = 2.0; // should be a smart choice from bbox?
+    Frame f;
+
+    switch(list.indexOf(a->text()))
+    {
+
+    case 0:
+        f = Frame(Vec(0,0,e), Quaternion());
+        camera()->interpolateTo(f,0.25);
+        break;
+    case 1:
+        f = Frame(Vec(0,0,-e), Quaternion());
+        f.rotate(Quaternion(Vec(1,0,0), M_PI));
+        camera()->interpolateTo(f,0.25);
+        break;
+    case 2:
+        f = Frame(Vec(0,-e,0), Quaternion(Vec(0,0,1),Vec(0,-1,0)));
+        camera()->interpolateTo(f,0.25);
+        break;
+    case 3:
+        f = Frame(Vec(0,e,0), Quaternion(Vec(0,0,1),Vec(0,1,0)));
+        f.rotate(Quaternion(Vec(0,0,1), M_PI));
+        camera()->interpolateTo(f,0.25);
+        break;
+    case 4:
+        f = Frame(Vec(e,0,0), Quaternion(Vec(0,0,1),Vec(1,0,0)));
+        f.rotate(Quaternion(Vec(0,0,1), M_PI / 2.0));
+        camera()->interpolateTo(f,0.25);
+        break;
+    case 5:
+        f = Frame(Vec(-e,0,0), Quaternion(Vec(0,0,-1),Vec(1,0,0)));
+        f.rotate(Quaternion(Vec(0,0,-1), M_PI / 2.0));
+        camera()->interpolateTo(f,0.25);
+    }
 }
 
 void StarlabDrawArea::init(){

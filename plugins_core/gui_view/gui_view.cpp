@@ -2,10 +2,11 @@
 
 void gui_view::load(){
     /// @todo re-enable them
-    // load_viewfrom();
+    load_viewfrom();
     // load_fullscreen();
     // load_copypasteviewmatrix();
-    
+    load_toggleCameraProjection();
+
     { /// @todo
         // toolBarMenu = viewMenu->addMenu(tr("&ToolBars"));
         // toolBarMenu->addAction(showToolbarStandardAct);
@@ -58,6 +59,27 @@ void gui_view::load_viewfrom(){
     connect(group, SIGNAL(triggered(QAction *)), drawArea(), SLOT(viewFrom(QAction *)));
 
     viewFromMenu->setEnabled(true);
+}
+
+void gui_view::load_toggleCameraProjection()
+{
+    QMenu* menu = mainWindow()->viewMenu->addMenu("Camera projection");
+    {
+        QAction* action = new QAction (tr("Perspective"), this);
+        connect(action, SIGNAL(triggered()), drawArea(), SLOT(setPerspectiveProjection()));
+        menu->addAction(action);
+    }
+    {
+        QAction* action = new QAction (tr("Orthographic"), this);
+        connect(action, SIGNAL(triggered()), drawArea(), SLOT(setOrthoProjection()));
+        menu->addAction(action);
+    }
+    {
+        // uses Orthographic projection + moves camera position
+        QAction* action = new QAction (tr("Isometric"), this);
+        connect(action, SIGNAL(triggered()), drawArea(), SLOT(setIsoProjection()));
+        menu->addAction(action);
+    }
 }
 
 Q_EXPORT_PLUGIN(gui_view)
