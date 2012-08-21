@@ -40,7 +40,8 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     
     /// On changes to the document, refresh the GUI
     {
-        connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
+        connect(document(), SIGNAL(hasChanged()), this,       SLOT(update()));
+        connect(document(), SIGNAL(hasChanged()), drawArea(), SLOT(update()));
     }
         
     /// Instantiate Menus (plugins will fill them in)
@@ -70,9 +71,12 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         selectionToolbar = addToolBar(tr("Selection Toolbar"));
         filterToolbar = addToolBar(tr("Filter Toolbar"));
 
-        /// @todo Why was this necessary in MeshLab?
-        // mainToolBar->setIconSize(QSize(32,32)); 
-        
+        /// Initially hide toolbars
+        mainToolbar->setVisible(true);
+        modeToolbar->setVisible(false);
+        selectionToolbar->setVisible(false);
+        filterToolbar->setVisible(false);
+                
         /// @todo is there a better way to retrieve all sub-toolbars?
         toolbars << mainToolbar << modeToolbar << selectionToolbar << filterToolbar;        
     }
@@ -102,7 +106,6 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     /// Connect document changes to view changes
     {
         connect(document(),SIGNAL(resetViewport()), drawArea(),SLOT(resetViewport()));
-        connect(document(),SIGNAL(resetViewport()), drawArea(),SLOT(update()));
     }
     
     /// Installs all the GUI plugins
@@ -122,9 +125,6 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     
     /// Delete window on close
     setAttribute(Qt::WA_DeleteOnClose, true);
-    
-    /// Re-fresh the window (which removes empty toolbars.. etc..)
-    this->update();
 }
 
 void StarlabMainWindow::dropEvent(QDropEvent* event) {
@@ -169,10 +169,7 @@ void StarlabMainWindow::update(){
     /// Update all the menus/toolbars
     foreach(GuiPlugin* plugin, pluginManager()->guiPlugins)
         plugin->update();
-    
-    /// Update the drawArea
-    _drawArea->update();
-    
+      
     /// Only display menus and toolbars if they contain something
     {        
         /// Disable empty menus...
@@ -191,10 +188,6 @@ void StarlabMainWindow::update(){
             tb->setVisible(hasactions);
         }
     }
-}
-
-void StarlabMainWindow::updateDrawArea(){
-    _drawArea->update();
 }
 
 void StarlabMainWindow::statusBarMessage(QString message, float timeout){

@@ -45,7 +45,7 @@ void gui_view::load_viewfrom(){
     QAction* reset = new QAction (tr("Reset"), this);
     reset->setShortcutContext(Qt::ApplicationShortcut);
     reset->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_H);
-    connect(reset, SIGNAL(triggered()), drawArea(), SLOT(viewFrom()));
+    connect(reset, SIGNAL(triggered()), drawArea(), SLOT(resetViewport()));
     viewFromMenu->addAction(reset);
 
     QActionGroup* group =  new QActionGroup(this);

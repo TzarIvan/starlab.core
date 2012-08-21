@@ -116,9 +116,6 @@ void gui_filemenu::reload_selection(){
 
     /// Inform the user
     mainWindow()->statusBarMessage("Model '"+ newmodel->name +"' reloaded from path: " + newmodel->path,5000);
-    
-    /// Refresh
-    mainWindow()->update();
 }
 
 

@@ -65,8 +65,7 @@ bool StarlabApplication::saveModel(Model* model, QString path){
 }
 
 bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
-    qDebug("StarlabApplication::loadModel(\"%s\")", qPrintable(path));
-    
+    // qDebug("StarlabApplication::loadModel(\"%s\")", qPrintable(path));    
     QFileInfo fileInfo(path);
     QString extension = fileInfo.suffix().toLower();
     QString basename = fileInfo.completeBaseName();
@@ -99,9 +98,8 @@ bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
     
     return true;
 }
-bool StarlabApplication::loadProject(QString path, ProjectInputOutputPlugin* plugin){
-    qDebug("StarlabApplication::loadProject(\"%s\")", qPrintable(path));
-    
+bool StarlabApplication::loadProject(QString path, ProjectInputOutputPlugin* plugin){   
+    // qDebug("StarlabApplication::loadProject(\"%s\")", qPrintable(path));
     QFileInfo fileInfo(path);
     QString extension = fileInfo.suffix().toLower();
     QString basename = fileInfo.completeBaseName();    
@@ -128,7 +126,6 @@ bool StarlabApplication::loadProject(QString path, ProjectInputOutputPlugin* plu
     
     /// Refresh visualization
     document()->emit_resetViewport();
-    document()->emit_hasChanged();
     
     /// @todo catch exceptions in iIO->open and return false on any caught exception
     return true;

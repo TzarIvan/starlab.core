@@ -30,86 +30,67 @@ class Model;
 class DYNAMIC_COMMON_EXPORT StarlabDrawArea : public QGLViewer{
     Q_OBJECT
     
-    /// @{ core
-    public:
-        /// Constructor
-        StarlabDrawArea(StarlabMainWindow* mainWindow);
-        /// Polymorphic destructor
-        ~StarlabDrawArea();
-    private:
-        StarlabMainWindow* const _mainWindow;
-    public:
-        StarlabMainWindow* mainWindow(){ return _mainWindow; }
-        Document* document(){ return _mainWindow->document(); }
-        StarlabSettings* settings(){ return _mainWindow->settings(); }
-        PluginManager* pluginManager(){ return _mainWindow->pluginManager(); }
-    /// @}
+/// @{ core
+public:
+    /// Constructor
+    StarlabDrawArea(StarlabMainWindow* mainWindow);
+    /// Polymorphic destructor
+    ~StarlabDrawArea();
+private:
+    StarlabMainWindow* const _mainWindow;
+public:
+    StarlabMainWindow* mainWindow(){ return _mainWindow; }
+    Document* document(){ return _mainWindow->document(); }
+    StarlabSettings* settings(){ return _mainWindow->settings(); }
+    PluginManager* pluginManager(){ return _mainWindow->pluginManager(); }
+/// @}
         
-    /// @{ Rendering specification
-    public:
-        void resetViewport(); /// Restores the default view camera
-
-    private:
-        void init(); 
-        void draw(); ///< Draws the whole scene
-        void drawWithNames();
-    /// @}
-        
-    /// @{ ModePlugin management
-    private:
-        bool eventFilter(QObject *object, QEvent *event);
-    /// @}
-        
-    /// @{ Model rendering system
-    private:
-        /// Stores the association model/renderer
-        QMap<Model*, RenderPlugin*> _renderers;
-    public:
-        /// Retrieves the list of renderers and initialize if necessary
-        QList<RenderPlugin*> renderers();
-        /// Set the renderer for the model by name
-        RenderPlugin* activeRenderer(Model* model);
-        void setRenderer(Model *model, QString pluginName);
-    /// @}
-    
-    /// @{ Scene-wide rendering elements (i.e. used for debug)
-    public:
-        void drawAllRenderObjects();
-        void deleteAllRenderObjects();
-        void deleteRenderObject(RenderObject* );
-        RenderObject::Triangle& drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color=Qt::red);
-        RenderObject::Point&    drawPoint(QVector3D p1, float size=1, QColor color=Qt::red);
-        RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
-        RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
-    
-    protected:        
-        /// Handles to additional render objects, created by draw??() methods, deleted by ~StarlabDrawArea()
-        QList<RenderObject::Base*> renderObjectList;
-    /// @}
-              
+/// @{ Rendering specification
 public slots:
-            
-    /// Updates the draw area
-    void update();
-
-    /// Camera projection modes
+    void resetViewport();     ///< Restores the default view camera
+    void viewFrom(QAction *); ///< Preset camera viewpoints
     void setPerspectiveProjection();
     void setOrthoProjection();
     void setIsoProjection();
+private:
+    void init();              ///< Initializes the scene
+    void draw();              ///< Draws the whole scene
+    void drawWithNames();
+/// @}
+    
+/// @{ ModePlugin management
+private:
+    bool eventFilter(QObject *object, QEvent *event);
+/// @}
+        
+/// @{ Model rendering system
+private:
+    /// Stores the association model/renderer
+    QMap<Model*, RenderPlugin*> _renderers;
+public:
+    /// Retrieves the list of renderers and initialize if necessary
+    QList<RenderPlugin*> renderers();
+    /// Set the renderer for the model by name
+    RenderPlugin* activeRenderer(Model* model);
+    void setRenderer(Model *model, QString pluginName);
+/// @}
+    
+/// @{ Scene-wide rendering elements (i.e. used for debug)
+public:
+    void drawAllRenderObjects();
+    void deleteAllRenderObjects();
+    void deleteRenderObject(RenderObject* );
+    RenderObject::Triangle& drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color=Qt::red);
+    RenderObject::Point&    drawPoint(QVector3D p1, float size=1, QColor color=Qt::red);
+    RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
+    RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
 
-    /// Preset camera viewpoints
-    void viewFrom(QAction *);
+protected:        
+    /// Handles to additional render objects, created by draw??() methods, deleted by ~StarlabDrawArea()
+    QList<RenderObject::Base*> renderObjectList;
+/// @}
+              
+public slots:
+    /// Updates the draw area
+    void update();
 };
-
-/// Old implementation
-//class StarlabDrawArea{   
-//public slots:
-//    /// Copies the view matrix to the system clipboard
-//    virtual void viewToClipboard(){}
-//    /// Pastes the view matrix to the system clipboard
-//    virtual void viewFromClipboard(){}
-//    /// Simple viewpoint selection
-//    virtual void viewFrom(QAction* /*from*/=NULL){}
-//    /// Selects a simple view setting (MESHLAB: createOrthoView)
-//    virtual void selectSimpleView(QString /*viewname*/){}
-//};

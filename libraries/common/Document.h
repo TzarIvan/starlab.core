@@ -8,12 +8,11 @@ class DYNAMIC_COMMON_EXPORT Document : public QObject{
     
 /// @{ Busy system management
 private:
-    int _isBusy; // default 0
+    int _isBusy;     /// defaults 0
 public:
-    void pushBusy(){_isBusy++;}
-    void popBusy(){if(_isBusy>=1) _isBusy--;}
-    /// Is the document busy? (I/O for example)
-    bool isBusy(){ return _isBusy>0; }
+    void pushBusy(); ///< Increases the busy level of the document 
+    void popBusy();  ///< Decreases the busy status, emits hasChanged() if !isBusy
+    bool isBusy();   /// Is the document busy? (i.e. busy during I/O)   
 /// @}
 
 private:
@@ -75,14 +74,10 @@ public:
 /// @{ Document status updates
 signals:
     void resetViewport(); ///< Document requesting a reset of the view matrixes
-    void hasChanged();    ///< Document has changed
+    void hasChanged();    ///< Document has changed, emitted after "last" popBusy()
 public:
-    void emit_resetViewport(){ emit resetViewport(); }
-    void emit_hasChanged(){ emit hasChanged(); }
+    void emit_resetViewport();
+private:
+    void emit_hasChanged();
 /// @}
-    
-public: 
-    /// Converts document to XML and writes to the desired file
-    void writeToXML(QString filename);
-    void readFromXML(QString filename);
 };

@@ -52,14 +52,15 @@ LayerDialog::LayerDialog(StarlabMainWindow* parent) : QDockWidget(parent){
 void LayerDialog::modelItemClicked(QTreeWidgetItem* item , int column_number){
     LayersWidgetModelItem* mitem = dynamic_cast<LayersWidgetModelItem*>(item); 
     if(mitem){
-        /// Clicked on the eye, toggle visibility
-        if( column_number==0 )
-            mitem->model.isVisible = !mitem->model.isVisible;
-        /// A click on any column makes a selection
-        if( column_number>0  )
-            mw->document()->setSelectedModel( &( mitem->model ) );
-        updateTable();
-        mw->update();
+        mw->document()->pushBusy();
+            /// Clicked on the eye, toggle visibility
+            if( column_number==0 )
+                mitem->model.isVisible = !mitem->model.isVisible;
+            /// A click on any column makes a selection
+            if( column_number>0  )
+                mw->document()->setSelectedModel( &( mitem->model ) );
+            updateTable();
+        mw->document()->popBusy();
     }
 }
 

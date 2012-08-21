@@ -3,7 +3,7 @@
 
 /// Since we depend on the selected model, the load is minimal
 void gui_selection::load(){
-    qDebug() << "gui_selection::load()";
+    // qDebug() << "gui_selection::load()";
     this->decoratorGroup = new QActionGroup(this);
     this->decoratorGroup->setExclusive(false);
     this->renderModeGroup = new QActionGroup(this);

@@ -91,13 +91,11 @@ public:
     /// @brief Executes a menu command by name, achieving the same effect as clicking on an action. 
     void triggerMenuActionByName(QString name);
         
-    public slots:
+    private slots:
     /// @brief Update the whole Starlab Window
-    /// => reloads menus
-    /// => refreshes renderer
-    /// => ... missing something?
-    virtual void update();
-    void updateDrawArea();
+    /// => reloads toolbar & menus
+    /// @note See drawArea if that's what you want to update
+    void update();
     
     /// @{ @name Window's statusbar management
     public slots:

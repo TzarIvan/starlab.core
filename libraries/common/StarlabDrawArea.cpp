@@ -48,22 +48,20 @@ void StarlabDrawArea::setRenderer(Model* model, QString pluginName){
         }
         _renderers[model] = newPlugin;
     document()->popBusy();
-    
-    /// Refresh the window
-    this->update();
 }
 
 void StarlabDrawArea::update(){
     // qDebug() << "StarlabDrawArea::update()";
-
-    /// Don't update on a busy document
-    if(document()->isBusy()) return;
-
+    
+    /// @internal Initialization can act on busy document
     /// Update the metadata needed by the renderer
     /// e.g. stick data in vertex buffer.. etc..
     foreach(RenderPlugin* renderer, renderers())
         renderer->init();
     
+    /// Don't update on a busy document
+    if(document()->isBusy()) return;
+
     /// This will force a "paint" of the GL window
     updateGL();
 }
