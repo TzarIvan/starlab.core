@@ -27,5 +27,6 @@ private:
 
 class CloudRenderPlugin : public RenderPlugin{
 private:
-    bool isApplicable(Model* model){ return isA(model); }    
+    bool isApplicable(Model* model){ return isA(model); }
+    CloudModel* cloud(){ return safeCast(model()); }
 };

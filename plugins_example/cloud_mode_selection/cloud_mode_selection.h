@@ -1,5 +1,6 @@
 #pragma once
 #include "interfaces/ModePlugin.h"
+#include "CloudModel.h"
 
 class cloud_mode_selection : public ModePlugin{
     Q_OBJECT
@@ -16,6 +17,7 @@ class cloud_mode_selection : public ModePlugin{
     bool mouseReleaseEvent(QMouseEvent*);
 
     void decorate();
+    void drawWithNames();
     void drawSelectionRectangle();
 
     bool isDragging;
@@ -23,4 +25,8 @@ class cloud_mode_selection : public ModePlugin{
     QPoint cur;
     QPoint prev;
     
+    /// 
+    CloudModel* cloud(){ 
+        return qobject_cast<CloudModel*>(model()); 
+    }
 };

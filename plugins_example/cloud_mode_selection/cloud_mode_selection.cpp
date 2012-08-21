@@ -30,6 +30,15 @@ void cloud_mode_selection::decorate(){
     drawSelectionRectangle();
 }
 
+void cloud_mode_selection::drawWithNames(){
+    qDebug() << "cloud_mode_selection::drawWithNames()";
+    glPushMatrix();
+        glMultMatrixd( document()->transform.data() );
+        foreach(QVector4D v, cloud()->points)
+            glVertex3d(v.x(), v.y(), v.z());
+    glPopMatrix();     
+}
+
 void cloud_mode_selection::drawSelectionRectangle(){  
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -53,6 +62,5 @@ void cloud_mode_selection::drawSelectionRectangle(){
         glVertex2f(start.x(),start.y());
     glEnd();
 }
-
 
 Q_EXPORT_PLUGIN(cloud_mode_selection)

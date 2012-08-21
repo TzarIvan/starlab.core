@@ -32,6 +32,7 @@ public:
     /// @{ @name Rendering events (optional)
     public: 
         virtual void decorate(){}
+        virtual void drawWithNames(){}
     /// @} 
 
     /// @{ @name User Input Callbacks (optional)
@@ -47,6 +48,8 @@ public:
     
     /// Access to properties
     using StarlabPlugin::drawArea;
+    using StarlabPlugin::model;
+    using StarlabPlugin::document;
 };
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/1.0")
