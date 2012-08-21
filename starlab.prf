@@ -62,10 +62,12 @@ equals(STARLAB_TEMPLATE,"dynamic"){
 
 equals(STARLAB_TEMPLATE,"plugin"){
     STARLAB_DEPENDS *= common parameters
-	STARLAB_EXTERNAL *= qglviewer
+    STARLAB_EXTERNAL *= qglviewer
 		
-	TEMPLATE = lib
+    TEMPLATE = lib
     CONFIG += plugin
+    DEPENDPATH += $$_PRO_FILE_PWD_
+    INCLUDEPATH += $$_PRO_FILE_PWD_
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/plugins
     win32: DESTDIR = \"$$DEPLOYPATH/plugins\"
     unix:!macx: error(TODO)
@@ -98,17 +100,20 @@ for(lib, STARLAB_DEPENDS){
     # Loads the library preferences from a PRF file
     PRFFILENAME = $$ROOT/libraries/$$lib/"$$lib".prf
     exists($$PRFFILENAME) : load($$PRFFILENAME)
-
     
     #---------------------- COMPILE TIME ---------------------------------------
     DIRNAME = $$dirname(lib)
     isEmpty(DIRNAME) {
-        INCLUDEPATH *= $$ROOT/libraries/$$lib/
-        DEPENDPATH  *= $$ROOT/libraries/$$lib/
+        LIBRARY_DIRECTORY = $$ROOT/libraries/$$lib/
+        INCLUDEPATH *= $$LIBRARY_DIRECTORY
+        DEPENDPATH  *= $$LIBRARY_DIRECTORY
+        !exists($$LIBRARY_DIRECTORY) : error("depends fail, could not find:" $$LIBRARY_DIRECTORY)
     } else {
+        LIBRARY_DIRECTORY = $$_PRO_FILE_PWD_/$$lib
         INCLUDEPATH *= $$_PRO_FILE_PWD_/$$lib
         DEPENDPATH  *= $$_PRO_FILE_PWD_/$$lib
         lib = $$basename(lib)
+        !exists($$LIBRARY_DIRECTORY) : error("depends fail, could not find:" $$LIBRARY_DIRECTORY)
     }
 
     # Link time depends
