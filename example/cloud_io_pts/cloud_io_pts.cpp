@@ -29,9 +29,8 @@ Model* cloud_io_pts::open(QString path){
 }    
 void cloud_io_pts::save(Model* model,QString path){
     CloudModel* cloud = safeCast(model);
-    checkValidPath(path); 
     FILE* fid = fopen( qPrintable(path), "w" );
-    if( fid == NULL ) throw StarlabException("the file cannot be opened");
+    if(fid==NULL) throw StarlabException("the file cannot be opened");
     
     foreach(QVector4D p, cloud->points)
         fprintf(fid, "%f %f %f %f\n", p.x(),p.y(),p.z(),p.w());
