@@ -146,7 +146,7 @@ void StarlabMainWindow::triggerFilterByName(QString name){
     
     /// Search the "filter" menu for the proper plugin
     foreach(QAction* action, filterMenu->actions())
-        if(action->text().toLower()==name){
+        if(action->text()==name){
             isFound=true;
             action->trigger();
         }
@@ -158,7 +158,18 @@ void StarlabMainWindow::triggerFilterByName(QString name){
 
 /// @todo Implement this function...
 void StarlabMainWindow::triggerMenuActionByName(QString name){
-    qDebug() << "TODO: StarlabMainWindow::triggerMenuActionByName( " << name << ")";
+    QAction* trigger_me;
+    foreach(QMenu* menu, menus)
+        foreach(QAction* action, menu->actions())
+            if(action->text()==name)
+                trigger_me = action;
+    
+    if(trigger_me){
+        statusBarMessage("Auto-Started: '"+ name + "'",10);
+        trigger_me->trigger();
+    }
+    else
+        statusBarMessage("[WARNING] Auto-Started failed: '"+ name + "'",10);
 }
 
 void StarlabMainWindow::update(){

@@ -13,8 +13,7 @@ StarlabSettings::StarlabSettings(StarlabApplication* application) :
     
     /// Defaults   
     setDefault("lastUsedDirectory",QDir::homePath());
-    setDefault("autostartWithFilter","");
-    setDefault("autostartWithMode","");
+    setDefault("autostartWithAction","");
     
     /// Now override any hardcoded with the ones specified by the user parameters
     load();

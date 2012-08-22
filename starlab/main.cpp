@@ -38,6 +38,10 @@ int main(int argc, char *argv[]) {
         mainWindow->activateWindow();
         mainWindow->raise();
         
+        /// Auto-start a user-specified action
+        QString actionName = application.settings()->getString("autostartWithAction");
+        if(!actionName.isEmpty()) mainWindow->triggerMenuActionByName(actionName);
+        
         /// Starts the event loop
         return app.exec();    
     }
