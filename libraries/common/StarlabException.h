@@ -76,3 +76,12 @@ public:
         qDebug() << "Bad exception!!"; \
         exit(-1); \
     } 
+
+#define STARLAB_CATCH_BLOCK_NOGUI \
+    catch (StarlabException& e){ \
+        QString message = e.what(); \
+        qWarning() << "[CRITICAL ERROR]: " << message; \
+        exit(-1); \
+    } catch (...) { \
+        qDebug() << "UNKNOWN EXCEPTION"; \
+    } 

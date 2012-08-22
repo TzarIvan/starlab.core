@@ -1,26 +1,31 @@
 #pragma once
+#include <QDebug>
+#include <QCoreApplication>
+#include <QVariant>
 #include "QCommandLine/QCommandLine.h"
-#include "StarlabSettings.h"
-
-class PluginManager;
 
 class CmdLineParser : public QObject{
     Q_OBJECT
 
+public:
+    CmdLineParser(int argc, char *argv[], QObject* parent);
+
+public:
+    bool listFilters;
+    bool saveOverwrite;
+    bool saveCreatecopy;
+    bool showExamples;
+    bool noArguments;
+    QString executeFilter;
+    QStringList inputModels;
+
 private:
     QCommandLine parser;
-   
-public:
-    /// Specify the structure here
-    CmdLineParser(int argc, char *argv[]);
     
-public slots:
+private slots:
     /// Errors result in app termination
     void parseError(const QString & name);
-    /// i.e. --help, -h
     void switchFound(const QString & name);
-    /// i.e. --filter="something"
     void optionFound(const QString & name, const QVariant & value);
-    /// i.e. ~/Data/mesh.off 
     void paramFound(const QString & name, const QVariant & value);
 };

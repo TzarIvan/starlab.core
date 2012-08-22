@@ -41,5 +41,5 @@ int main(int argc, char *argv[]) {
         /// Starts the event loop
         return app.exec();    
     }
-    STARLAB_CATCH_BLOCK   
+    STARLAB_CATCH_BLOCK
 }

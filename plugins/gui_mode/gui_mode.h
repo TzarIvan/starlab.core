@@ -12,9 +12,6 @@ class gui_mode : public GuiPlugin{
 public:    
 
     QAction* defaultModeAction; 
-    gui_mode(){ 
-        defaultModeAction = new QAction (QIcon(":/images/no_edit.png"),"Default", this);
-    }
 
     /// plugin constructor
     virtual void load();

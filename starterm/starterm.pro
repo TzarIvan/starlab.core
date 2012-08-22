@@ -6,5 +6,4 @@ SOURCES += main.cpp \
     CmdLineParser.cpp
 
 HEADERS += \
-    CoreApplication.h \
     CmdLineParser.h

@@ -7,6 +7,7 @@ void gui_mode::load(){
     modeActionGroup->setExclusive(true);
     
     /// Default mode (rendering)
+    defaultModeAction = new QAction (QIcon(":/images/no_edit.png"),"Default", this);
     defaultModeAction->setShortcut(Qt::Key_Escape);
     defaultModeAction->setCheckable(true);
     defaultModeAction->setChecked(true);

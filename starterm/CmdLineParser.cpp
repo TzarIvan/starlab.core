@@ -1,23 +1,27 @@
 #include "CmdLineParser.h"
-#include "PluginManager.h"
-#include "StarlabApplication.h"
-
-#include <QDebug>
-#include <QCoreApplication>
-#include <QVariant>
-
-CmdLineParser::CmdLineParser(int argc, char *argv[]){
+CmdLineParser::CmdLineParser(int argc, char *argv[], QObject *parent){
+    this->setParent(parent);
     parser.setArguments(argc, argv);
+    
+    /// Init
+    listFilters = false;
+    saveOverwrite = false;
+    saveCreatecopy = false;
+    executeFilter = "";
+    showExamples = false;
+    noArguments = true;
     
     /// Real options
     parser.enableVersion(true); ///< enable -v // --version
     parser.enableHelp(true); ///< enable -h / --help
-    parser.addParam("model", "The set models to load", QCommandLine::Multiple);
+    parser.addParam("model", "The path of model files to be processed", QCommandLine::Multiple);
     
     /// Filter options 
-    parser.addSwitch(QChar::Null, "execute", "should we execute the filter or only open the dialog?");
-    parser.addOption(QChar::Null, "filter", "Runs the specified filter, to show available filters type \"starlab --show-filters\"", QCommandLine::Multiple);
-    parser.addSwitch(QChar::Null, "list-filters", "Shows available filters");
+    parser.addSwitch(QChar::Null, "examples",       "Show usage examples", QCommandLine::Optional);
+    parser.addSwitch(QChar::Null, "list-filters",   "Shows available filters");
+    parser.addOption(QChar::Null, "filter",         "Runs the specified filter, to show available filters type \"starlab --show-filters\"", QCommandLine::Multiple);
+    parser.addSwitch(QChar::Null, "save",           "Save the filtered models by creating a new copy", QCommandLine::Optional);
+    parser.addSwitch(QChar::Null, "save-overwrite", "Overwrites the models after they have been filtered", QCommandLine::Optional);
         
     /// Set this class as the parser
     connect(&parser, SIGNAL(switchFound(const QString &)), this, SLOT(switchFound(const QString &)));
@@ -27,34 +31,38 @@ CmdLineParser::CmdLineParser(int argc, char *argv[]){
     
     /// Default hardcoded options
     parser.parse();
+    
+    /// Show help when nothing (aside from Qt options) was given
+    if(noArguments) parser.showHelp(true,0);
 }
 
 void CmdLineParser::parseError(const QString& error){
     qWarning() << qPrintable(error);
     parser.showHelp(true, -1);
-    exit(0);
+    exit(-1);
 }
 
+/// i.e. --help, -h, --list-filters
 void CmdLineParser::switchFound(const QString & name){
-#if 0
-    // qWarning() << "Switch:" << name;
-    if(name=="list-filters") settings->set("action","list-filters");        
-    if(name=="execute")      settings->set("action","execute");
-#endif
+    // qWarning() << "Switch:" << name << name.toString();
+    noArguments=false;
+    if(name=="list-filters") listFilters = true;
+    if(name=="save") saveCreatecopy = true;
+    if(name=="save-overwrite") saveOverwrite = true;
+    if(name=="examples") showExamples = true;
 }
 
+/// Name/Value pair: i.e. --filter="something" means optionFound("filter","something")
 void CmdLineParser::optionFound(const QString & name, const QVariant & value){
-#if 0
     // qWarning() << "Option:" << name << value.toString();
-    if(name=="filter") settings->set("filter", value.toString());
-#endif
+    noArguments=false;
+    if(name=="filter") executeFilter = value.toString();
 }
 
+/// Input (everything that is not option) i.e. ~/Data/mesh.off 
 void CmdLineParser::paramFound(const QString& /*name*/, const QVariant & value){
-#if 0
     // qWarning() << "Parameter:" << name << value.toString();
-    QStringList pars = settings->getStringList("inputs");
-    pars.append(value.toString());
-    settings->set("inputs",pars);
-#endif
+    noArguments=false;
+    inputModels.append(value.toString());
 }
+

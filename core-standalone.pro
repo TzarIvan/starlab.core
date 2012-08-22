@@ -30,6 +30,6 @@ SUBDIRS += plugins/gui_view
 #--- EXAMPLES
 SUBDIRS += example/cloud
 SUBDIRS += example/cloud_io_pts
-SUBDIRS += example/cloud_filter_example
+SUBDIRS += example/cloud_filter_normalize
 SUBDIRS += example/cloud_mode_selection
 SUBDIRS += example/cloud_render_points

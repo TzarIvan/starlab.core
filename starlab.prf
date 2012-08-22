@@ -85,15 +85,13 @@ equals(STARLAB_TEMPLATE,"console"){
     DEPENDPATH  += $$_PRO_FILE_PWD_
     INCLUDEPATH += $$_PRO_FILE_PWD_
 
-    macx{
-        DESTDIR = $$DEPLOYPATH/Starlab.app/bin/
-    }
-    win32{
-        error(fix me here)
-    }
-    linux{
-        error(fix me here)
-    }
+    # Correct broken "make clean"
+    macx:QMAKE_CLEAN = rm $$DEPLOYPATH/Starlab.app/plugins/*
+
+    # Where is cmdline application deployed?
+    macx: DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/MacOS/
+    win32: error(fix me here)
+    linux: error(fix me here)
 }
 
 #----- appbundle -----
@@ -106,9 +104,8 @@ equals(STARLAB_TEMPLATE,"appbundle"){
         # Copy data & PRF into app bundle
         DATAPATH = $$DEPLOYPATH/Starlab.app/data
         QMAKE_POST_LINK = mkdir -p $$DATAPATH  && cd $$DATAPATH && cp -r $$ROOT/data/* $$DATAPATH && cp $$ROOT/starlab.prf $$DEPLOYPATH/Starlab.app/
-        # Correct broke "make clean"
-        macx:QMAKE_CLEAN  += $$PWD/../distrib/Starlab.app/Contents/MacOS/starlab
-        macx:QMAKE_CLEAN  += $$PWD/../distrib/plugins/*
+        # Correct broken "make clean"
+        macx:QMAKE_CLEAN = rm $$DEPLOYPATH/Starlab.app/plugins/*
     } 
     win32{
         DESTDIR = $$DEPLOYPATH

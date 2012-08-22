@@ -29,8 +29,15 @@ public:
         bool saveModel(Model* model, QString path="");
         bool loadProject(QString path, ProjectInputOutputPlugin* plugin=NULL);
     /// @}
-    
-    void executeFilter(QString filterName);
+
+    /// @{ filters frontend
+        /// Provides the names of all filters
+        QList<FilterPlugin*> applicableFilters();
+        /// Provides the names of all filters suitable for given model
+        QList<FilterPlugin*> applicableFilters(Model* model);
+        /// Executes a filter by name
+        void executeFilter(QString filterName);
+    /// @}
     
     /// Where is Starlab located?
     /// Mac: /Applications/Starlab.app

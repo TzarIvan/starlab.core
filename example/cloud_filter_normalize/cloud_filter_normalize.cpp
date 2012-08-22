@@ -1,4 +1,4 @@
-#include "cloud_filter_example.h"
+#include "cloud_filter_normalize.h"
 #include "CloudModel.h"
 #include "StarlabDrawArea.h"
 #include "RichParameterSet.h"
@@ -13,12 +13,12 @@ QString printBounding(QBox3D box){
     return retval;
 }
 
-void cloud_filter_example::initParameters(RichParameterSet* pars){
+void cloud_filter_normalize::initParameters(RichParameterSet* pars){
     pars->addParam( new RichBool("normalize",false,"Normalize","Normalize to unitary bounding box"));
     // pars->addParam( new RichFloat("rotatedeg",.2,"Rotate cloud by..."));
 }
 
-void cloud_filter_example::applyFilter(RichParameterSet* pars){
+void cloud_filter_normalize::applyFilter(RichParameterSet* pars){
     CloudModel* cloud = qobject_cast<CloudModel*>(model());
             
     /// Bounding box normalization
@@ -55,7 +55,7 @@ void cloud_filter_example::applyFilter(RichParameterSet* pars){
 #endif   
     
     /// Reset the viewpoint
-    drawArea()->resetViewport();
+    if(drawArea()) drawArea()->resetViewport();
 }
 
-Q_EXPORT_PLUGIN(cloud_filter_example)
+Q_EXPORT_PLUGIN(cloud_filter_normalize)
