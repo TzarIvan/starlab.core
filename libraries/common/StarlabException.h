@@ -80,7 +80,12 @@ public:
 #define STARLAB_CATCH_BLOCK_NOGUI \
     catch (StarlabException& e){ \
         QString message = e.what(); \
-        qWarning() << "[CRITICAL ERROR]: " << message; \
+        qWarning() << "************************ CRITICAL ERROR ************************"; \
+        qWarning() << "*"; \
+        qWarning() << "* Message: " << message; \
+        qWarning() << "*"; \
+        qWarning() << "* The program will now terminate: " << message; \
+        qWarning() << "****************************************************************"; \
         exit(-1); \
     } catch (...) { \
         qDebug() << "UNKNOWN EXCEPTION"; \

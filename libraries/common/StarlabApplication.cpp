@@ -32,7 +32,7 @@ bool StarlabApplication::saveModel(Model* model, QString path){
     /// Checks a suitable plugin exists
     InputOutputPlugin* iIO = pluginManager()->modelExtensionToPlugin[extension];
     if( !iIO ) throw StarlabException("Cannot find plugin suitable for the provided extension %s", qPrintable(extension));
-    iIO->save(path, model);            
+    iIO->save(model,path);            
     
     return true;
 }
@@ -127,18 +127,18 @@ void StarlabApplication::load(QString path){
         throw StarlabException("Starlab does not know how to open file: \"%s\"",qPrintable(path));
 }
 
-void StarlabApplication::executeFilter(QString filterName){
+void StarlabApplication::executeFilter(Model* model, QString filterName){
     DEB qDebug() << "StarlabApplication::executeFilter()";
     FilterPlugin* filter = pluginManager()->filterPlugins.value(filterName,NULL);
     if(filter==NULL) throw StarlabException("Filter '%s' does not exist", qPrintable(filterName));
-    foreach(Model* model, document()->models()){
-        document()->setSelectedModel(model);
-        RichParameterSet* pars = new RichParameterSet();
-        /// @todo have "dummy" drawArea here which throws exceptions on misuse
-        filter->initParameters(pars);
-        filter->applyFilter(pars);
-        pars->destructor();
-    }
+    if(!filter->isApplicable(model)) throw StarlabException("Filter not applicable");
+    
+    /// Filter is applied on the *selected* model
+    document()->setSelectedModel(model);
+    RichParameterSet* pars = new RichParameterSet();
+    filter->initParameters(pars);
+    filter->applyFilter(pars);
+    pars->destructor();
 }
 
 QString StarlabApplication::starlabDirectory(){

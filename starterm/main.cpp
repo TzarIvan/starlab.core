@@ -19,6 +19,7 @@ int main(int argc, char *argv[]){
         if(parser->showExamples){
             qDebug("starterm --help");
             qDebug("starterm --list-filters");
+            qDebug("starterm --filter=Normalize --save-overwrite %s/data/sphere.pts", qPrintable(starlab->starlabDirectory()));
             qDebug("starterm --list-filters %s/data/sphere.pts ", qPrintable(starlab->starlabDirectory()));
             return 0;
         }
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]){
         if(parser->listFilters && parser->inputModels.isEmpty()){
             qDebug() << "Available filters (Model=Any): ";
             foreach(FilterPlugin* filter, starlab->applicableFilters())
-                qDebug(" -->  %s \t %s", qPrintable(filter->name()), qPrintable(filter->description()));
+                qDebug("--> %s \t %s", qPrintable(filter->name()), qPrintable(filter->description()));
             return 0;
         }
     
@@ -36,6 +37,8 @@ int main(int argc, char *argv[]){
             qDebug() << "Loading models into the document";
             foreach(QString path, parser->inputModels)
                 starlab->load(path);
+            foreach(Model* model, document->models())
+                qDebug("--> '%s' from '%s'",qPrintable(model->name),qPrintable(model->path));
         }
         
         /// Requested filters appropriate to given input
@@ -43,23 +46,30 @@ int main(int argc, char *argv[]){
             Model* model = document->selectedModel();
             qDebug("Available filters (Model:%s):", qPrintable(model->metaObject()->className()));
             foreach(FilterPlugin* filter, starlab->applicableFilters(model))
-                qDebug(" -->  %s \t %s", qPrintable(filter->name()), qPrintable(filter->description()));
+                qDebug("--> %s \t %s", qPrintable(filter->name()), qPrintable(filter->description()));
         }
         
         /// Executes the filter
         if(!parser->executeFilter.isEmpty() && document->models().size()>0 ){
             qDebug("Executing the filter '%s'", qPrintable(parser->executeFilter));
-            starlab->executeFilter(parser->executeFilter);
+            foreach(Model* model, document->models()){
+                starlab->executeFilter(model, parser->executeFilter);
+                qDebug("--> Executed on '%s'",qPrintable(model->name));
+            }
         }
 
         /// Saves results in a new file
         if(parser->saveCreatecopy && document->models().size()>0){
             qDebug() << "[TODO] Saving filtered models (Safe Copy)";
         }
+        
+        /// Saves results by overwriting models
         if(parser->saveOverwrite && document->models().size()>0){
             qDebug("Saving filtered models (Overwriting)");
-            foreach(Model* model, document->models())
+            foreach(Model* model, document->models()){
                 starlab->saveModel(model,model->path);
+                qDebug("--> Saved '%s' at '%s'",qPrintable(model->name),qPrintable(model->path));
+            }
         }
     } 
     STARLAB_CATCH_BLOCK_NOGUI 

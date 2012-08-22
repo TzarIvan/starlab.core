@@ -36,7 +36,7 @@ public:
         /// Provides the names of all filters suitable for given model
         QList<FilterPlugin*> applicableFilters(Model* model);
         /// Executes a filter by name
-        void executeFilter(QString filterName);
+        void executeFilter(Model *model, QString filterName);
     /// @}
     
     /// Where is Starlab located?

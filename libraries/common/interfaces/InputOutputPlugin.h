@@ -30,10 +30,7 @@ public:
     virtual Model* open(QString path) = 0;
     /// @brief Saves a model to the specified path
     /// @internal path 
-    virtual void save(QString /*path*/, Model* /*model*/){ 
-        throw StarlabException("InputOutputPlugin::save not implemented");
-    }
-    
+    virtual void save(Model*, QString path) = 0;    
     
     /// @{ utility functions: use these in your plugins to your advantage
     protected:

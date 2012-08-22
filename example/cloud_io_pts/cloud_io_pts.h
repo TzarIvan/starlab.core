@@ -7,5 +7,5 @@ class cloud_io_pts : public CloudInputOutputPlugin{
 public:
     QString name() { return "3D Point List (*.pts)"; }
     Model* open(QString path);
-    void save(QString path, Model* m);
+    void save(Model* m,QString path);
 };
