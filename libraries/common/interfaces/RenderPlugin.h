@@ -18,19 +18,17 @@ class RenderPlugin : public StarlabPlugin{
         /// @brief Clean up resources (destructor)
         virtual void finalize(){}    
     protected:
-        /// @brief returns the model associated with the plugin
-        Model* model(){ return _model; }
         /// @brief Return a new instance of your plugin    
         virtual RenderPlugin* factory()=0;    
     /// @}
     
-    /// @{ internal usage
+    /// @{ 
+    public:
+        /// @brief returns the model associated with the plugin
+        Model* model(){ return _model; }
     friend class PluginManager;
     private:
-        /// @internal
         Model* _model;
-    public:
-        RenderPlugin():_model(NULL){}
     /// @}
 };
 

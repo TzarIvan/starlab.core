@@ -1,13 +1,12 @@
 #include "StarlabApplication.h"
 #include "interfaces/FilterPlugin.h"
+#include "RichParameterSet.h"
 
-StarlabApplication::StarlabApplication(int& argc, char* argv[])
-    : QApplication(argc,argv){
-    QLocale::setDefault(QLocale::C); // Use "C"urrent locale
-    
-    _settings = new StarlabSettings(this);
+StarlabApplication::StarlabApplication(){
+    /// Instantiate resources
+    _settings      = new StarlabSettings(this);
     _pluginManager = new PluginManager(_settings);
-    _document = new Document();
+    _document      = new Document();
     
     /// Register all plugins access functionality
     foreach(StarlabPlugin* plugin, pluginManager()->plugins())
@@ -18,29 +17,6 @@ StarlabApplication::~StarlabApplication(){
     delete _pluginManager;
     delete _document;
     delete _settings;
-}
-
-bool StarlabApplication::notify( QObject * rec, QEvent * ev ){
-    try{
-        return QApplication::notify(rec,ev);
-    } catch (StarlabException& e){        
-        QString title = "Unmanaged StarLab Exception";
-        QString message = e.what();
-        int retval = QMessageBox::critical(NULL, title, message, QMessageBox::Abort|QMessageBox::Ignore);
-        if( retval == QMessageBox::Abort ){
-            qCritical() << "Terminated because aborted exception";
-            // this->closeAllWindows();
-            this->exit(-1);
-        }
-        /// Restore pointer if it was changed
-        qApp->restoreOverrideCursor();
-    } catch (...) {
-        qDebug() << "BAD EXCEPTION..";
-    }
-    // the event will be propagated to the receiver's parent and 
-    // so on up to the top-level object if the receiver is not 
-    // interested in the event (i.e., it returns false).
-    return false;
 }
 
 bool StarlabApplication::saveModel(Model* model, QString path){
@@ -56,10 +32,7 @@ bool StarlabApplication::saveModel(Model* model, QString path){
     /// Checks a suitable plugin exists
     InputOutputPlugin* iIO = pluginManager()->modelExtensionToPlugin[extension];
     if( !iIO ) throw StarlabException("Cannot find plugin suitable for the provided extension %s", qPrintable(extension));
-    
-    qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
-        iIO->save(path, model);            
-    qApp->restoreOverrideCursor();
+    iIO->save(path, model);            
     
     return true;
 }
@@ -132,16 +105,14 @@ bool StarlabApplication::loadProject(QString path, ProjectInputOutputPlugin* plu
 }
 
 void StarlabApplication::load(QString path){
-    try{
-        // qDebug("StarlabApplication::load(\"%s\")", qPrintable(path));
-        bool retstatus = false;
-        if(!retstatus) retstatus = loadModel(path,NULL);
-        if(!retstatus) retstatus = loadProject(path,NULL);
-        
-        /// Nothing was able to open
-        if(!retstatus)
-            throw StarlabException("Starlab does not know how to open file: \"%s\"",qPrintable(path));
-    } STARLAB_CATCH_BLOCK
+    // qDebug("StarlabApplication::load(\"%s\")", qPrintable(path));
+    bool retstatus = false;
+    if(!retstatus) retstatus = loadModel(path,NULL);
+    if(!retstatus) retstatus = loadProject(path,NULL);
+    
+    /// Nothing was able to open
+    if(!retstatus)
+        throw StarlabException("Starlab does not know how to open file: \"%s\"",qPrintable(path));
 }
 
 void StarlabApplication::executeFilter(QString filterName){

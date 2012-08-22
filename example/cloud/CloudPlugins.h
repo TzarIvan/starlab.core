@@ -6,6 +6,8 @@
 #include "CloudModel.h"
 #include "interfaces/InputOutputPlugin.h"
 #include "interfaces/RenderPlugin.h"
+#include "interfaces/FilterPlugin.h"
+#include "interfaces/ModePlugin.h"
 
 /// This namescape limits the visibility of these functions to this file
 namespace{
@@ -24,6 +26,15 @@ private:
     bool isApplicable(Model* model){ return isA(model); }
 };
 
+class CloudFilterPlugin : public FilterPlugin{
+private:
+    bool isApplicable(Model* model){ return isA(model); }    
+};
+
+class CloudModePlugin : public ModePlugin{
+private:
+    bool isApplicable(Document* doc){ return isA(doc->selectedModel()); }    
+};
 
 class CloudRenderPlugin : public RenderPlugin{
 private:

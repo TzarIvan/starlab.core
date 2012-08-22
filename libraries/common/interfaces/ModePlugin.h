@@ -14,9 +14,8 @@ class StarlabDrawArea;
  */
 class ModePlugin : public StarlabPlugin {
 public: 
-    // This will disappear with the new C++ standard
-    ModePlugin() { isSuspended=false; }
-    bool isSuspended;    
+    /// @brief can the plugin be used?
+    virtual bool isApplicable(Document* doc) = 0;
     
     /// @{ @name Plugin Creation/Termination
     public:
@@ -46,10 +45,20 @@ public:
         virtual bool wheelEvent         (QWheelEvent* ) { return false; }
     /// @}
     
-    /// Access to properties
-    using StarlabPlugin::drawArea;
-    using StarlabPlugin::model;
-    using StarlabPlugin::document;
+    /// @{ Access to properties
+    protected:
+        using StarlabPlugin::drawArea;
+        using StarlabPlugin::document;
+    /// @} 
+    
+    /// @{ 
+    public:
+        /// @brief returns the model associated with the plugin
+        Model* model(){ return _model; }
+    friend class PluginManager;
+    private:
+        Model* _model;
+    /// @}
 };
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/1.0")

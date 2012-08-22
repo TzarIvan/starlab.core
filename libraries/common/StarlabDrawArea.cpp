@@ -33,20 +33,21 @@ RenderPlugin *StarlabDrawArea::activeRenderer(Model *model){
 }
 
 void StarlabDrawArea::setRenderer(Model* model, QString pluginName){
-    RenderPlugin* old = _renderers.value(model,NULL);
-    if(pluginName==old->name())
-        return;
-    
     // qDebug("StarlabDrawArea::setRenderer(%s,%s)",qPrintable(model->name), qPrintable(pluginName));
-    RenderPlugin* newPlugin = pluginManager()->newRenderPlugin(pluginName,model);
-    
-    /// Replace the plugins
     document()->pushBusy();
-        if(old != NULL){
-            old->finalize();
-            old->deleteLater();
-        }
-        _renderers[model] = newPlugin;
+        removeRenderer(model);
+        _renderers[model] = pluginManager()->newRenderPlugin(pluginName,model);
+    document()->popBusy();
+}
+
+void StarlabDrawArea::removeRenderer(Model* model){
+    // qDebug() << "StarlabDrawArea::removeRenderer()";
+    document()->pushBusy();
+        RenderPlugin* rend = _renderers.value(model,NULL);
+        if(rend==NULL) throw StarlabException("FATAL: StarlabDrawArea::removeRenderer()");
+        _renderers.remove(model);
+        rend->finalize();
+        rend->deleteLater();
     document()->popBusy();
 }
 
@@ -69,18 +70,26 @@ void StarlabDrawArea::update(){
 StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow) 
     : _mainWindow(mainWindow){
 
+    /// When document changes, refresh the rendering
+    connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
+    /// When a model is deleted, tell the renderer to stop working on it
+    connect(document(), SIGNAL(deleteScheduled(Model*)), this, SLOT(removeRenderer(Model*)));
     /// Determines which events are forwarded to Mode plugins
     installEventFilter(this);
     
-    settings()->setDefault("StarlabDrawArea/showtrackball",false);
+    /// @todo restore trackball
+    // settings()->setDefault("StarlabDrawArea/showtrackball",false);
 
     /// Default camera
     camera()->setType(Camera::ORTHOGRAPHIC);
     
+    /// @todo setup View->ToggleFPS
+    /// @todo why is update broken when nothing is moving?
     this->setFPSIsDisplayed(true);
-    // this->setAnimationPeriod(0);
+
     // setGridIsDrawn(false);
     
+    /// @todo Add screenshot to View->Take Screenshot
     // Keyboard + Mouse behavior
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 }

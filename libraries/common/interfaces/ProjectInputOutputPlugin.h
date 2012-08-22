@@ -4,10 +4,11 @@
 #include "Callbacks.h"
 #include "StarlabPlugin.h"
 #include "Model.h"
-#include "RichParameterSet.h"
 #include "StarlabException.h"
 #include "Document.h"
+
 class StarlabApplication;
+class RichParameterSet;
 
 /** 
  * @brief Plugin interface to perform I/O of project files

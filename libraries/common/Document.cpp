@@ -11,6 +11,9 @@ Document::Document(){
 }
 
 void Document::pushBusy(){
+    /// @todo change cursors on need
+    // qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
+    // qApp->restoreOverrideCursor();
     _isBusy++;
 }
 
@@ -46,8 +49,10 @@ void Document::addModel(Model* m){
 void Document::clear(){
     pushBusy();
         /// Delete models individually
-        foreach(Model* model, _models)
+        foreach(Model* model, _models){
+            emit deleteScheduled(model);
             model->deleteLater();
+        }
         /// Clear the list
         _models.clear();
         /// Clear the selection
@@ -61,6 +66,8 @@ void Document::replaceModel(Model *old_model, Model *new_model){
     int index = _models.indexOf(old_model);
     Q_ASSERT(index!=-1);
     _models[index] = new_model;
+    /// Tell others the model was deleted
+    emit deleteScheduled(old_model);
     delete old_model;
 }
 

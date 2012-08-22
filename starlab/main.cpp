@@ -2,37 +2,44 @@
 #include <QColor>
 #include <QGLFormat> /// @todo why in main.cpp???
 #include "StarlabMainWindow.h"
+#include "GUIApplication.h"
 #include "StarlabApplication.h"
 #include "StarlabSettings.h"
 #include "FileOpenEater.h"
 #include "interfaces/FilterPlugin.h"
 
 int main(int argc, char *argv[]) { 
-    try{
-        QApplication::setOrganizationName("Free Software Foundation");
-        QApplication::setApplicationName("starlab");
-        QApplication::setApplicationVersion("1.0.1");
-    
+    try{    
+        /// Create QT GUI app
+        GUIApplication app(argc,argv);
+        
         /// Create a starlab application
-        StarlabApplication application(argc,argv);    
-        /// Create window (@internal *new* is important)
+        StarlabApplication application;    
+        
+        /// Create a new window (@internal *new* is important)
         StarlabMainWindow* mainWindow = new StarlabMainWindow(&application);        
         
-        /// Manages open requests from OS (i.e. double click a file)
+        /// Manages I/O requested by Operating system
         FileOpenEater* eater = new FileOpenEater(mainWindow);
-        application.installEventFilter(eater);
-        application.processEvents();
+        // app.installEventFilter(eater);
+        mainWindow->installEventFilter(eater);
         
-        /// Attempts to open varargs (@internal skips program name)
+        /// Open command line input
         for(int i=1; i<argc; i++)
-            QApplication::sendEvent(&application, new QFileOpenEvent(argv[i]));
+            QApplication::sendEvent(mainWindow, new QFileOpenEvent(argv[i]));
         
         /// Automatically load layer menu if I opened more than one model    
         // if(mainWindow->document()->models.size()>=2)
         //    emit mainWindow->show_layer_dialog(true);    
     
+        /// Show the window 
+        /// (@internal see QWidget::activateWindow)
+        mainWindow->showNormal();
+        mainWindow->activateWindow();
+        mainWindow->raise();
+        
         /// Starts the event loop
-        return application.exec();    
+        return app.exec();    
     }
     STARLAB_CATCH_BLOCK   
 }

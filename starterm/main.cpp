@@ -1,7 +1,7 @@
-#include <QCoreApplication>
+#include "CoreApplication.h"
 int main(int argc, char *argv[]){
-    QCoreApplication a(argc, argv);
- 
+    CoreApplication a(argc, argv);
+    
     #if 0
         /// Lists filters if requested
         if(application.document()->getString("action")=="list-filters"){

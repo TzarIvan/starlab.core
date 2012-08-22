@@ -16,8 +16,8 @@ public:
     virtual void startDecorate(){}
     /// Free resources?
     virtual void endDecorate() {}
-    /// @brief allows you to retrieve current this->model()
-    using StarlabPlugin::model;
+    /// @note Given the current Model, can the plugin be executed? 
+    virtual bool isApplicable(Model*) = 0;
     
 public:
     /// @internal A decorator plugin can either be enabled or disabled thus we make its action "Checkable"

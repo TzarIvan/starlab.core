@@ -1,13 +1,11 @@
 #pragma once
-#include "interfaces/ModePlugin.h"
-#include "CloudModel.h"
+#include "CloudPlugins.h"
 
-class cloud_mode_selection : public ModePlugin{
+class cloud_mode_selection : public CloudModePlugin{
     Q_OBJECT
     Q_INTERFACES(ModePlugin)
-    
+        
     QIcon icon(){ return QIcon(":/icons/select_points.png"); }   
-    
     /// Functions part of the EditPlugin system
     void createEdit(){}
     void destroyEdit(){}    

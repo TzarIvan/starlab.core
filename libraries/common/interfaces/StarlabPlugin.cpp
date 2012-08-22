@@ -12,7 +12,6 @@ StarlabApplication* StarlabPlugin::application(){ return _application; }
 Document* StarlabPlugin::document(){ return application()->document(); }
 StarlabSettings* StarlabPlugin::settings(){ return application()->settings(); }
 PluginManager* StarlabPlugin::pluginManager(){ return application()->pluginManager(); }
-Model *StarlabPlugin::model(){ return document()->selectedModel(); }
 
 /// @internal action cannot be created in constructor. This is because 
 /// in the constructor local methods are preferred over polymorphic ones :(

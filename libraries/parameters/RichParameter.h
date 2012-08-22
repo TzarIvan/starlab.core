@@ -41,6 +41,7 @@ public:
         this->description = description.isEmpty() ? name : description;
         this->tooltip = tooltip.isEmpty() ? name : tooltip;
     }
+    virtual ~RichParameter(){}
  
     /// Returns a widget. If undefined by RichParameter adds nothing to the frame
     virtual RichParameterWidget* getWidget(QWidget* /*parent*/){ 

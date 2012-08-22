@@ -41,10 +41,6 @@ public:
     
     /// If the plugin has an icon, return it.
     virtual QIcon icon() { return QIcon(); }
-
-    /// @{ @note Given the current Model/Document, can the plugin be executed? 
-        virtual bool isApplicable(){ return true; }
-    /// @}
     
     /// What shortcut would you like me to use for this plugin?
     virtual QKeySequence shortcut(){ return QKeySequence(); }
@@ -60,7 +56,6 @@ public:
         
     /// @{ Quick access to the Starlab resources
     private:
-        Model*              model();
         Document*           document();
         StarlabApplication* application();
         StarlabSettings*    settings();

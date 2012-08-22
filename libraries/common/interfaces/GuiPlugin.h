@@ -14,15 +14,15 @@ public:
     virtual void load() = 0;
     /// If Gui elements need to be updated upon change (i.e. disabled, removed), then overlaod this method.
     virtual void update(){}
-    
+
 protected:
+    Model* selectedModel(){ return document()->selectedModel(); }
     using StarlabPlugin::application;
     using StarlabPlugin::mainWindow;
     using StarlabPlugin::settings;
     using StarlabPlugin::pluginManager;
     using StarlabPlugin::document;
     using StarlabPlugin::drawArea; 
-    using StarlabPlugin::model;
 };
 
 Q_DECLARE_INTERFACE(GuiPlugin, "starlab.GuiPlugin/1.0")

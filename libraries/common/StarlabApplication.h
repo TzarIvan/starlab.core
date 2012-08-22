@@ -1,13 +1,11 @@
 #pragma once
-#include <QApplication>
-#include <QMessageBox>
+#include "dynamic_common_global.h"
 #include "Document.h"
 #include "PluginManager.h"
 #include "StarlabSettings.h"
-#include "dynamic_common_global.h"
 
 /// @note QApplication is for GUI, QCoreApplication is for command line stuff
-class DYNAMIC_COMMON_EXPORT StarlabApplication : public QApplication{
+class DYNAMIC_COMMON_EXPORT StarlabApplication{
     
     /// @{ core resources and accessors
     public:
@@ -21,10 +19,8 @@ class DYNAMIC_COMMON_EXPORT StarlabApplication : public QApplication{
     /// @}
         
 public:
-    StarlabApplication(int &argc, char* argv[]);   
+    StarlabApplication();   
     ~StarlabApplication();
-    /// @todo why is this necessary?
-    bool notify( QObject * rec, QEvent * ev );
     
 public:
     /// @{ I/O: return false if don't know how to load
@@ -41,4 +37,5 @@ public:
     /// Win: C:/Program Files/starlab
     /// Lin: ????
     QString starlabDirectory();
+    static QString version(){ return "1.0.2 alpha"; }
 };

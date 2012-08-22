@@ -57,14 +57,15 @@ public:
 
 /// Default try/catch blocks, use them as:
 /// 
+/// 
 /// try
 /// {
 ///    ... potential exc-throwing code ...
 /// }
 /// STARLAB_CATCH_BLOCK
+/// @note used to qApp::restoreOverrideCursor();
 #define STARLAB_CATCH_BLOCK \
     catch(StarlabException& e){ \
-        qApp->restoreOverrideCursor(); \
         if(OSQuery::isMac()) QMessageBox::warning(NULL, e.type(), e.type().toUpper() + ":\n\n" + e.message()); \
         else QMessageBox::warning(NULL, e.type(), e.message()); \
         qWarning() << "[StarlabException]: " << e.message(); \

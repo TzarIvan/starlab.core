@@ -4,10 +4,11 @@
 #include "Callbacks.h"
 #include "StarlabPlugin.h"
 #include "Model.h"
-#include "RichParameterSet.h"
 #include "StarlabException.h"
 #include "Document.h"
+
 class StarlabApplication;
+class RichParameterSet;
 
 /** 
  * @brief todo
@@ -23,6 +24,8 @@ public:
     /// string you will find in the save/load GUI. The format has to be something like:
     /// "[CGALMesh] Object File Format (*.off)"
     virtual QString name() = 0;
+    /// @brief can this plugin Save/Load the model?
+    virtual bool isApplicable(Model*) = 0;
     /// @brief Opens a model at the specified path
     virtual Model* open(QString path) = 0;
     /// @brief Saves a model to the specified path
@@ -30,11 +33,8 @@ public:
     virtual void save(QString /*path*/, Model* /*model*/){ 
         throw StarlabException("InputOutputPlugin::save not implemented");
     }
-    /// @brief Returns true if this plugin is responsible to open these Models
-    /// Mandatory overload for I/O plugins as it's used to determine which 
-    /// plugin is to be used to "Reload" a mesh
-    virtual bool isApplicable(Model* /*model*/) = 0;    
-        
+    
+    
     /// @{ utility functions: use these in your plugins to your advantage
     protected:
         QString pathToName(QString path){

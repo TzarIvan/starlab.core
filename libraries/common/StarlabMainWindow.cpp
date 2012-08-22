@@ -5,6 +5,7 @@
 #include <QToolBar>
 #include <QDesktopWidget>
 #include <QUrl> /// Drag&Drop
+#include <QApplication>
 
 #include "interfaces/GuiPlugin.h"
 #include "StarlabDrawArea.h"
@@ -39,11 +40,8 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     }
     
     /// On changes to the document, refresh the GUI
-    {
-        connect(document(), SIGNAL(hasChanged()), this,       SLOT(update()));
-        connect(document(), SIGNAL(hasChanged()), drawArea(), SLOT(update()));
-    }
-        
+    connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
+    
     /// Instantiate Menus (plugins will fill them in)
     /// Do not use the silly & windows notation for alt navigation
     {
@@ -115,14 +113,7 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
             plugin->load();
         }
     }
-    
-    /// Makes the window steal the focus (@see QWidget::activateWindow())
-    {                          
-        showNormal();
-        activateWindow();
-        raise();
-    }
-    
+        
     /// Delete window on close
     setAttribute(Qt::WA_DeleteOnClose, true);
     
@@ -134,10 +125,11 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
 }
 
 void StarlabMainWindow::dropEvent(QDropEvent* event) {
+    // qDebug() << "StarlabMainWindow::dropEvent()";
     const QMimeData* data = event->mimeData();
     if(data->hasUrls())
         foreach(QUrl url, data->urls())
-            QApplication::sendEvent(application(), new QFileOpenEvent(url));    
+            QApplication::sendEvent(this, new QFileOpenEvent(url));    
 }
 
 QSize StarlabMainWindow::sizeHint() const{

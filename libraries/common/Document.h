@@ -58,23 +58,11 @@ public:
     /// The models in this layer (cannot edit the set directly!)
     const QList<Model*>& models(){ return _models; }
     
-    /// Retrieves a model by name 
-    /// @todo move to cpp file
-    template<class T> T* getModel(QString name){
-        foreach(Model* model, _models)
-            if(model->name == name){
-                T* retval = qobject_cast<T*>(model);
-                if(!retval) 
-                    throw StarlabException("A model named '%s' of the required type was not found", qPrintable(name));
-                return retval;
-            }        
-        throw StarlabException("Requested model '%s'' not found",qPrintable(name));
-    }
-
 /// @{ Document status updates
 signals:
-    void resetViewport(); ///< Document requesting a reset of the view matrixes
-    void hasChanged();    ///< Document has changed, emitted after "last" popBusy()
+    void resetViewport();         ///< Document requesting a reset of the view matrixes
+    void hasChanged();            ///< Document has changed, emitted after "last" popBusy()
+    void deleteScheduled(Model*); ///< This model is scheduled for deletion
 public:
     void emit_resetViewport();
 private:

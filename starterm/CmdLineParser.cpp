@@ -36,19 +36,25 @@ void CmdLineParser::parseError(const QString& error){
 }
 
 void CmdLineParser::switchFound(const QString & name){
+#if 0
     // qWarning() << "Switch:" << name;
     if(name=="list-filters") settings->set("action","list-filters");        
     if(name=="execute")      settings->set("action","execute");
+#endif
 }
 
 void CmdLineParser::optionFound(const QString & name, const QVariant & value){
+#if 0
     // qWarning() << "Option:" << name << value.toString();
     if(name=="filter") settings->set("filter", value.toString());
+#endif
 }
 
 void CmdLineParser::paramFound(const QString& /*name*/, const QVariant & value){
+#if 0
     // qWarning() << "Parameter:" << name << value.toString();
     QStringList pars = settings->getStringList("inputs");
     pars.append(value.toString());
     settings->set("inputs",pars);
+#endif
 }

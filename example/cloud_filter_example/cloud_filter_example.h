@@ -1,7 +1,6 @@
 #pragma once
-#include "interfaces/FilterPlugin.h"
-
-class cloud_filter_example : public FilterPlugin{
+#include "CloudPlugins.h"
+class cloud_filter_example : public CloudFilterPlugin{
     Q_OBJECT
     Q_INTERFACES(FilterPlugin)
 

@@ -22,10 +22,11 @@ void gui_selection::update_renderModes(){
     QMenu* renderModeMenu = menu()->addMenu("Render Mode");
     
     /// Fetch current renderer
-    RenderPlugin* currentRenderer = drawArea()->activeRenderer(model());
+    Model* selectedModel = document()->selectedModel();
+    RenderPlugin* currentRenderer = drawArea()->activeRenderer(selectedModel);
     
     /// Add render modes menu/toolbar entries
-    foreach(QAction* action, pluginManager()->getRenderPluginsActions(model())){
+    foreach(QAction* action, pluginManager()->getRenderPluginsActions(selectedModel)){
         action->setCheckable(true);
         
         /// "Check" an icon
@@ -54,7 +55,7 @@ void gui_selection::update_renderModes(){
 void gui_selection::update_decorators(){
     /// The stuff from decorative plugins
     foreach(DecoratePlugin* plugin, pluginManager()->decoratePlugins){
-        if(!plugin->isApplicable()) continue;
+        if(!plugin->isApplicable(document()->selectedModel())) continue;
         QAction* action = plugin->action();
         action->setCheckable(true);
         /// Add to the group (for easy event mngmnt)
@@ -91,18 +92,18 @@ void gui_selection::toggleDecorator(QAction* action){
 
 void gui_selection::triggerSetDefaultRenderer(){
     // qDebug() << "gui_selection::triggerSetDefaultRenderer()";
-    RenderPlugin* renderer = drawArea()->activeRenderer(model());
-    pluginManager()->setPreferredRenderer(model(),renderer);
+    RenderPlugin* renderer = drawArea()->activeRenderer(document()->selectedModel());
+    pluginManager()->setPreferredRenderer(document()->selectedModel(),renderer);
     QString message;
     message.sprintf("Preferred renderer for '%s' set to '%s'",
-                    qPrintable(model()->metaObject()->className()),
+                    qPrintable(document()->selectedModel()->metaObject()->className()),
                     qPrintable(renderer->name()));
     mainWindow()->statusBarMessage(message);
 }
 
 void gui_selection::triggerRenderModeAction(QAction* action){
     // qDebug("gui_selection::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));
-    drawArea()->setRenderer(model(),action->text());
+    drawArea()->setRenderer(document()->selectedModel(),action->text());
 }
 
 Q_EXPORT_PLUGIN(gui_selection)

@@ -225,7 +225,9 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
     newplugin->_mainWindow = plugin->_mainWindow;
     newplugin->_application = plugin->_application;
     newplugin->_model = model;
-    /// Parent remains the original plugin!!    
+    /// If model deleted so is the renderer
+    newplugin->setParent(model);
+    /// Original action remains...
     newplugin->_action = plugin->_action;
     return newplugin;
 }

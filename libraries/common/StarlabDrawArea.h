@@ -73,6 +73,8 @@ public:
     /// Set the renderer for the model by name
     RenderPlugin* activeRenderer(Model* model);
     void setRenderer(Model *model, QString pluginName);
+public slots:
+    void removeRenderer(Model*);
 /// @}
     
 /// @{ Scene-wide rendering elements (i.e. used for debug)

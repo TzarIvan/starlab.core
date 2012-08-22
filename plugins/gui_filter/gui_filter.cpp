@@ -60,7 +60,7 @@ void gui_filter::startFilter() {
         /// of scope
         RichParameterSet* parameters = new RichParameterSet();
         iFilter->initParameters(parameters);
-        bool needUserInput = !parameters->isEmpty();
+        int needUserInput = !parameters->isEmpty();
         
         /// I do not need the user input, just run it
         switch(needUserInput){
@@ -79,7 +79,7 @@ void gui_filter::startFilter() {
 }
 
 void gui_filter::execute(FilterPlugin* iFilter, RichParameterSet* parameters) {
-    if(!iFilter->isApplicable()) 
+    if(!iFilter->isApplicable(document()->selectedModel())) 
         throw StarlabException("Filter is not applicable");
 
     /// @todo save the current filter and its parameters in the history

@@ -1,7 +1,10 @@
-QT += core
-QT -= gui
-TARGET = starterm
-CONFIG += console
-CONFIG -= app_bundle
-TEMPLATE = app
-SOURCES += main.cpp
+CONFIG += starlab
+STARLAB_TEMPLATE = console
+STARLAB_DEPENDS += common parameters
+
+SOURCES += main.cpp \
+    CmdLineParser.cpp
+
+HEADERS += \
+    CoreApplication.h \
+    CmdLineParser.h
