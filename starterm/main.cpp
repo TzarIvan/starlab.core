@@ -2,8 +2,22 @@
 #include "CmdLineparser.h"
 #include "StarlabApplication.h"
 #include "PluginManager.h"
-
 #include "interfaces/FilterPlugin.h";
+
+QString safeCopyPath(QString path){
+    QFileInfo fi(path);                 /// /tmp/archive.tar.gz
+    QString dir = fi.absolutePath();    /// /tmp
+    QString base = fi.baseName();       /// archive
+    QString ext = fi.completeSuffix();  /// tar.gz
+    
+    QString newpath;
+    int copynumber=1;
+    do{
+        newpath.sprintf("%s/%s_copy%d.%s",dir,base,copynumber,ext);
+        copynumber++;
+    } while( !QFileInfo(newpath).exists() );
+    return newpath;
+}
 
 int main(int argc, char *argv[]){ 
     try{
@@ -61,6 +75,11 @@ int main(int argc, char *argv[]){
         /// Saves results in a new file
         if(parser->saveCreatecopy && document->models().size()>0){
             qDebug() << "[TODO] Saving filtered models (Safe Copy)";
+            foreach(Model* model, document->models()){
+                QString newPath = safeCopyPath(model->path);
+                starlab->saveModel(model,newPath);
+                qDebug("--> Saved '%s' at '%s'",qPrintable(model->name),qPrintable(newPath));
+            }
         }
         
         /// Saves results by overwriting models

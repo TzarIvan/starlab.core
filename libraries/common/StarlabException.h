@@ -84,7 +84,7 @@ public:
         qWarning() << "*"; \
         qWarning() << "* Message: " << message; \
         qWarning() << "*"; \
-        qWarning() << "* The program will now terminate: " << message; \
+        qWarning() << "* The program will now terminate."; \
         qWarning() << "****************************************************************"; \
         exit(-1); \
     } catch (...) { \
