@@ -11,7 +11,7 @@
 
 StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     _application(_application), _activeMode(NULL)
-{
+{   
     /// Setup central widget
     {
         // Anti-aliasing when using QGLWidget or subclasses
@@ -125,6 +125,12 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     
     /// Delete window on close
     setAttribute(Qt::WA_DeleteOnClose, true);
+    
+    /// Make sure settings are fresh & inform user on where settings are loaded from
+    {
+        settings()->sync();
+        statusBarMessage("Settings loaded from: "+settings()->settingsFilePath(),2);
+    }
 }
 
 void StarlabMainWindow::dropEvent(QDropEvent* event) {
@@ -190,9 +196,15 @@ void StarlabMainWindow::update(){
     }
 }
 
-void StarlabMainWindow::statusBarMessage(QString message, float timeout){
+void StarlabMainWindow::statusBarMessage(QString message, float timeout_seconds){
+    /// Setup tooltip of old messages
+    _oldMessages.prepend(message);
+    QString tooltipMessage = "Message Log (first is recent):";
+    foreach(QString old, _oldMessages) tooltipMessage.append("\n-> "+old);
+    _statusBar->setToolTip(tooltipMessage);
+    /// Show the current message
+    _statusBar->showMessage(message, (int)timeout_seconds*1000);
     _statusBar->show();
-    _statusBar->showMessage(message, (int)timeout*1000);
     _statusBar->update();
 }
 

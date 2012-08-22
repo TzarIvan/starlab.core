@@ -99,8 +99,9 @@ public:
     
     /// @{ @name Window's statusbar management
     public slots:
-        /// Sets statusbar message to something
-        virtual void statusBarMessage(QString message, float timeout=0.0f);
+        /// Show message on statusbar, default timeout is 2 seconds
+        /// Message stays permanent with timeout_seconds set to 0
+        virtual void statusBarMessage(QString message, float timeout_seconds=2.0f);
         /// Sets statusbar progress to a certain value
         /// @par Who is performing an action?
         /// @par What's the completion? [0..1]
@@ -108,8 +109,9 @@ public:
     private slots: 
         void hideToolbarOnEmptyMessage(QString message);
     private:
-        QStatusBar*   _statusBar;   ///< This should not be touched, use this->setStatusBarMessage
-        QProgressBar* _progressBar; ///< This should not be touched, use this->setProgressBarPercentage
+        QStatusBar*      _statusBar; ///< This should not be touched, use this->setStatusBarMessage
+        QProgressBar*  _progressBar; ///< This should not be touched, use this->setProgressBarPercentage
+        QList<QString> _oldMessages; ///< Saves all messages sent to statusbar
     /// @}
 
     /// @{ @name Core Events Management
