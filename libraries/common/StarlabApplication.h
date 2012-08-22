@@ -35,4 +35,10 @@ public:
     /// @}
     
     void executeFilter(QString filterName);
+    
+    /// Where is Starlab located?
+    /// Mac: /Applications/Starlab.app
+    /// Win: C:/Program Files/starlab
+    /// Lin: ????
+    QString starlabDirectory();
 };

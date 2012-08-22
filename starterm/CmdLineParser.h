@@ -9,11 +9,10 @@ class CmdLineParser : public QObject{
 
 private:
     QCommandLine parser;
-    StarlabSettings* const settings;
    
 public:
     /// Specify the structure here
-    CmdLineParser(int argc, char *argv[], StarlabSettings* settings);
+    CmdLineParser(int argc, char *argv[]);
     
 public slots:
     /// Errors result in app termination

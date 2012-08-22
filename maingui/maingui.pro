@@ -7,10 +7,8 @@ CONFIG += starlab
 STARLAB_TEMPLATE = appbundle
 STARLAB_DEPENDS += common parameters
 
+HEADERS += FileOpenEater.h
 SOURCES += main.cpp
-SOURCES += CmdLineParser.cpp
-HEADERS += CmdLineParser.h \
-    FileOpenEater.h
 
 #------------- BASIC CONFIG ---------------
 # NOTE: QtCreator bug, $$[DSTPATH] wouldn't produce correct run configuration

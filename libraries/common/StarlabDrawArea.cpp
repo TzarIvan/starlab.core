@@ -72,6 +72,8 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
     /// Determines which events are forwarded to Mode plugins
     installEventFilter(this);
     
+    settings()->setDefault("StarlabDrawArea/showtrackball",false);
+
     /// Default camera
     camera()->setType(Camera::ORTHOGRAPHIC);
     

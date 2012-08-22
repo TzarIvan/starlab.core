@@ -2,23 +2,23 @@
 #include <QSettings>
 #include <QDebug>
 #include <QColor>
+
 #include "dynamic_common_global.h"
-
-
+#include "StarlabApplication.h"
 
 class DYNAMIC_COMMON_EXPORT StarlabSettings{
     
 private: 
-    QSettings qsettings;
-    
+    QSettings* qsettings;
+    StarlabApplication* const _application;
 public:
     /**
       * The constructor first set some hardcoded parameters, 
       * then attempts to override their values with the ones
       * specified by the xml options file 
       */
-    StarlabSettings();
-    void sync(){ qsettings.sync(); }
+    StarlabSettings(StarlabApplication *application);
+    void sync(){ qsettings->sync(); }
     
     /// Sets hardcoded default setting value (writes only if value is not already defined)
     void setDefault(const QString& key, const QVariant& value);
@@ -38,12 +38,16 @@ public:
         QString getString(const QString& key);
         QStringList getStringList(const QString& key);
     /// @}
-    
-    /// @todo load settings from file
-    void load(const QString& filename="");
-    /// @todo save settings to file
-    void save(const QString& filename="");
-    
+
+        
+    /// @{ Settings I/O
+        /// Where will the "ini" file be saved?
+        QString settingsFilePath();
+        /// @todo load settings from file
+        void load(const QString& filename="");
+        /// @todo save settings to file
+        void save(const QString& filename="");
+    /// @}
     
     
     /// Print to string (e.g. qDebug() << this->toString() )

@@ -5,7 +5,7 @@ StarlabApplication::StarlabApplication(int& argc, char* argv[])
     : QApplication(argc,argv){
     QLocale::setDefault(QLocale::C); // Use "C"urrent locale
     
-    _settings = new StarlabSettings();
+    _settings = new StarlabSettings(this);
     _pluginManager = new PluginManager(_settings);
     _document = new Document();
     
@@ -155,5 +155,17 @@ void StarlabApplication::executeFilter(QString filterName){
         filter->applyFilter(pars);
         pars->destructor();
     }
+}
+
+QString StarlabApplication::starlabDirectory(){
+    QDir baseDir(QApplication::applicationDirPath());
+    if( OSQuery::isMac() ){            
+        baseDir.cdUp();
+        baseDir.cdUp();
+        return baseDir.absolutePath();
+    }
+    if( OSQuery::isLinux() || OSQuery::isWin() )
+        throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
+    throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
 }
 

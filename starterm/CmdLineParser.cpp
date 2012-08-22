@@ -6,9 +6,7 @@
 #include <QCoreApplication>
 #include <QVariant>
 
-CmdLineParser::CmdLineParser(int argc, char *argv[], StarlabSettings* _settings) : 
-    settings( _settings )
-{
+CmdLineParser::CmdLineParser(int argc, char *argv[]){
     parser.setArguments(argc, argv);
     
     /// Real options

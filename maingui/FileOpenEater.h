@@ -5,15 +5,20 @@ class FileOpenEater : public QObject{
 private:
     StarlabMainWindow* const mainWindow;
 public:
-    FileOpenEater(StarlabMainWindow* mainWindow) : mainWindow(mainWindow){}       
+    FileOpenEater(StarlabMainWindow* mainWindow) : mainWindow(mainWindow){
+        setParent(mainWindow);
+    }       
 protected:
     bool eventFilter(QObject *obj, QEvent *event){
         if (event->type() == QEvent::FileOpen) {
             QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
-            mainWindow->application()->load( fileEvent->file() );
+            QString target = fileEvent->file();
+            mainWindow->statusBarMessage("Loading file '"+target+"'",0.0);
+            mainWindow->application()->load(target);
+            mainWindow->statusBarMessage("The file '"+target+"' has been loaded",2.0);
             return true;
         } else {
-            // standard event processing
+            /// use standard event processing
             return QObject::eventFilter(obj, event);
         }
     }

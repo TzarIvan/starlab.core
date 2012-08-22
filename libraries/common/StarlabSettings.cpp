@@ -1,45 +1,51 @@
-#include "StarlabSettings.h"
 #include <QColor>
 #include <QDir>
+#include <QApplication>
+#include "OSQuery.h"
+#include "StarlabSettings.h"
+#include "StarlabException.h"
 
-StarlabSettings::StarlabSettings(){
-    qsettings.sync();
-
-    /// Defaults   
-    setDefault("showtrackball",false);
-    setDefault("lastUsedDirectory",QDir::homePath());
-    setDefault("DefaultDrawAreaPlugin","drawarea_meshlab");
+StarlabSettings::StarlabSettings(StarlabApplication* application) :
+    _application(application)
+{
+    /// Open and reads the settings
+    qsettings = new QSettings(settingsFilePath(),QSettings::IniFormat);
     
-    /// Resets at every run
-    set("nogui",false);           ///< should a window be opened?
-    set("action","");             ///< the auto-loaded action (i.e. execute filter)
-    set("filter","");             ///< the auto-loaded filter
-    set("edit","");               ///< the auto-loaded edit 
-    set("inputs",QStringList());  ///< the program inputs (command line)
-        
+    /// Defaults   
+    setDefault("lastUsedDirectory",QDir::homePath());
+    setDefault("autostartWithFilter","");
+    setDefault("autostartWithMode","");
+    
     /// Now override any hardcoded with the ones specified by the user parameters
     load();
 }
 
+QString StarlabSettings::settingsFilePath(){
+    if(OSQuery::isMac()) return _application->starlabDirectory() + "/settings.ini";
+    if(OSQuery::isLinux()) return QDir::homePath() + ".starlab";
+    if(OSQuery::isWin()) throw StarlabException("TODO, see StarlabSettings::settingsFilePath()");
+    exit(-1);
+}
+
 /// Display only settings in "starlab" group
 QByteArray StarlabSettings::toLocal8Bit(){
-    qsettings.beginGroup("starlab");    
+    qsettings->beginGroup("starlab");    
         QString retval="";
         retval += "========== Starlab Settings: =========\n";
-        foreach(QString key, qsettings.allKeys())
-            retval += key + ": (" + qsettings.value(key).toString() + ")\n";
+        foreach(QString key, qsettings->allKeys())
+            retval += key + ": (" + qsettings->value(key).toString() + ")\n";
         retval += "======================================\n";
-    qsettings.endGroup();
+    qsettings->endGroup();
     return retval.toLocal8Bit();
 }
 
 QVariant StarlabSettings::get(const QString &key){
     checkContains(key);
-    return qsettings.value("starlab/"+key);
+    return qsettings->value("starlab/"+key);
 }
 
 void StarlabSettings::set(const QString &key, const QVariant &value){
-    qsettings.setValue("starlab/"+key, value);   
+    qsettings->setValue("starlab/"+key, value);   
 }
 
 void StarlabSettings::setDefault(const QString &key, const QVariant &value){
@@ -47,7 +53,7 @@ void StarlabSettings::setDefault(const QString &key, const QVariant &value){
 }
 
 bool StarlabSettings::contains(const QString &key){ 
-    return qsettings.contains("starlab/"+key);
+    return qsettings->contains("starlab/"+key);
 }
 
 void StarlabSettings::checkContains(const QString &key){
@@ -75,12 +81,5 @@ QStringList StarlabSettings::getStringList(const QString &key){ return get(key).
 QColor StarlabSettings::getQColor(const QString &key){ return get(key).convert(QVariant::Color); }
 float StarlabSettings::getFloat(const QString &key){ return get(key).toFloat(); }
 
-
 void StarlabSettings::load(const QString& /*filename*/){ }
 void StarlabSettings::save(const QString& /*filename*/){ }
-
-
-
-
-
-
