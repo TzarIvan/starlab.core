@@ -124,7 +124,7 @@ void StarlabApplication::load(QString path){
     
     /// Nothing was able to open
     if(!retstatus)
-        throw StarlabException("Starlab does not know how to open file: \"%s\"",qPrintable(path));
+        throw StarlabException("Starlab does not know how to open file: " + path);
 }
 
 void StarlabApplication::executeFilter(Model* model, QString filterName){
@@ -148,7 +148,9 @@ QString StarlabApplication::starlabDirectory(){
         baseDir.cdUp();
         return baseDir.absolutePath();
     }
-    if( OSQuery::isLinux() || OSQuery::isWin() )
+    if( OSQuery::isWin() )
+        return QCoreApplication::applicationFilePath();
+    if( OSQuery::isLinux() )
         throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
     throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
 }

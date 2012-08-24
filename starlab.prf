@@ -90,7 +90,7 @@ equals(STARLAB_TEMPLATE,"console"){
 
     # Where is cmdline application deployed?
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/MacOS/
-    win32: error(fix me here)
+    win32: DESTDIR = $$DEPLOYPATH
     linux: error(fix me here)
 }
 

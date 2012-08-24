@@ -20,9 +20,8 @@ StarlabSettings::StarlabSettings(StarlabApplication* application) :
 }
 
 QString StarlabSettings::settingsFilePath(){
-    if(OSQuery::isMac()) return _application->starlabDirectory() + "/settings.ini";
+    if(OSQuery::isMac() || OSQuery::isWin()) return _application->starlabDirectory() + "/settings.ini";
     if(OSQuery::isLinux()) return QDir::homePath() + ".starlab";
-    if(OSQuery::isWin()) throw StarlabException("TODO, see StarlabSettings::settingsFilePath()");
     exit(-1);
 }
 

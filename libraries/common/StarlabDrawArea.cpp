@@ -188,7 +188,7 @@ void StarlabDrawArea::viewFrom(QAction * a)
 }
 
 void StarlabDrawArea::init(){
-    setBackgroundColor(QColor(255,255,255));   
+    setBackgroundColor(QColor(50,50,60));
     resetViewport();
 }
 
