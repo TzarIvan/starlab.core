@@ -57,6 +57,11 @@ private:
     void draw();              ///< Draws the whole scene
     void drawWithNames();
 /// @}
+
+/// @{ Selection functions
+private:
+    void endSelection(const QPoint&);
+/// @}
     
 /// @{ ModePlugin management
 private:

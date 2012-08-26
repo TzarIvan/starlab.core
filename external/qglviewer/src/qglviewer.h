@@ -969,7 +969,7 @@ public:
 
 		/*! @name Mouse customization */
 		//@{
-protected:
+public:
 	/*! Defines the different mouse handlers: camera() or manipulatedFrame().
 
 	Used by setMouseBinding(), setMouseBinding(int, ClickAction, bool, int) and setWheelBinding() to

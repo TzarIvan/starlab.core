@@ -14,6 +14,8 @@ class StarlabDrawArea;
  */
 class ModePlugin : public StarlabPlugin {
 public: 
+    ModePlugin(){ _model = NULL; }
+
     /// @brief can the plugin be used?
     virtual bool isApplicable(Document* doc) = 0;
     
@@ -33,6 +35,12 @@ public:
         virtual void decorate(){}
         virtual void drawWithNames(){}
     /// @} 
+
+    /// @{ @name Selection events (optional)
+    public:
+        virtual void endSelection(const QPoint&){}
+        friend class StarlabDrawArea;
+    /// @}
 
     /// @{ @name User Input Callbacks (optional)
     public: 
@@ -54,7 +62,10 @@ public:
     /// @{ 
     public:
         /// @brief returns the model associated with the plugin
-        Model* model(){ return _model; }
+        Model* model(){
+            if(!_model) _model = document()->selectedModel();
+            return _model;
+        }
     friend class PluginManager;
     private:
         Model* _model;

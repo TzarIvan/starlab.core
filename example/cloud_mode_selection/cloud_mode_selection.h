@@ -4,11 +4,11 @@
 class cloud_mode_selection : public CloudModePlugin{
     Q_OBJECT
     Q_INTERFACES(ModePlugin)
-        
-    QIcon icon(){ return QIcon(":/icons/select_points.png"); }   
+
+    QIcon icon(){ return QIcon(":/icons/select_points.png"); }
     /// Functions part of the EditPlugin system
     void createEdit(){}
-    void destroyEdit(){}    
+    void destroyEdit(){}
     
     bool mousePressEvent(QMouseEvent*);
     bool mouseMoveEvent(QMouseEvent*);
@@ -18,13 +18,15 @@ class cloud_mode_selection : public CloudModePlugin{
     void drawWithNames();
     void drawSelectionRectangle();
 
-    bool isDragging;
+    // Selection
+    QSet<int> selection;
+    enum SelectionMode{ NONE, ADD, REMOVE } selectionMode;
+
+    void endSelection(const QPoint &);
+
     QPoint start;
     QPoint cur;
     QPoint prev;
-    
-    /// 
-    CloudModel* cloud(){ 
-        return qobject_cast<CloudModel*>(model()); 
-    }
+
+    friend class QGLViewer;
 };

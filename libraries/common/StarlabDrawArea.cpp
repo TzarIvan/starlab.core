@@ -215,6 +215,12 @@ void StarlabDrawArea::drawWithNames(){
         mainWindow()->activeMode()->drawWithNames();
 }
 
+void StarlabDrawArea::endSelection(const QPoint & p)
+{
+    if(mainWindow()->hasActiveMode())
+        mainWindow()->activeMode()->endSelection(p);
+}
+
 StarlabDrawArea::~StarlabDrawArea(){
     // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
     deleteAllRenderObjects();

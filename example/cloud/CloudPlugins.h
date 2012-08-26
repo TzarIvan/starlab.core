@@ -22,22 +22,27 @@ namespace{
 }
 
 class CloudInputOutputPlugin : public InputOutputPlugin{
-private: 
+private:
     bool isApplicable(Model* model){ return isA(model); }
 };
 
 class CloudFilterPlugin : public FilterPlugin{
 private:
-    bool isApplicable(Model* model){ return isA(model); }    
+    bool isApplicable(Model* model){ return isA(model); }
+protected:
+    CloudModel* cloud(){ return safeCast(model()); }
 };
 
 class CloudModePlugin : public ModePlugin{
 private:
-    bool isApplicable(Document* doc){ return isA(doc->selectedModel()); }    
+    bool isApplicable(Document* doc){ return isA(doc->selectedModel()); }
+protected:
+    CloudModel* cloud(){ return safeCast(model()); }
 };
 
 class CloudRenderPlugin : public RenderPlugin{
 private:
     bool isApplicable(Model* model){ return isA(model); }
+protected:
     CloudModel* cloud(){ return safeCast(model()); }
 };
