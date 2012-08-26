@@ -13,9 +13,9 @@ OTHER_FILES += starlab.prf README.txt
 SUBDIRS += libraries/parameters
 SUBDIRS += libraries/common
 
-#--- APPLICATION MAKER (Note Qt Creator: by default, last in alphabetical order is run by default)
+#--- APPLICATION MAKER
 SUBDIRS += starlab
-SUBDIRS += starterm
+SUBDIRS += star_term  #(Qt Creator: last in alphabetical order is run by default)
 
 #--- GUI MODULES
 SUBDIRS += plugins/project_io_starlab

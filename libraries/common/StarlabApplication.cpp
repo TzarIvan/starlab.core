@@ -149,7 +149,7 @@ QString StarlabApplication::starlabDirectory(){
         return baseDir.absolutePath();
     }
     if( OSQuery::isWin() )
-        return QCoreApplication::applicationFilePath();
+        return QCoreApplication::applicationDirPath();
     if( OSQuery::isLinux() )
         throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
     throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
