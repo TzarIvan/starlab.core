@@ -13,7 +13,7 @@ OTHER_FILES += starlab.prf README.txt
 SUBDIRS += libraries/parameters
 SUBDIRS += libraries/common
 
-#--- APPLICATION MAKER
+#--- APPLICATION MAKER (Note Qt Creator: by default, last in alphabetical order is run by default)
 SUBDIRS += starlab
 SUBDIRS += starterm
 
@@ -33,3 +33,4 @@ SUBDIRS += example/cloud_io_pts
 SUBDIRS += example/cloud_filter_normalize
 SUBDIRS += example/cloud_mode_selection
 SUBDIRS += example/cloud_render_points
+

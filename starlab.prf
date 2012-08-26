@@ -11,11 +11,7 @@ isEmpty(DEPLOYPATH) {
         DEPLOYPATH = /Applications
     }
     win32{
-        CONFIG(debug, debug|release) {
-            DEPLOYPATH = $$[BUILD_PATH]/StarlabPackageDebug
-        } else {
-            DEPLOYPATH = $$[BUILD_PATH]/StarlabPackage
-        }
+        DEPLOYPATH = $$[BUILD_PATH]/StarlabPackage
     } 
     linux{
         error("fix deploy rules")
@@ -90,7 +86,7 @@ equals(STARLAB_TEMPLATE,"console"){
 
     # Where is cmdline application deployed?
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/MacOS/
-    win32: DESTDIR = $$DEPLOYPATH
+    win32: DESTDIR = $$OUT_PWD/../StarlabPackage
     linux: error(fix me here)
 }
 
@@ -108,7 +104,7 @@ equals(STARLAB_TEMPLATE,"appbundle"){
         macx:QMAKE_CLEAN = rm $$DEPLOYPATH/Starlab.app/plugins/*
     } 
     win32{
-        DESTDIR = $$DEPLOYPATH
+        DESTDIR = $$OUT_PWD/../StarlabPackage
     }
 }
 

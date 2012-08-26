@@ -2,7 +2,7 @@
 #include "CmdLineparser.h"
 #include "StarlabApplication.h"
 #include "PluginManager.h"
-#include "interfaces/FilterPlugin.h";
+#include "interfaces/FilterPlugin.h"
 
 QString safeCopyPath(QString path){
     QFileInfo fi(path);                 /// /tmp/archive.tar.gz
