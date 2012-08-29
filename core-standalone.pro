@@ -14,8 +14,8 @@ SUBDIRS += libraries/parameters
 SUBDIRS += libraries/common
 
 #--- APPLICATION MAKER
+SUBDIRS += starterm
 SUBDIRS += starlab
-SUBDIRS += star_term  #(Qt Creator: last in alphabetical order is run by default)
 
 #--- GUI MODULES
 SUBDIRS += plugins/project_io_starlab

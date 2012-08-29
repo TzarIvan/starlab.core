@@ -20,6 +20,7 @@ QCommandLine::QCommandLine(const QCoreApplication & app,
                            const QCommandLineConfig & config,
                            QObject * parent)
     : QObject(parent), d(new QCommandLinePrivate) {
+    Q_UNUSED(app);
     setArguments(app.arguments());
     setConfig(config);
     enableHelp(true);

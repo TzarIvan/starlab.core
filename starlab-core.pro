@@ -6,8 +6,9 @@ OTHER_FILES += starlab.prf
 
 SUBDIRS += libraries/parameters
 SUBDIRS += libraries/common
-SUBDIRS += starlab
 SUBDIRS += starterm
+SUBDIRS += starlab
+
 SUBDIRS += plugins/render_bbox
 SUBDIRS += plugins/gui_filemenu
 SUBDIRS += plugins/gui_filter

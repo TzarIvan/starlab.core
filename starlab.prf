@@ -86,7 +86,7 @@ equals(STARLAB_TEMPLATE,"console"){
 
     # Where is cmdline application deployed?
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/MacOS/
-    win32: DESTDIR = $$OUT_PWD/../StarlabPackage
+    win32: DESTDIR = $$DEPLOYPATH
     linux: error(fix me here)
 }
 
@@ -104,7 +104,7 @@ equals(STARLAB_TEMPLATE,"appbundle"){
         macx:QMAKE_CLEAN = rm $$DEPLOYPATH/Starlab.app/plugins/*
     } 
     win32{
-        DESTDIR = $$OUT_PWD/../StarlabPackage
+        DESTDIR = $$DEPLOYPATH
     }
 }
 
@@ -115,7 +115,7 @@ for(lib, STARLAB_DEPENDS){
     # Loads the library preferences from a PRF file
     PRFFILENAME = $$ROOT/libraries/$$lib/"$$lib".prf
     exists($$PRFFILENAME) : load($$PRFFILENAME)
-    
+
     #---------------------- COMPILE TIME ---------------------------------------
     DIRNAME = $$dirname(lib)
     isEmpty(DIRNAME) {

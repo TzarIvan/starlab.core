@@ -27,6 +27,4 @@ class cloud_mode_selection : public CloudModePlugin{
     QPoint start;
     QPoint cur;
     QPoint prev;
-
-    friend class QGLViewer;
 };

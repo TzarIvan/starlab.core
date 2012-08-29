@@ -1,7 +1,6 @@
 #pragma once
 #include <QDebug>
 #include <QString>
-#include <QSharedPointer>
 #include "global.h"
 #include "Model.h"
 
@@ -14,7 +13,7 @@ public:
 
     // Cloud points properties
     QMap< QString, QVector<QVariant> > property;
-    QVector<QVariant> getProperty(QString name);
+    QVector<QVariant> & getProperty(QString name);
     
 public:
     CloudModel(QString path, QString name=QString()) : Model(path,name){}
