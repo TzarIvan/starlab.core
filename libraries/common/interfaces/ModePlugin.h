@@ -56,6 +56,7 @@ public:
     protected:
         using StarlabPlugin::drawArea;
         using StarlabPlugin::document;
+        using StarlabPlugin::mainWindow;
     /// @} 
     
     /// @{ 

@@ -1,6 +1,7 @@
 #include "gui_mode.h"
 #include "interfaces/ModePlugin.h"
 #include "StarlabMainWindow.h"
+#include "StarlabDrawArea.h"
 
 void gui_mode::load(){
     QActionGroup* modeActionGroup = new QActionGroup(mainWindow()->modeMenu);
@@ -36,6 +37,7 @@ void gui_mode::startMode(QAction* action){
     
     if( action==defaultModeAction ){
         mainWindow()->setActiveMode(NULL);
+        drawArea()->setMouseBinding(Qt::LeftButton, QGLViewer::CAMERA, QGLViewer::ROTATE);
     } else {
         /// Create new plugin
         if( !mainWindow()->hasActiveMode() ){

@@ -78,6 +78,8 @@ void cloud_mode_selection::endSelection(const QPoint &)
         vselect[idx] = true;
 
     cloud()->property["selected"] = vselect;
+
+    mainWindow()->statusBarMessage(QString("( %1 ) points selected.").arg(nbHits));
 }
 
 void cloud_mode_selection::decorate(){
