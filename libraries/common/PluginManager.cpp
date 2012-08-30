@@ -232,17 +232,25 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
     return newplugin;
 }
 
-
 QString PluginManager::getPreferredRenderer(Model *model){
     QString key = "DefaultRenderer/"+QString(model->metaObject()->className());
-    /// By default use the bounding box renderer
-    settings()->setDefault(key,"Bounding Box");
-    /// Deal with a non-existent preferred plugin
     QString rendererName = settings()->getString(key);
+
+    /// Deal with a non-existent preferred plugin
     if(!renderPlugins.contains(rendererName)){
-        settings()->set(key,"Bounding Box");
-        return "Bounding Box";
+        rendererName = "Bounding Box";
+
+        // Query renderers, if any request to be default
+        foreach(RenderPlugin* plugin, renderPlugins)
+        {
+            if(plugin->isApplicable(model) && plugin->isDefault()){
+                rendererName = plugin->name();
+                break;
+            }
+        }
+        settings()->set(key,rendererName);
     }
+
     return rendererName;
 }
 

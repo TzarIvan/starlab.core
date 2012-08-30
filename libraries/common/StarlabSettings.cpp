@@ -76,7 +76,7 @@ bool StarlabSettings::getBool(const QString &key){
 
 QString StarlabSettings::getString(const QString &key){ return get(key).toString(); }
 QStringList StarlabSettings::getStringList(const QString &key){ return get(key).toStringList(); }
-QColor StarlabSettings::getQColor(const QString &key){ return get(key).convert(QVariant::Color); }
+QColor StarlabSettings::getQColor(const QString &key){ return get(key).value<QColor>(); }
 float StarlabSettings::getFloat(const QString &key){ return get(key).toFloat(); }
 
 void StarlabSettings::load(const QString& /*filename*/){ }

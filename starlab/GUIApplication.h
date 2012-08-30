@@ -15,7 +15,7 @@ public:
             return QApplication::notify(rec,ev);
         } catch (StarlabException& e){        
             QString title = "Unmanaged StarLab Exception";
-            QString message = e.what();
+            QString message = e.message();
             int retval = QMessageBox::critical(NULL, title, message, QMessageBox::Abort|QMessageBox::Ignore);
             if( retval == QMessageBox::Abort ){
                 qCritical() << "Terminated because aborted exception";

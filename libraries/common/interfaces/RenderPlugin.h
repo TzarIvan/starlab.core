@@ -19,7 +19,9 @@ class RenderPlugin : public StarlabPlugin{
         virtual void finalize(){}    
     protected:
         /// @brief Return a new instance of your plugin    
-        virtual RenderPlugin* factory()=0;    
+        virtual RenderPlugin* factory()=0;
+        /// @brief Plugins can define their default status
+        virtual bool isDefault() { return false; }
     /// @}
     
     /// @{ 

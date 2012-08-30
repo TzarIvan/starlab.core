@@ -146,49 +146,48 @@ void StarlabDrawArea::setIsoProjection(){
     camera()->interpolateTo(f,0.25);
 }
 
-void StarlabDrawArea::viewFrom(QAction * a)
-{
+void StarlabDrawArea::viewFrom(QAction * a){
+    Frame f;
+
     QStringList list;
     list << "Top" << "Bottom" << "Left" << "Right" << "Front" << "Back";
 
-    double e = 2.0; // should be a smart choice from bbox?
-    Frame f;
+    double e = document()->selectedModel()->bbox().size().length();
 
     switch(list.indexOf(a->text()))
     {
-
     case 0:
         f = Frame(Vec(0,0,e), Quaternion());
-        camera()->interpolateTo(f,0.25);
         break;
     case 1:
         f = Frame(Vec(0,0,-e), Quaternion());
         f.rotate(Quaternion(Vec(1,0,0), M_PI));
-        camera()->interpolateTo(f,0.25);
         break;
     case 2:
         f = Frame(Vec(0,-e,0), Quaternion(Vec(0,0,1),Vec(0,-1,0)));
-        camera()->interpolateTo(f,0.25);
         break;
     case 3:
         f = Frame(Vec(0,e,0), Quaternion(Vec(0,0,1),Vec(0,1,0)));
         f.rotate(Quaternion(Vec(0,0,1), M_PI));
-        camera()->interpolateTo(f,0.25);
         break;
     case 4:
         f = Frame(Vec(e,0,0), Quaternion(Vec(0,0,1),Vec(1,0,0)));
         f.rotate(Quaternion(Vec(0,0,1), M_PI / 2.0));
-        camera()->interpolateTo(f,0.25);
         break;
     case 5:
         f = Frame(Vec(-e,0,0), Quaternion(Vec(0,0,-1),Vec(1,0,0)));
         f.rotate(Quaternion(Vec(0,0,-1), M_PI / 2.0));
-        camera()->interpolateTo(f,0.25);
+        break;
     }
+    camera()->interpolateTo(f,0.25);
 }
 
 void StarlabDrawArea::init(){
-    setBackgroundColor(QColor(50,50,60));
+    /// Background color from settings file
+    QString key = "DefaultBackgroundColor";
+    settings()->setDefault( key, QVariant(QColor(50,50,60)) );
+    setBackgroundColor( settings()->getQColor(key) );
+
     resetViewport();
 }
 
@@ -199,15 +198,18 @@ void StarlabDrawArea::draw(){
     foreach(RenderPlugin* renderer, renderers()){
         glPushMatrix();
             glMultMatrixd( document()->transform.data() );
-            renderer->render();
+            if(renderer->model()->isVisible) renderer->render();
         glPopMatrix();        
     }   
 
     /// @todo Render decoration plugins
-    
+
+    /// Render renderable objects
+    drawAllRenderObjects();
+
     /// Render mode decoration
     if( mainWindow()->hasActiveMode() )
-        mainWindow()->activeMode()->decorate();       
+        mainWindow()->activeMode()->decorate();
 }
 
 void StarlabDrawArea::drawWithNames(){

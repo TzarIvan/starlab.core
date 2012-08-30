@@ -80,6 +80,7 @@ void Document::setSelectedModel(Model* model){
     bool exists = _models.contains(model);
     if(!exists) throw StarlabException("Requested selection update with a model which is not part of the document");
     _selectedModel = model;
+    emit emit_hasChanged();
 }
 
 

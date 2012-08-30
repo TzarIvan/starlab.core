@@ -2,7 +2,6 @@
 #include <QObject>
 #include <QDockWidget>
 #include "StarlabPlugin.h"
-#include "RichParameterSet.h"
 #include "Callbacks.h"
 #include "Document.h"
 #include "StarlabException.h"

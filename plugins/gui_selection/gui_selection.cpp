@@ -48,7 +48,7 @@ void gui_selection::update_renderModes(){
     
     /// Connect click events to change in renderer system
     /// @todo why is it triggering 3x events every time? 
-    connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)));
+    connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()));
 }
 

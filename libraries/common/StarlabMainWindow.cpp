@@ -104,6 +104,7 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     /// Connect document changes to view changes
     {
         connect(document(),SIGNAL(resetViewport()), drawArea(),SLOT(resetViewport()));
+        connect(document(),SIGNAL(resetViewport()), drawArea(),SLOT(updateGL()));
     }
     
     /// Installs all the GUI plugins
