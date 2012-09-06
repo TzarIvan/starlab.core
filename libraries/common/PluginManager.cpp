@@ -44,10 +44,12 @@ QStringList extractExtensions(QString iopluginname){
 QString failurecauses_qtplugin(
 "\nPOSSIBLE FAILURE REASONS:\n"
 "  1) plugin needs a DLL which cannot be found in the executable folder\n"
-"  2) ... add your reason?");
+"  2) Release / debug build mismatch.\n"
+"  3) ... add your reason?");
 QString failurecauses_starlabplugin(
 "\nPOSSIBLE FAILURE REASONS:\n"
-"  2) starlab PluginManager does not know how to load it\n"
+"  1) starlab PluginManager does not know how to load it\n"
+"  2) Release / debug build mismatch.\n"
 "  3) ... add your reason?");
 
 PluginManager::PluginManager(StarlabSettings* settings) : 

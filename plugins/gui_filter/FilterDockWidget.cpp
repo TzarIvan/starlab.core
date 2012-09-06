@@ -13,6 +13,7 @@ FilterDockWidget::FilterDockWidget(FilterPlugin* filterPlugin, RichParameterSet 
     this->init(pars);
     this->adjustSize();
     this->setWindowTitle(filterPlugin->name());
+    ui->filterDescription->setText(filterPlugin->description());
     
     /// Whenever docking changed, re-adjust the sizing
     connect(this,SIGNAL(topLevelChanged(bool)), this,SLOT(adjustSize()));
