@@ -5,9 +5,9 @@
 #pragma once
 #include "CloudModel.h"
 #include "interfaces/InputOutputPlugin.h"
-#include "interfaces/RenderPlugin.h"
 #include "interfaces/FilterPlugin.h"
 #include "interfaces/ModePlugin.h"
+#include "interfaces/RenderPlugin.h"
 
 /// This namescape limits the visibility of these functions to this file
 namespace{

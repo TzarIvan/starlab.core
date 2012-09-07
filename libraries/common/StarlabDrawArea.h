@@ -47,6 +47,7 @@ public:
         
 /// @{ Rendering specification
 public slots:
+    void getSceneBounds(QVector3D&, QVector3D&);
     void resetViewport();     ///< Restores the default view camera
     void viewFrom(QAction *); ///< Preset camera viewpoints
     void setPerspectiveProjection();
@@ -61,6 +62,9 @@ private:
 /// @{ Selection functions
 private:
     void endSelection(const QPoint&);
+    void postSelection(const QPoint&);
+public:
+	void defaultEndSelection(const QPoint&p){ QGLViewer::endSelection(p); } ///< Needed in Mode plugins
 /// @}
     
 /// @{ ModePlugin management

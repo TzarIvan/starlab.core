@@ -94,28 +94,39 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 }
 
-void StarlabDrawArea::resetViewport(){
-    Vec center(0,0,0);
-    QBox3D largestBBox;
-    largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
-
+void StarlabDrawArea::getSceneBounds(QVector3D &minbound, QVector3D &maxbound)
+{
     foreach(Model* m, document()->models()){
-        const QBox3D bbox = m->bbox();
-        if(bbox.intersects(largestBBox))
-            largestBBox = bbox;
-        /*Vector3 c = (m->bbox.minimum() + m->bbox.maximum()) * 0.5;
-        center = Vec(c[0],c[1],c[2]);
-        radius = (m->bbox.maximum() - m->bbox.minimum()).norm() * 0.5;*/
+        QBox3D bbox = m->bbox();
+        minbound = QVector3D(qMin(bbox.minimum().x(),minbound.x()),
+                             qMin(bbox.minimum().y(),minbound.y()),
+                             qMin(bbox.minimum().z(),minbound.z()));
+
+        maxbound = QVector3D(qMax(bbox.maximum().x(),maxbound.x()),
+                             qMax(bbox.maximum().y(),maxbound.y()),
+                             qMax(bbox.maximum().z(),maxbound.z()));
+    }
+}
+
+void StarlabDrawArea::resetViewport(){
+    QVector3D minbound(-1,-1,-1);
+    QVector3D maxbound( 1, 1, 1);
+
+    if(document()->models().size()){
+        double l = 1e20;
+        minbound = QVector3D( l, l, l);
+        maxbound = QVector3D(-l,-l,-l);
     }
 
-    QVector3D extent(largestBBox.size());
-    double radius = qMax(extent.x(), qMax(extent.y(), extent.z()));
+    getSceneBounds(minbound, maxbound);
 
-    camera()->setSceneRadius(radius * 2);
+    Vec min_bound(minbound.x(),minbound.y(),minbound.z());
+    Vec max_bound(maxbound.x(),maxbound.y(),maxbound.z());
+
+    camera()->fitBoundingBox( min_bound, max_bound );
+    camera()->setSceneRadius((max_bound - min_bound).norm()*0.6);
+    camera()->setSceneCenter((min_bound + max_bound) * 0.5);
     camera()->showEntireScene();
-    camera()->setUpVector(Vec(0,0,1));
-    camera()->setPosition(Vec(radius,radius,radius) + center);
-    camera()->lookAt(center);
 }
 
 void StarlabDrawArea::setPerspectiveProjection(){
@@ -129,18 +140,9 @@ void StarlabDrawArea::setOrthoProjection(){
 void StarlabDrawArea::setIsoProjection(){
     setOrthoProjection();
 
-    // Find largest bounding box
-    QBox3D largestBBox;
-    largestBBox.setExtents(QVector3D(-1,-1,-1),QVector3D(1,1,1));
-    foreach(Model* m, document()->models()){
-        const QBox3D bbox = m->bbox();
-        if(bbox.intersects(largestBBox))
-            largestBBox = bbox;
-    }
-
     // Move camera such that entire scene is visisble
-    double mx = 2*qMax(largestBBox.maximum().x(), qMax(largestBBox.maximum().y(), largestBBox.maximum().z()));
-    Frame f(Vec(mx,-mx,mx), Quaternion());
+    double r = camera()->sceneRadius();
+    Frame f(camera()->sceneCenter() + Vec(r,-r,r), Quaternion());
     f.rotate(Quaternion(Vec(0,0,1), M_PI / 4.0));
     f.rotate(Quaternion(Vec(1,0,0), M_PI / 3.3));
     camera()->interpolateTo(f,0.25);
@@ -152,34 +154,39 @@ void StarlabDrawArea::viewFrom(QAction * a){
     QStringList list;
     list << "Top" << "Bottom" << "Left" << "Right" << "Front" << "Back";
 
-    double e = document()->selectedModel()->bbox().size().length();
+    QBox3D bbox = document()->selectedModel()->bbox();
+
+    double e = bbox.size().length() * 2;
+    Vec c(bbox.center().x(),bbox.center().y(),bbox.center().z());
 
     switch(list.indexOf(a->text()))
     {
     case 0:
-        f = Frame(Vec(0,0,e), Quaternion());
+        f = Frame(c+Vec(0,0,e), Quaternion());
         break;
     case 1:
-        f = Frame(Vec(0,0,-e), Quaternion());
+        f = Frame(c+Vec(0,0,-e), Quaternion());
         f.rotate(Quaternion(Vec(1,0,0), M_PI));
         break;
     case 2:
-        f = Frame(Vec(0,-e,0), Quaternion(Vec(0,0,1),Vec(0,-1,0)));
+        f = Frame(c+Vec(0,-e,0), Quaternion(Vec(0,0,1),Vec(0,-1,0)));
         break;
     case 3:
-        f = Frame(Vec(0,e,0), Quaternion(Vec(0,0,1),Vec(0,1,0)));
+        f = Frame(c+Vec(0,e,0), Quaternion(Vec(0,0,1),Vec(0,1,0)));
         f.rotate(Quaternion(Vec(0,0,1), M_PI));
         break;
     case 4:
-        f = Frame(Vec(e,0,0), Quaternion(Vec(0,0,1),Vec(1,0,0)));
+        f = Frame(c+Vec(e,0,0), Quaternion(Vec(0,0,1),Vec(1,0,0)));
         f.rotate(Quaternion(Vec(0,0,1), M_PI / 2.0));
         break;
     case 5:
-        f = Frame(Vec(-e,0,0), Quaternion(Vec(0,0,-1),Vec(1,0,0)));
+        f = Frame(c+Vec(-e,0,0), Quaternion(Vec(0,0,-1),Vec(1,0,0)));
         f.rotate(Quaternion(Vec(0,0,-1), M_PI / 2.0));
         break;
     }
     camera()->interpolateTo(f,0.25);
+
+    camera()->setSceneCenter(c);
 }
 
 void StarlabDrawArea::init(){
@@ -187,6 +194,8 @@ void StarlabDrawArea::init(){
     QString key = "DefaultBackgroundColor";
     settings()->setDefault( key, QVariant(QColor(50,50,60)) );
     setBackgroundColor( settings()->getQColor(key) );
+
+    camera()->setUpVector(Vec(0,0,1));
 
     resetViewport();
 }
@@ -221,6 +230,14 @@ void StarlabDrawArea::endSelection(const QPoint & p)
 {
     if(mainWindow()->hasActiveMode())
         mainWindow()->activeMode()->endSelection(p);
+	else
+		QGLViewer::endSelection(p);
+}
+
+void StarlabDrawArea::postSelection(const QPoint & p)
+{
+    if(mainWindow()->hasActiveMode())
+        mainWindow()->activeMode()->postSelection(p);
 }
 
 StarlabDrawArea::~StarlabDrawArea(){
@@ -278,7 +295,7 @@ bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
         case QEvent::MouseMove:          return mode->mouseMoveEvent((QMouseEvent*)event); break;
         case QEvent::KeyPress:           return mode->keyPressEvent((QKeyEvent*)event); break;
         case QEvent::Wheel:              return mode->wheelEvent((QWheelEvent*)event); break;
-        default: return true; ///< Any other event is blocked!!
+        default: return false;
     }  
 }
 

@@ -38,7 +38,7 @@ public:
     /// @{ @name Selection events (optional)
     public:
         virtual void endSelection(const QPoint&){}
-        friend class StarlabDrawArea;
+        virtual void postSelection(const QPoint&){}
     /// @}
 
     /// @{ @name User Input Callbacks (optional)
