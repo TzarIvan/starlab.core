@@ -247,9 +247,10 @@ StarlabDrawArea::~StarlabDrawArea(){
 
 void StarlabDrawArea::deleteAllRenderObjects(){
     document()->pushBusy();
-    foreach(RenderObject::Base* obj, renderObjectList)
-        delete obj;
+
+    qDeleteAll(renderObjectList.begin(), renderObjectList.end());
     renderObjectList.clear();
+
     document()->popBusy();
 }
 
@@ -258,28 +259,33 @@ void StarlabDrawArea::drawAllRenderObjects(){
         obj->draw();
 }
 
+void StarlabDrawArea::addRenderObject(RenderObject::Base * obj)
+{
+    renderObjectList.append(obj);
+}
+
 RenderObject::Triangle& StarlabDrawArea::drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color){
     RenderObject::Triangle* triangle = new RenderObject::Triangle(p1,p2,p3,color);
-    renderObjectList.append(triangle);
+    addRenderObject(triangle);
     return *triangle;
 }
 
 RenderObject::Point& StarlabDrawArea::drawPoint(QVector3D p1, float size, QColor color){
     RenderObject::Point* point = new RenderObject::Point(p1,size,color);
-    renderObjectList.append(point);
+    addRenderObject(point);
     return *point;
 }
 
 RenderObject::Segment& StarlabDrawArea::drawSegment(QVector3D p1, QVector3D p2, float size, QColor color){
-    RenderObject::Segment* edge = new RenderObject::Segment(p1,p2,size,color);
-    renderObjectList.append(edge);
-    return *edge;
+    RenderObject::Segment* segment = new RenderObject::Segment(p1,p2,size,color);
+    addRenderObject(segment);
+    return *segment;
 }
 
 RenderObject::Ray& StarlabDrawArea::drawRay(QVector3D orig, QVector3D dir, float size, QColor color, float scale){
-    RenderObject::Ray* edge = new RenderObject::Ray(orig,dir,size,color,scale);
-    renderObjectList.append(edge);
-    return *edge;
+    RenderObject::Ray* ray = new RenderObject::Ray(orig,dir,size,color,scale);
+    addRenderObject(ray);
+    return *ray;
 }
 
 /// @internal returning true will prevent the drawArea plugin from intercepting the events!!!

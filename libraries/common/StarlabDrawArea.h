@@ -91,17 +91,18 @@ public:
     void drawAllRenderObjects();
     void deleteAllRenderObjects();
     void deleteRenderObject(RenderObject* );
+    void addRenderObject(RenderObject::Base*);
     RenderObject::Triangle& drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color=Qt::red);
     RenderObject::Point&    drawPoint(QVector3D p1, float size=1, QColor color=Qt::red);
     RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
     RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
-
-protected:        
-    /// Handles to additional render objects, created by draw??() methods, deleted by ~StarlabDrawArea()
-    QList<RenderObject::Base*> renderObjectList;
 /// @}
-              
+
 public slots:
     /// Updates the draw area
     void update();
+
+protected:
+    /// Handles to additional render objects, created by draw??() methods, deleted by ~StarlabDrawArea()
+    QList<RenderObject::Base*> renderObjectList;
 };

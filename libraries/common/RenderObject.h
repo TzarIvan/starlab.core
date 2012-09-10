@@ -12,7 +12,7 @@ public:
     public:
         Base(float size,QColor color) : _size(size),_color(color){}
         virtual ~Base(){}
-        virtual void draw(); 
+        virtual void draw()=0;
         Base& size(float size){ this->_size=size; return *this; }
         Base& color(QColor color){ this->_color=color; return *this; }
     };

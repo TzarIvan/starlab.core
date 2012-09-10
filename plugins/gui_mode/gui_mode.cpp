@@ -43,6 +43,7 @@ void gui_mode::startMode(QAction* action){
         if( !mainWindow()->hasActiveMode() ){
             iMode->createEdit();
             mainWindow()->setActiveMode(iMode);
+            drawArea()->updateGL();
         }
     }
 }

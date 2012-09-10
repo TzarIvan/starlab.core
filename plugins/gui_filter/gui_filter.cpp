@@ -9,6 +9,7 @@
 #include "StarlabMainWindow.h"
 #include "RichParameterSet.h"
 #include "interfaces/FilterPlugin.h"
+#include <QElapsedTimer>
 
 void gui_filter::load(){
     /// Setup tooltips (mouse hover) for menu entries
@@ -91,8 +92,12 @@ void gui_filter::execute(FilterPlugin* iFilter, RichParameterSet* parameters) {
     qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
     document()->pushBusy();
         try {
+            QElapsedTimer t;
+            t.start();
+
             iFilter->applyFilter(parameters);
-            mainWindow()->statusBarMessage("Filter '"+ iFilter->name() +"' Executed",5000);
+
+            mainWindow()->statusBarMessage("Filter '"+ iFilter->name() +"' Executed " + QString("(%1ms).").arg(t.elapsed()),5000);
         } STARLAB_CATCH_BLOCK
     document()->popBusy();
     qApp->restoreOverrideCursor();
