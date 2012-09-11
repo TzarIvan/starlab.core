@@ -35,7 +35,7 @@ RenderPlugin *StarlabDrawArea::activeRenderer(Model *model){
 void StarlabDrawArea::setRenderer(Model* model, QString pluginName){
     // qDebug("StarlabDrawArea::setRenderer(%s,%s)",qPrintable(model->name), qPrintable(pluginName));
     document()->pushBusy();
-        removeRenderer(model);
+        if(_renderers.value(model,NULL)) removeRenderer(model);
         _renderers[model] = pluginManager()->newRenderPlugin(pluginName,model);
     document()->popBusy();
 }
