@@ -5,7 +5,7 @@
 #include "float.h"   // max floating point number
 
 using namespace std;
-typedef vector<double> Point;
+typedef vector<double> KDPoint;
 
 /// The root node is stored in position 0 of nodesPtrs
 #define ROOT 0
@@ -23,7 +23,7 @@ struct Node{
     double key;	///< the key (value along k-th dimension) of the split
     int LIdx;	///< the index to the left sub-tree (-1 if none)
 	int	RIdx;	///< the index to the right sub-tree (-1 if none)
-	int	pIdx;   ///< index of stored data-point (NOTE: only if isLeaf)
+    int	pIdx;   ///< index of stored data-point (NOTE: only if isLeaf)
 
     Node(){ LIdx=RIdx=key=pIdx=-1; }
     inline bool isLeaf() const{ return pIdx>=0; }
@@ -33,7 +33,7 @@ class KDTree{
     /// @{ kdtree constructor/destructor
     public:
         KDTree(){}                           ///< Default constructor (only for load/save)
-        KDTree(const vector<Point>& points); ///< tree constructor
+        KDTree(const vector<KDPoint>& points); ///< tree constructor
         ~KDTree();                           ///< tree destructor
     private:
         int build_recursively(vector< vector<int> >& sortidx, vector<char> &sidehelper, int dim);       
@@ -50,7 +50,7 @@ class KDTree{
     private:
         int ndim;                 ///< Number of dimensions of the data (>0)
         int npoints;              ///< Number of stored points
-        vector<Point> points;     ///< Points data, size ?x?
+        vector<KDPoint> points;     ///< Points data, size ?x?
         vector<Node*> nodesPtrs;  ///< Tree node pointers, size ?x?
     /// @}
    
@@ -91,33 +91,33 @@ class KDTree{
         
     /// @{ Knn Search & helpers
     public:
-        int closest_point(const Point& p);
-        void closest_point(const Point &p, int &idx, double &dist);
-        void k_closest_points(const Point& Xq, int k, vector<int>& idxs, vector<double>& distances);
+        int closest_point(const KDPoint& p);
+        void closest_point(const KDPoint &p, int &idx, double &dist);
+        void k_closest_points(const KDPoint& Xq, int k, vector<int>& idxs, vector<double>& distances);
     private:
-        void knn_search( const Point& Xq, int nodeIdx = 0, int dim = 0);
-        bool ball_within_bounds(const Point& Xq);
-        double bounds_overlap_ball(const Point& Xq);
+        void knn_search( const KDPoint& Xq, int nodeIdx = 0, int dim = 0);
+        bool ball_within_bounds(const KDPoint& Xq);
+        double bounds_overlap_ball(const KDPoint& Xq);
     private:
         int k;					  ///< number of records to search for
-        Point Bmin;  		 	  ///< bounding box lower bound
-        Point Bmax;  		      ///< bounding box upper bound
+        KDPoint Bmin;  		 	  ///< bounding box lower bound
+        KDPoint Bmax;  		      ///< bounding box upper bound
         MaxHeap<double> pq;  	  ///< <key,idx> = <distance, node idx>
         bool terminate_search;    ///< true if k points have been found
     /// @}        
 
-	/// @{ Points in hypersphere (ball) query
+    /// @{ Points in hypersphere (ball) query
     public: 
-        void ball_query( const Point& point, const double radius, vector<int>& idxsInRange, vector<double>& distances );
+        void ball_query( const KDPoint& point, const double radius, vector<int>& idxsInRange, vector<double>& distances );
     private: 
-        void ball_bbox_query(int nodeIdx, Point& pmin, Point& pmax, vector<int>& inrange_idxs, vector<double>& distances, const Point& point, const double& radiusSquared, int dim=0);
+        void ball_bbox_query(int nodeIdx, KDPoint& pmin, KDPoint& pmax, vector<int>& inrange_idxs, vector<double>& distances, const KDPoint& point, const double& radiusSquared, int dim=0);
     /// @}       
     
     /// @{ Range (box) query 
     public: 
-        void range_query( const Point& pmin, const Point& pmax, vector<int>& inrange_idxs, int nodeIdx=0, int dim=0 );
+        void range_query( const KDPoint& pmin, const KDPoint& pmax, vector<int>& inrange_idxs, int nodeIdx=0, int dim=0 );
     private:
-        bool lies_in_range( const Point& p, const Point& pMin, const Point& pMax );
+        bool lies_in_range( const KDPoint& p, const KDPoint& pMin, const KDPoint& pMax );
     /// @}
 };
 
@@ -134,7 +134,7 @@ class KDTree{
  * 				   the number of points and the dimensionality is inferred
  *                 by the data
  */
-KDTree::KDTree(const vector<Point>& points){
+KDTree::KDTree(const vector<KDPoint>& points){
     // initialize data
     this -> npoints   = points.size();
     this -> ndim      = points[0].size();
@@ -142,7 +142,7 @@ KDTree::KDTree(const vector<Point>& points){
     nodesPtrs.reserve( npoints );
     
     // used for sort-based tree construction
-    // tells whether a point should go to the left or right 
+    // tells whether a point should go to the left or right
     // array in the partitioning of the sorting array
     vector<char> sidehelper(npoints,'x');
     
@@ -308,7 +308,7 @@ void KDTree::print_tree( int index/*=0*/, int level/*=0*/ ) const{
  * @param distances     the distances from the points
  *
  */
-void KDTree::k_closest_points(const Point& Xq, int k, vector<int>& idxs, vector<double>& distances){
+void KDTree::k_closest_points(const KDPoint& Xq, int k, vector<int>& idxs, vector<double>& distances){
     // initialize search data
     Bmin = vector<double>(ndim,-DBL_MAX);
     Bmax = vector<double>(ndim,+DBL_MAX);
@@ -360,7 +360,7 @@ void KDTree::k_closest_points(const Point& Xq, int k, vector<int>& idxs, vector<
  *          publisher = {ACM},
  *          address = {New York, NY, USA}}
  */
-void KDTree::knn_search( const Point& Xq, int nodeIdx/*=0*/, int dim/*=0*/){
+void KDTree::knn_search( const KDPoint& Xq, int nodeIdx/*=0*/, int dim/*=0*/){
     // cout << "at node: " << nodeIdx << endl;
     Node* node = nodesPtrs[ nodeIdx ];
     double temp;
@@ -419,7 +419,7 @@ void KDTree::leaves_of_node( int nodeIdx, vector<int>& indexes ){
     leaves_of_node( node->RIdx, indexes );
 }
 
-void KDTree::closest_point(const Point &p, int& idx, double& dist){
+void KDTree::closest_point(const KDPoint &p, int& idx, double& dist){
     vector<int> idxs;
     vector<double> dsts;
     k_closest_points(p,1,idxs,dsts);
@@ -428,7 +428,7 @@ void KDTree::closest_point(const Point &p, int& idx, double& dist){
     return;
 }
 
-int KDTree::closest_point(const Point &p){
+int KDTree::closest_point(const KDPoint &p){
     int idx;
     double dist;
     closest_point(p,idx,dist);
@@ -449,7 +449,7 @@ int KDTree::closest_point(const Point &p){
  * @param Xq the query point
  * @return true if the search can be safely terminated, false otherwise
  */
-bool KDTree::ball_within_bounds(const Point& Xq){
+bool KDTree::ball_within_bounds(const KDPoint& Xq){
 
     //extract best distance from queue top
     double best_dist = sqrt( pq.top().first );
@@ -467,7 +467,7 @@ bool KDTree::ball_within_bounds(const Point& Xq){
  * the current node (Bmin Bmax globals).
  *
  */
-double KDTree::bounds_overlap_ball(const Point& Xq){
+double KDTree::bounds_overlap_ball(const KDPoint& Xq){
     // k-closest still not found. termination test unavailable
     if( pq.size()<k )
         return true;
@@ -508,10 +508,10 @@ double KDTree::bounds_overlap_ball(const Point& Xq){
  *       1) the range query is not implemented in its most efficient way
  *       2) all the points in between the bbox and the ball are visited as well, then rejected
  */
-void KDTree::ball_query( const Point& point, const double radius, vector<int>& idxsInRange, vector<double>& distances ){
+void KDTree::ball_query( const KDPoint& point, const double radius, vector<int>& idxsInRange, vector<double>& distances ){
     // create pmin pmax that bound the sphere
-    Point pmin(ndim,0);
-    Point pmax(ndim,0);
+    KDPoint pmin(ndim,0);
+    KDPoint pmax(ndim,0);
     for (int dim=0; dim < ndim; dim++) {
         pmin[dim] = point[dim]-radius;
         pmax[dim] = point[dim]+radius;
@@ -525,7 +525,7 @@ void KDTree::ball_query( const Point& point, const double radius, vector<int>& i
  *
  * @note this is similar to "range_query" i just replaced "lies_in_range" with "euclidean_distance"
  */
-void KDTree::ball_bbox_query(int nodeIdx, Point& pmin, Point& pmax, vector<int>& inrange_idxs, vector<double>& distances, const Point& point, const double& radiusSquared, int dim/*=0*/){
+void KDTree::ball_bbox_query(int nodeIdx, KDPoint& pmin, KDPoint& pmax, vector<int>& inrange_idxs, vector<double>& distances, const KDPoint& point, const double& radiusSquared, int dim/*=0*/){
     Node* node = nodesPtrs[nodeIdx];
 
     // if it's a leaf and it lies in R
@@ -554,7 +554,7 @@ void KDTree::ball_bbox_query(int nodeIdx, Point& pmin, Point& pmax, vector<int>&
  * @param inrange_idxs the indexes which satisfied the query, falling in the bounding box area
  *
  */
-void KDTree::range_query( const Point& pmin, const Point& pmax, vector<int>& inrange_idxs, int nodeIdx/*=0*/, int dim/*=0*/ ){
+void KDTree::range_query( const KDPoint& pmin, const KDPoint& pmax, vector<int>& inrange_idxs, int nodeIdx/*=0*/, int dim/*=0*/ ){
     Node* node = nodesPtrs[nodeIdx];
     //cout << "I am in: "<< nodeIdx << "which is is leaf?" << node->isLeaf() << endl;
 
@@ -581,7 +581,7 @@ void KDTree::range_query( const Point& pmin, const Point& pmax, vector<int>& inr
  *
  * @return true if the point lies in the box, false otherwise
  */
-bool KDTree::lies_in_range( const Point& p, const Point& pMin, const Point& pMax ){
+bool KDTree::lies_in_range( const KDPoint& p, const KDPoint& pMin, const KDPoint& pMax ){
     for (int dim=0; dim < ndim; dim++)
         if( p[dim]<pMin[dim] || p[dim]>pMax[dim] )
             return false;
