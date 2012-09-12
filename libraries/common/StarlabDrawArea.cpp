@@ -94,31 +94,11 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 }
 
-void StarlabDrawArea::getSceneBounds(QVector3D &minbound, QVector3D &maxbound)
-{
-    foreach(Model* m, document()->models()){
-        QBox3D bbox = m->bbox();
-        minbound = QVector3D(qMin(bbox.minimum().x(),minbound.x()),
-                             qMin(bbox.minimum().y(),minbound.y()),
-                             qMin(bbox.minimum().z(),minbound.z()));
-
-        maxbound = QVector3D(qMax(bbox.maximum().x(),maxbound.x()),
-                             qMax(bbox.maximum().y(),maxbound.y()),
-                             qMax(bbox.maximum().z(),maxbound.z()));
-    }
-}
-
 void StarlabDrawArea::resetViewport(){
-    QVector3D minbound(-1,-1,-1);
-    QVector3D maxbound( 1, 1, 1);
 
-    if(document()->models().size()){
-        double l = 1e20;
-        minbound = QVector3D( l, l, l);
-        maxbound = QVector3D(-l,-l,-l);
-    }
-
-    getSceneBounds(minbound, maxbound);
+    QBox3D sceneBBox = document()->bbox();
+    QVector3D minbound = sceneBBox.minimum();
+    QVector3D maxbound = sceneBBox.maximum();
 
     Vec min_bound(minbound.x(),minbound.y(),minbound.z());
     Vec max_bound(maxbound.x(),maxbound.y(),maxbound.z());
@@ -149,11 +129,15 @@ void StarlabDrawArea::setIsoProjection(){
 }
 
 void StarlabDrawArea::viewFrom(QAction * a){
+
+    if(!document()->selectedModel()) return;
+
     Frame f;
 
     QStringList list;
     list << "Top" << "Bottom" << "Left" << "Right" << "Front" << "Back";
 
+    document()->selectedModel()->updateBoundingBox();
     QBox3D bbox = document()->selectedModel()->bbox();
 
     double e = bbox.size().length() * 2;

@@ -28,7 +28,9 @@ bool Document::isBusy(){
 
 
 QBox3D Document::bbox() {
-    QBox3D box;
+    QBox3D box(QVector3D (-1,-1,-1), QVector3D ( 1, 1, 1));
+    if(_models.size()) box = _models.first()->bbox();
+
     /// @todo rotate bbox of model by its custom transfrom like meshlab was doing in box.Add(m->transform,m->bbox)
     foreach(Model* m, _models)
         box.unite(m->bbox());

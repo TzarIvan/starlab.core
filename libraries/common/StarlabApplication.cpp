@@ -65,9 +65,8 @@ bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
         newModel->updateBoundingBox();
         document()->addModel( newModel ); 
     document()->popBusy();
-    
-    if(document()->models().size()==1)
-        document()->emit_resetViewport();
+
+    document()->emit_resetViewport();
     
     return true;
 }

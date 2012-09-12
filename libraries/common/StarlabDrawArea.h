@@ -47,7 +47,6 @@ public:
         
 /// @{ Rendering specification
 public slots:
-    void getSceneBounds(QVector3D&, QVector3D&);
     void resetViewport();     ///< Restores the default view camera
     void viewFrom(QAction *); ///< Preset camera viewpoints
     void setPerspectiveProjection();
