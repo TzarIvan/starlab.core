@@ -13,7 +13,7 @@ class StarlabDrawArea;
  */
 class ModePlugin : public StarlabPlugin {
 public: 
-    ModePlugin(){ _model = NULL; }
+    ModePlugin(){ }
 
     /// @brief can the plugin be used?
     virtual bool isApplicable(Document* doc) = 0;
@@ -22,11 +22,15 @@ public:
     public:
         /// Called when the user starts the edit the FIRST time (i.e. it does not get re-loaded when the plugin is suspended)
         /// Think about it as a constructor, as the plugin constructor would be automatically loaded at boot time.
-        virtual void createEdit()=0;
+        virtual void create()=0;
         /// Called when the user closes the edit
         /// Automatically closes the widget
         /// @todo is suspend a close?
-        virtual void destroyEdit()=0;
+        virtual void destroy()=0;
+
+        /// The user changed selection
+        /// return true if you just want destoryEdti() + createEdit()
+        virtual bool selectionUpdate(Model* model){ Q_UNUSED(model); return true; }
     /// @} 
        
     /// @{ @name Rendering events (optional)
@@ -57,18 +61,7 @@ public:
         using StarlabPlugin::drawArea;
         using StarlabPlugin::document;
         using StarlabPlugin::mainWindow;
-    /// @} 
-    
-    /// @{ 
-    public:
-        /// @brief returns the model associated with the plugin
-        Model* model(){
-            if(!_model) _model = document()->selectedModel();
-            return _model;
-        }
-    friend class PluginManager;
-    private:
-        Model* _model;
+        using StarlabPlugin::application;
     /// @}
 };
 

@@ -37,7 +37,7 @@ class CloudModePlugin : public ModePlugin{
 private:
     bool isApplicable(Document* doc){ return isA(doc->selectedModel()); }
 protected:
-    CloudModel* cloud(){ return safeCast(model()); }
+    CloudModel* cloud(){ return safeCast(document()->selectedModel()); }
 };
 
 class CloudRenderPlugin : public RenderPlugin{

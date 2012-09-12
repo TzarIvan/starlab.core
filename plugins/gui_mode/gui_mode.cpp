@@ -41,7 +41,7 @@ void gui_mode::startMode(QAction* action){
     } else {
         /// Create new plugin
         if( !mainWindow()->hasActiveMode() ){
-            iMode->createEdit();
+            iMode->create();
             mainWindow()->setActiveMode(iMode);
             drawArea()->updateGL();
         }
