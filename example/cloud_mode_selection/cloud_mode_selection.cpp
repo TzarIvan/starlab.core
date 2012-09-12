@@ -79,7 +79,8 @@ void cloud_mode_selection::endSelection(const QPoint &)
 
     cloud()->property["selected"] = vselect;
 
-    mainWindow()->statusBarMessage(QString("( %1 ) points selected.").arg(nbHits));
+    /// @todo create StarlabPlugin::log() to publish log messages
+    // mainWindow()->statusBarMessage(QString("( %1 ) points selected.").arg(nbHits));
 }
 
 void cloud_mode_selection::decorate(){
