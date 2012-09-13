@@ -12,9 +12,6 @@ void gui_mode::load(){
     defaultModeAction->setShortcut(Qt::Key_Escape);
     defaultModeAction->setCheckable(true);
     defaultModeAction->setChecked(true);
-    mainWindow()->modeToolbar->addAction(defaultModeAction);
-    mainWindow()->modeMenu->addAction(defaultModeAction);
-    modeActionGroup->addAction(defaultModeAction);
     
     connect(modeActionGroup,SIGNAL(triggered(QAction*)),this,SLOT(startMode(QAction*)));
     connect(document(),SIGNAL(selectionChanged(Model*)),this,SLOT(selectionChanged(Model*)));
@@ -24,6 +21,11 @@ void gui_mode::update(){
     /// Clear the menus
     mainWindow()->modeToolbar->clear();
     mainWindow()->modeMenu->clear();
+
+    /// Add the "default" mode action (modes disactivated)
+    mainWindow()->modeToolbar->addAction(defaultModeAction);
+    mainWindow()->modeMenu->addAction(defaultModeAction);
+    modeActionGroup->addAction(defaultModeAction);
     
     /// Re-fill the menu with plugin names and make connections
     foreach(ModePlugin* plugin, pluginManager()->editPlugins.values()){
