@@ -10,13 +10,21 @@ class gui_mode : public GuiPlugin{
     Q_INTERFACES(GuiPlugin)
     
 public:    
-
     QAction* defaultModeAction; 
-
+    QActionGroup* modeActionGroup;
+    
     /// plugin constructor
-    virtual void load();
+    void load();
+    void update();
     
 public slots:
-    /// Starts an edit plugin, popping up its default GUI (also manages the suspend)
+    /// Starts a mode plugin (also manages the suspend)
     void startMode(QAction *);
+
+    /// Responds to a change in selection. If the plugin specifies its own way 
+    /// to respond to the event, this is used. This can be done by overloading 
+    /// ModePlugin::selectionChanged(Model* model). If no custom behavior is 
+    /// provided, we simply call ModePlugin::destroy(), ModePlugin::create() 
+    /// in succession
+    void selectionChanged(Model* model);
 };

@@ -60,9 +60,10 @@ public:
     
 /// @{ Document status updates
 signals:
-    void resetViewport();         ///< Document requesting a reset of the view matrixes
-    void hasChanged();            ///< Document has changed, emitted after "last" popBusy()
-    void deleteScheduled(Model*); ///< This model is scheduled for deletion
+    void resetViewport();                ///< Document requesting a reset of the view matrixes
+    void hasChanged();                   ///< Document has changed, emitted after "last" popBusy()
+    void deleteScheduled(Model*);        ///< This model is scheduled for deletion
+    void selectionChanged(Model* model); ///< The selection has changed to the provided model
 public:
     void emit_resetViewport();
 private:

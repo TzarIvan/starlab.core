@@ -28,9 +28,10 @@ public:
         /// @todo is suspend a close?
         virtual void destroy()=0;
 
-        /// The user changed selection
-        /// return true if you just want destoryEdti() + createEdit()
-        virtual bool selectionUpdate(Model* model){ Q_UNUSED(model); return true; }
+        /// Called whenever the selection is changed 
+        /// If you return false (or if you don't overload this function) we will 
+        /// just call ModePlugin::destory() and ModePlugin::create() in succession.
+        virtual bool selectionChanged(Model*){ return false; }
     /// @} 
        
     /// @{ @name Rendering events (optional)

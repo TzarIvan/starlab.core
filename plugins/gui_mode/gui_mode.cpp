@@ -4,7 +4,7 @@
 #include "StarlabDrawArea.h"
 
 void gui_mode::load(){
-    QActionGroup* modeActionGroup = new QActionGroup(mainWindow()->modeMenu);
+    modeActionGroup = new QActionGroup(mainWindow()->modeMenu);
     modeActionGroup->setExclusive(true);
     
     /// Default mode (rendering)
@@ -16,17 +16,26 @@ void gui_mode::load(){
     mainWindow()->modeMenu->addAction(defaultModeAction);
     modeActionGroup->addAction(defaultModeAction);
     
-    /// Fill the menu with plugin names and make connections
+    connect(modeActionGroup,SIGNAL(triggered(QAction*)),this,SLOT(startMode(QAction*)));
+    connect(document(),SIGNAL(selectionChanged(Model*)),this,SLOT(selectionChanged(Model*)));
+}
+
+void gui_mode::update(){
+    /// Clear the menus
+    mainWindow()->modeToolbar->clear();
+    mainWindow()->modeMenu->clear();
+    
+    /// Re-fill the menu with plugin names and make connections
     foreach(ModePlugin* plugin, pluginManager()->editPlugins.values()){
+        if(!plugin->isApplicable(document())) continue;
+        
         QAction* action = plugin->action();
         action->setCheckable(true);
         modeActionGroup->addAction(action);
         mainWindow()->modeMenu->addAction(action);
         if(!action->icon().isNull())
             mainWindow()->modeToolbar->addAction(action);
-    }
-
-    connect(modeActionGroup,SIGNAL(triggered(QAction*)),this,SLOT(startMode(QAction*)));
+    }    
 }
 
 void gui_mode::startMode(QAction* action){
@@ -45,6 +54,23 @@ void gui_mode::startMode(QAction* action){
             mainWindow()->setActiveMode(iMode);
             drawArea()->updateGL();
         }
+    }
+}
+
+void gui_mode::selectionChanged(Model* model){
+    qDebug("gui_mode::selectionChanged(%s)", qPrintable(model->name));
+    ModePlugin* iMode = mainWindow()->activeMode();
+    
+    if( !mainWindow()->hasActiveMode() ) return;
+    
+    /// Give the plugin a chance to react to the selection change
+    bool updatePerformed = iMode->selectionChanged(model);
+    
+    /// If plugin wasn't able to perform the update, simply destroy
+    /// the plugina and re-create it from scratch!
+    if(!updatePerformed){
+        iMode->destroy();
+        iMode->create();
     }
 }
 

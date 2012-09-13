@@ -6,7 +6,7 @@ class cloud_mode_selection : public CloudModePlugin{
     Q_INTERFACES(ModePlugin)
 
     QIcon icon(){ return QIcon(":/icons/select_points.png"); }
-
+    
     /// Functions part of the EditPlugin system
     void create(){}
     void destroy(){}
