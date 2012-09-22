@@ -63,6 +63,7 @@ public:
         using StarlabPlugin::document;
         using StarlabPlugin::mainWindow;
         using StarlabPlugin::application;
+        using StarlabPlugin::pluginManager;
     /// @}
 };
 
