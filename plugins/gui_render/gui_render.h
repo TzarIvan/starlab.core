@@ -4,9 +4,8 @@
 #include "StarlabMainWindow.h"
 #include "interfaces/GuiPlugin.h"
 #include "interfaces/RenderPlugin.h"
-#include "interfaces/DecoratePlugin.h"
 
-class gui_selection : public GuiPlugin{
+class gui_render : public GuiPlugin{
     Q_OBJECT
     Q_INTERFACES(GuiPlugin)
     
@@ -14,22 +13,11 @@ class gui_selection : public GuiPlugin{
     public:    
         void load();    
         void update();
-    private:
-        void update_renderModes();
-        void update_decorators();
     /// @}
     
     /// @{ access specific resources
-    private:    
-        QToolBar* toolbar(){ return mainWindow()->selectionToolbar; }
-        QMenu* menu(){ return mainWindow()->selectionMenu; }
-    /// @}
-        
-    /// @{ decorator module
-    public slots:
-        void toggleDecorator(QAction* );
-    private:
-        QActionGroup* decoratorGroup;
+        QToolBar* toolbar(){ return mainWindow()->renderToolbar; }
+        QMenu* menu(){ return mainWindow()->renderMenu; }
     /// @}
         
     /// @{ renderer module

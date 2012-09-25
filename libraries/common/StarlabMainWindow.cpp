@@ -45,38 +45,33 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     /// Instantiate Menus (plugins will fill them in)
     /// Do not use the silly & windows notation for alt navigation
     {
-        fileMenu = menuBar()->addMenu(tr("File"));
-        modeMenu = menuBar()->addMenu(tr("Mode"));
-        filterMenu = menuBar()->addMenu(tr("Filters"));
-        selectionMenu = menuBar()->addMenu(tr("Selection"));
-        viewMenu = menuBar()->addMenu(tr("View"));
-        windowsMenu = menuBar()->addMenu(tr("Windows"));
-        helpMenu = menuBar()->addMenu(tr("Help"));
-        
-        // editMenu->clear();
-        
-        /// @todo is there a better way to retrieve all sub-menus?
-        /// I attempted "foreach(QAction* menu_a, menuBar()->actions()){...}"
-        menus << fileMenu << modeMenu << filterMenu 
-              << selectionMenu << viewMenu << windowsMenu 
-              << helpMenu;
+        menus << (fileMenu      = menuBar()->addMenu("File"));
+        menus << (modeMenu      = menuBar()->addMenu("Mode"));
+        menus << (filterMenu    = menuBar()->addMenu("Filters"));
+        menus << (renderMenu    = menuBar()->addMenu("Render"));
+        menus << (decorateMenu  = menuBar()->addMenu("Decorate"));
+        menus << (viewMenu      = menuBar()->addMenu("View"));
+        menus << (windowsMenu   = menuBar()->addMenu("Windows"));
+        menus << (helpMenu      = menuBar()->addMenu("Help"));
     }
     
     /// Instantiate Toolbars
     {
         mainToolbar = addToolBar(tr("Main Toolbar"));
         modeToolbar = addToolBar(tr("Edit Toolbar"));
-        selectionToolbar = addToolBar(tr("Selection Toolbar"));
+        renderToolbar = addToolBar(tr("Render Toolbar"));
+        decorateToolbar = addToolBar(tr("Decorate Toolbar"));
         filterToolbar = addToolBar(tr("Filter Toolbar"));
 
         /// Initially hide toolbars
         mainToolbar->setVisible(true);
         modeToolbar->setVisible(false);
-        selectionToolbar->setVisible(false);
+        renderToolbar->setVisible(false);
+        decorateToolbar->setVisible(false);
         filterToolbar->setVisible(false);
                 
         /// @todo is there a better way to retrieve all sub-toolbars?
-        toolbars << mainToolbar << modeToolbar << selectionToolbar << filterToolbar;        
+        toolbars << mainToolbar << modeToolbar << renderToolbar << decorateToolbar << filterToolbar;        
     }
     
     /// Sets up progress/status bar    

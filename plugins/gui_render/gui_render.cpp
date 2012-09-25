@@ -1,24 +1,18 @@
-#include "gui_selection.h"
+#include "gui_render.h"
 #include "StarlabDrawArea.h"
 
 /// Since we depend on the selected model, the load is minimal
-void gui_selection::load(){
-    // qDebug() << "gui_selection::load()";
-    this->decoratorGroup = new QActionGroup(this);
-    this->decoratorGroup->setExclusive(false);
+void gui_render::load(){
+    // qDebug() << "gui_render::load()";
     this->renderModeGroup = new QActionGroup(this);
     this->renderModeGroup->setExclusive(true);
     this->currentAsDefault = new QAction("Set current as default...",NULL);
 }
 
-void gui_selection::update(){
+void gui_render::update(){
     toolbar()->clear();
     menu()->clear();
-    update_renderModes();
-    update_decorators();
-}
 
-void gui_selection::update_renderModes(){
     QMenu* renderModeMenu = menu()->addMenu("Render Mode");
     
     /// Fetch current renderer
@@ -52,46 +46,8 @@ void gui_selection::update_renderModes(){
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()));
 }
 
-void gui_selection::update_decorators(){
-    /// The stuff from decorative plugins
-    foreach(DecoratePlugin* plugin, pluginManager()->decoratePlugins){
-        if(!plugin->isApplicable(document()->selectedModel())) continue;
-        QAction* action = plugin->action();
-        action->setCheckable(true);
-        /// Add to the group (for easy event mngmnt)
-        decoratorGroup->addAction( action );
-        /// Insert in menus/toolbars
-        menu()->insertAction(NULL,action);
-        if(!action->icon().isNull())
-            toolbar()->insertAction(NULL,action);
-    }
-    
-#if 0
-    /// Mark active decorators menu entries as "checked"
-    foreach(DecoratePlugin* p, m->decorators)
-        p->action()->setChecked(true);
-#endif
-    
-    connect(decoratorGroup, SIGNAL(triggered(QAction*)), this, SLOT(toggleDecorator(QAction*)) );
-}
-
-void gui_selection::toggleDecorator(QAction* action){
-    qDebug() << "TODO: gui_selection::toggleDecorator()" << action->isChecked();
-#ifdef TODO_REENABLE_DECORATORS
-    DecoratePlugin* dplugin = qobject_cast<DecoratePlugin*>(action->parent());
-    Q_ASSERT(dplugin);
-    Model* model = document()->selectedModel();
-    
-    bool removed = model->decorators.removeOne(dplugin);
-    if(!removed) model->decorators.append(dplugin);
-
-    /// Refresh the window
-    mainWindow()->updateDrawArea();    
-#endif
-}
-
-void gui_selection::triggerSetDefaultRenderer(){
-    // qDebug() << "gui_selection::triggerSetDefaultRenderer()";
+void gui_render::triggerSetDefaultRenderer(){
+    // qDebug() << "gui_render::triggerSetDefaultRenderer()";
     RenderPlugin* renderer = drawArea()->activeRenderer(document()->selectedModel());
     pluginManager()->setPreferredRenderer(document()->selectedModel(),renderer);
     QString message;
@@ -101,9 +57,9 @@ void gui_selection::triggerSetDefaultRenderer(){
     mainWindow()->statusBarMessage(message);
 }
 
-void gui_selection::triggerRenderModeAction(QAction* action){
-    // qDebug("gui_selection::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));
+void gui_render::triggerRenderModeAction(QAction* action){
+    // qDebug("gui_render::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));
     drawArea()->setRenderer(document()->selectedModel(),action->text());
 }
 
-Q_EXPORT_PLUGIN(gui_selection)
+Q_EXPORT_PLUGIN(gui_render)

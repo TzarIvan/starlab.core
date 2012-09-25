@@ -63,11 +63,13 @@ public:
         QMenu *fileMenu;        ///< @todo
         QMenu *modeMenu;        ///< EditPlugin entries are stored here
         QMenu *filterMenu;      ///< FilterPlugin entries are stored here
-        QMenu *selectionMenu;   ///< Dynamically updated according to selection
-        QMenu *viewMenu;           
+        QMenu *renderMenu;      ///< RenderPlugin entries are stored here
+        QMenu *decorateMenu;    ///< DecoratePlugin entries are stored here
+        QMenu *viewMenu;        ///< StarlabDrawArea component responsible for this menu
         QMenu *windowsMenu;
         QMenu *helpMenu;
     private:
+        /// @todo is there a better way to retrieve all sub-menus? I attempted "foreach(QAction* menu_a, menuBar()->actions()){...}"
         QList<QMenu*> menus;    ///< List of pointers to all the above
     /// @}
 
@@ -76,7 +78,8 @@ public:
         QToolBar *mainToolbar;      ///< Core icons, always visible regardless
         QToolBar *modeToolbar;      ///< Edit-specific icons, only added by edits which....QMenu *fileMenu;           
         QToolBar *filterToolbar;    ///< Filter-specific icons, only added by filters which....
-        QToolBar *selectionToolbar; ///< Dynamically updated according to selection
+        QToolBar *renderToolbar;    ///< Toolbar icons for rendering
+        QToolBar *decorateToolbar;  ///< Toolbar icons for decorations
     private:
         QList<QToolBar*> toolbars; ///< List of all available toolbars
     /// @}
