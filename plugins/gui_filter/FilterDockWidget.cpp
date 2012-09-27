@@ -13,6 +13,7 @@ FilterDockWidget::FilterDockWidget(FilterPlugin* filterPlugin, RichParameterSet 
     this->init(pars);
     this->adjustSize();
     this->setWindowTitle(filterPlugin->name());
+
     ui->filterDescription->setText(filterPlugin->description());
     
     /// Whenever docking changed, re-adjust the sizing
@@ -36,17 +37,12 @@ void FilterDockWidget::on_defaultButton_pressed(){
 }
 
 void FilterDockWidget::adjustSize(){
-    ui->verticalLayoutWidget->adjustSize();
     ui->dockWidgetContents->adjustSize();
-    int w = ui->dockWidgetContents->width();
-    int h = ui->dockWidgetContents->height();
-    ui->dockWidgetContents->setMinimumSize(w,h);
-    ui->dockWidgetContents->setMaximumSize(w,h);
     this->QWidget::adjustSize();
 }
 
 void FilterDockWidget::init(RichParameterSet *pars){
     parFrame = new ParametersFrame(this);
     parFrame->load(pars);
-    ui->verticalLayout->insertWidget(1,parFrame);
+    ui->parametersLayout->insertWidget(1,parFrame);
 }
