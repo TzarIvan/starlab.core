@@ -82,6 +82,9 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
 
     /// Default camera
     camera()->setType(Camera::ORTHOGRAPHIC);
+
+    /// Value of 100.0 forbids spinning
+    camera()->frame()->setSpinningSensitivity(100);
     
     /// @todo setup View->ToggleFPS
     /// @todo why is update broken when nothing is moving?
