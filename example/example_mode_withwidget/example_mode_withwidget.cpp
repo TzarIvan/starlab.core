@@ -3,7 +3,7 @@
 #include "ParametersFrame.h"
 
 void example_mode_withwidget::create(){
-    qDebug() << "created";  
+    qDebug() << "example_mode_withwidget::created()";  
     
     /// Create a simple widget with a button
     dockwidget = new ModePluginDockWidget(mainWindow());

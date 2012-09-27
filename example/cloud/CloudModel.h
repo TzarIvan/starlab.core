@@ -18,5 +18,4 @@ public:
 public:
     CloudModel(QString path, QString name=QString()) : Model(path,name){}
     void updateBoundingBox();
-    RenderPlugin* defaultRenderer();
 };

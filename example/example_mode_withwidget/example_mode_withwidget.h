@@ -14,19 +14,19 @@ class example_mode_withwidget : public ModePlugin{
 /// @{ ModePlugin
     void create();
     void destroy(){ 
-        qDebug() << "destroyed";
+        qDebug() << "example_mode_withwidget::::destroyed()";
         dockwidget->deleteLater(); 
     }
     void suspend(){ 
-        qDebug() << "suspended";    
+        qDebug() << "example_mode_withwidget::suspended()";    
         dockwidget->setEnabled(false); 
     }
     void resume(){ 
-        qDebug() << "resumed";    
+        qDebug() << "example_mode_withwidget::resumed()";    
         dockwidget->setEnabled(true); 
     }
     bool documentChanged(){
-        qDebug() << "documentChanged()";
+        qDebug() << "example_mode_withwidget::documentChanged()";
         return true;        
     }
 /// @} 
