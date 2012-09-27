@@ -237,6 +237,21 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
     return newplugin;
 }
 
+DecoratePlugin* PluginManager::newDecoratePlugin(QString pluginName, Model* model){
+    Q_ASSERT(model!=NULL);
+    DecoratePlugin *plugin = decoratePlugins.value(pluginName,NULL);
+    if(plugin==NULL) 
+        throw StarlabException("Could not find plugin '%s'.",qPrintable(pluginName));  
+    DecoratePlugin* newplugin = plugin->factory();
+    newplugin->_mainWindow = plugin->_mainWindow;
+    newplugin->_application = plugin->_application;
+    newplugin->_model = model;   
+    /// If model is deleted so it is this instance of decorator
+    newplugin->setParent(model);
+    newplugin->_action = plugin->action();
+    return newplugin;
+}
+
 QString PluginManager::getPreferredRenderer(Model *model){
     QString key = "DefaultRenderer/"+QString(model->metaObject()->className());
     QString rendererName;

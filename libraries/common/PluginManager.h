@@ -56,7 +56,7 @@ public:
         QMap<QString,DecoratePlugin*> decoratePlugins;
     /// @}
 
-        
+
     /// @{ Render Plugins Control
     private:
         QMap<QString,RenderPlugin*> renderPlugins;        
@@ -67,7 +67,11 @@ public:
         void setPreferredRenderer(Model* model, RenderPlugin* pluginName);
         QList<QAction*> getRenderPluginsActions(Model *model);
     /// @}
-                
+
+    /// @{ Decorate plugin control
+        DecoratePlugin *newDecoratePlugin(QString pluginName, Model *model);
+    /// @}
+        
 public:
     /// Directory where plugins are found
     QDir pluginsDir;    
