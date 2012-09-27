@@ -1,6 +1,8 @@
 #include "cloud_io_pts.h"
 #include "CloudModel.h"
 
+typedef CloudModel::Point Point;
+
 Model* cloud_io_pts::open(QString path){
     CloudModel* model = new CloudModel(path);
     
@@ -21,7 +23,7 @@ Model* cloud_io_pts::open(QString path){
     /// Read data
     while( !feof(in) ){
         err = fscanf(in, "%f %f %f", &x,&y,&z);
-        model->points.push_back( QVector3D(x,y,z) );
+        model->points.push_back( new Point(x,y,z) );
     }
     
     fclose(in);
@@ -32,8 +34,10 @@ void cloud_io_pts::save(Model* model,QString path){
     FILE* fid = fopen( qPrintable(path), "w" );
     if(fid==NULL) throw StarlabException("the file cannot be opened");
     
-    foreach(QVector4D p, cloud->points)
-        fprintf(fid, "%f %f %f %f\n", p.x(),p.y(),p.z(),p.w());
+    foreach(Point* point, cloud->points){
+        QVector3D& p = point->coord; 
+        fprintf(fid, "%f %f %f\n", p.x(),p.y(),p.z());
+    }
 }
 
 Q_EXPORT_PLUGIN(cloud_io_pts)

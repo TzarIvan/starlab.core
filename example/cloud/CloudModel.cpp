@@ -2,8 +2,8 @@
 
 void CloudModel::updateBoundingBox(){
     _bbox.setToNull();
-    foreach(QVector4D p, points)
-        _bbox.unite(QVector3D(p.x(),p.y(),p.z()));
+    foreach(Point* p, points)
+        _bbox.unite(p->coord);
 }
 
 QVector<QVariant>& CloudModel::getProperty(QString name)
