@@ -85,7 +85,7 @@ equals(STARLAB_TEMPLATE,"console"){
     INCLUDEPATH += $$_PRO_FILE_PWD_
 
     # Correct broken "make clean"
-    macx:QMAKE_CLEAN = rm $$DEPLOYPATH/Starlab.app/plugins/*
+    macx:QMAKE_CLEAN = rm -rf $$DEPLOYPATH/Starlab.app
 
     # Where is cmdline application deployed?
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/MacOS/
