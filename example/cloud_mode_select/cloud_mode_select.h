@@ -1,7 +1,8 @@
 #pragma once
 #include "CloudPlugins.h"
+#include "StarlabMainWindow.h"
 
-class cloud_mode_selection : public CloudModePlugin{
+class cloud_mode_select : public CloudModePlugin{
     Q_OBJECT
     Q_INTERFACES(ModePlugin)
 

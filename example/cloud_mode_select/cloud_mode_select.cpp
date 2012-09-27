@@ -1,10 +1,10 @@
 #include <QMouseEvent>
-#include "cloud_mode_selection.h"
+#include "cloud_mode_select.h"
 #include "StarlabDrawArea.h"
 #include <qgl.h>
 
-bool cloud_mode_selection::mousePressEvent(QMouseEvent* event){
-    // qDebug() << "cloud_mode_selection::mousePressEvent()";
+bool cloud_mode_select::mousePressEvent(QMouseEvent* event){
+    // qDebug() << "cloud_mode_select::mousePressEvent()";
 
     selectionMode = ADD;
     drawArea()->setMouseBinding(Qt::LeftButton, QGLViewer::SELECT);
@@ -18,8 +18,8 @@ bool cloud_mode_selection::mousePressEvent(QMouseEvent* event){
     return true;
 }
 
-bool cloud_mode_selection::mouseMoveEvent(QMouseEvent* event){
-    // qDebug() << "cloud_mode_selection::mouseMoveEvent()";
+bool cloud_mode_select::mouseMoveEvent(QMouseEvent* event){
+    // qDebug() << "cloud_mode_select::mouseMoveEvent()";
 
     if(selectionMode == NONE) return true;
 
@@ -30,7 +30,7 @@ bool cloud_mode_selection::mouseMoveEvent(QMouseEvent* event){
     return true;
 }
 
-bool cloud_mode_selection::mouseReleaseEvent(QMouseEvent *){
+bool cloud_mode_select::mouseReleaseEvent(QMouseEvent *){
     if (selectionMode != NONE)
     {
         QRect rectangle(start, cur);
@@ -48,7 +48,7 @@ bool cloud_mode_selection::mouseReleaseEvent(QMouseEvent *){
     return true;
 }
 
-void cloud_mode_selection::endSelection(const QPoint &)
+void cloud_mode_select::endSelection(const QPoint &)
 {
     // Flush GL buffers
     glFlush();
@@ -83,8 +83,8 @@ void cloud_mode_selection::endSelection(const QPoint &)
     // mainWindow()->statusBarMessage(QString("( %1 ) points selected.").arg(nbHits));
 }
 
-void cloud_mode_selection::decorate(){
-    // qDebug() << "cloud_mode_selection::paintEvent";
+void cloud_mode_select::decorate(){
+    // qDebug() << "cloud_mode_select::paintEvent";
 
     if (selectionMode != NONE)
         drawSelectionRectangle();
@@ -105,8 +105,8 @@ void cloud_mode_selection::decorate(){
     glEnd();
 }
 
-void cloud_mode_selection::drawWithNames(){
-    //qDebug() << "cloud_mode_selection::drawWithNames()";
+void cloud_mode_select::drawWithNames(){
+    //qDebug() << "cloud_mode_select::drawWithNames()";
 
     int i = 0;
 
@@ -119,7 +119,7 @@ void cloud_mode_selection::drawWithNames(){
     }
 }
 
-void cloud_mode_selection::drawSelectionRectangle(){  
+void cloud_mode_select::drawSelectionRectangle(){  
     glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT | GL_LIGHTING_BIT );
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
@@ -146,4 +146,4 @@ void cloud_mode_selection::drawSelectionRectangle(){
 }
 
 
-Q_EXPORT_PLUGIN(cloud_mode_selection)
+Q_EXPORT_PLUGIN(cloud_mode_select)
