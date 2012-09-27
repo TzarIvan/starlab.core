@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
             QApplication::sendEvent(mainWindow, new QFileOpenEvent(argv[i]));
         
         /// Automatically load layer menu if I opened more than one model    
-        // if(mainWindow->document()->models.size()>=2)
-        //    emit mainWindow->show_layer_dialog(true);    
+        if(mainWindow->document()->models().size()>=2)
+            mainWindow->triggerMenuActionByName("Show Layers Dialog");    
     
         /// Show the window 
         /// (@internal see QWidget::activateWindow)

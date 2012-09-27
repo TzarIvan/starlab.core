@@ -27,6 +27,7 @@ public:
     /// Has document been modified? (i.e. added/removed a model)
     bool isModified;
     /// Viewpoint transformation (identifies trackball)
+    /// @todo use the QGLViewer transformation datatype
     QMatrix4x4 transform;
 
 /// @{ Selection management

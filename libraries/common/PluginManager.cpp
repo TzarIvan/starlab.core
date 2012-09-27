@@ -222,16 +222,14 @@ QString PluginManager::getFilterStrings(){
     return filters.join(";;");
 }
 
-RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
-    Q_ASSERT(model!=NULL);
+RenderPlugin *PluginManager::newRenderPlugin(QString pluginName){
     RenderPlugin *plugin = renderPlugins.value(pluginName,NULL);
-    if(plugin==NULL) throw StarlabException("Attempted to load plugin '%s' but I couldn't find one loaded!!",qPrintable(pluginName));  
+    Q_ASSERT(plugin!=NULL);
     RenderPlugin* newplugin = plugin->factory();
+    Q_ASSERT(newplugin!=NULL);
     newplugin->_mainWindow = plugin->_mainWindow;
     newplugin->_application = plugin->_application;
-    newplugin->_model = model;
-    /// If model deleted so is the renderer
-    newplugin->setParent(model);
+    
     /// Original action remains...
     newplugin->_action = plugin->_action;
     return newplugin;
@@ -295,12 +293,11 @@ void PluginManager::setPreferredRenderer(Model *model, RenderPlugin* plugin){
     settings()->sync();
 }
 
-QList<QAction *> PluginManager::getRenderPluginsActions(Model* model){
-    QList<QAction*> retval;
-    if(model==NULL) return retval;
-    foreach(RenderPlugin* plugin, renderPlugins.values()){
+QList<RenderPlugin *> PluginManager::getApplicableRenderPlugins(Model* model){
+    QList<RenderPlugin*> retval;
+    Q_ASSERT(model!=NULL);
+    foreach(RenderPlugin* plugin, renderPlugins.values())
         if( plugin->isApplicable(model) )
-            retval.append(plugin->action());
-    }
+            retval.append(plugin);
     return retval;
 }

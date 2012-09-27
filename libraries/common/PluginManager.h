@@ -61,11 +61,13 @@ public:
     private:
         QMap<QString,RenderPlugin*> renderPlugins;        
     public:
-        /// Creates a new instance of a render plugin for the given model
-        RenderPlugin* newRenderPlugin(QString pluginName, Model *model);
+        /// Creates a new instance of a render plugin
+        RenderPlugin* newRenderPlugin(QString pluginName);
         QString getPreferredRenderer(Model* model);
         void setPreferredRenderer(Model* model, RenderPlugin* pluginName);
-        QList<QAction*> getRenderPluginsActions(Model *model);
+        
+        /// Get the list of actions corresponding to render plugin that apply to this type of model
+        QList<RenderPlugin*> getApplicableRenderPlugins(Model *model);
     /// @}
 
     /// @{ Decorate plugin control

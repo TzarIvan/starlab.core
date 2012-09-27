@@ -34,9 +34,9 @@ public:
 /// @}
     
 /// @{ Internal Usage
+friend class Model;
 private:
     Model* _model;
-friend class PluginManager;
 /// @}
 };
 

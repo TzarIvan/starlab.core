@@ -44,7 +44,7 @@ public:
     StarlabSettings* settings(){ return _mainWindow->settings(); }
     PluginManager* pluginManager(){ return _mainWindow->pluginManager(); }
 /// @}
-        
+ 
 /// @{ Rendering specification
 public slots:
     void resetViewport();     ///< Restores the default view camera
@@ -55,7 +55,7 @@ public slots:
 private:
     void init();              ///< Initializes the scene
     void draw();              ///< Draws the whole scene
-    void drawWithNames();
+    void drawWithNames();     ///< Draws to the symbols buffer
 /// @}
 
 /// @{ Selection functions
@@ -71,20 +71,6 @@ private:
     bool eventFilter(QObject *object, QEvent *event);
 /// @}
         
-/// @{ Model rendering system
-private:
-    /// Stores the association model/renderer
-    QMap<Model*, RenderPlugin*> _renderers;
-public:
-    /// Retrieves the list of renderers and initialize if necessary
-    QList<RenderPlugin*> renderers();
-    /// Set the renderer for the model by name
-    RenderPlugin* activeRenderer(Model* model);
-    void setRenderer(Model *model, QString pluginName);
-public slots:
-    void removeRenderer(Model*);
-/// @}
-    
 /// @{ Scene-wide rendering elements (i.e. used for debug)
 public:
     void drawAllRenderObjects();
@@ -96,9 +82,10 @@ public:
     RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
     RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
 /// @}
-
+    
 public slots:
-    /// Updates the draw area
+    /// Updates the draw area, this is not the OpenGL update, this updates all
+    /// the metadata needed by all models for correct rendering!! 
     void update();
 
 protected:

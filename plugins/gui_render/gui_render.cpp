@@ -10,20 +10,22 @@ void gui_render::load(){
 }
 
 void gui_render::update(){
+    // qDebug() << "gui_render::update()";
     toolbar()->clear();
     menu()->clear();
 
     /// Fetch current renderer
     Model* selectedModel = document()->selectedModel();
-    RenderPlugin* currentRenderer = drawArea()->activeRenderer(selectedModel);
+    RenderPlugin* currentRenderer = selectedModel->renderer();
     
     /// Add render modes menu/toolbar entries
-    foreach(QAction* action, pluginManager()->getRenderPluginsActions(selectedModel)){
+    foreach(RenderPlugin* plugin, pluginManager()->getApplicableRenderPlugins(selectedModel)){
+        QAction* action = plugin->action();
         action->setCheckable(true);
         
         /// "Check" an icon
         if(currentRenderer!=NULL)
-            if(currentRenderer->action() == action)
+            if(currentRenderer->name() == plugin->name())
                 action->setChecked("true");
         
         renderModeGroup->addAction(action);
@@ -39,14 +41,13 @@ void gui_render::update(){
     menu()->addSeparator();
     
     /// Connect click events to change in renderer system
-    /// @todo why is it triggering 3x events every time? 
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()));
 }
 
 void gui_render::triggerSetDefaultRenderer(){
     // qDebug() << "gui_render::triggerSetDefaultRenderer()";
-    RenderPlugin* renderer = drawArea()->activeRenderer(document()->selectedModel());
+    RenderPlugin* renderer = document()->selectedModel()->renderer();
     pluginManager()->setPreferredRenderer(document()->selectedModel(),renderer);
     QString message;
     message.sprintf("Preferred renderer for '%s' set to '%s'",
@@ -57,7 +58,11 @@ void gui_render::triggerSetDefaultRenderer(){
 
 void gui_render::triggerRenderModeAction(QAction* action){
     // qDebug("gui_render::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));
-    drawArea()->setRenderer(document()->selectedModel(),action->text());
+    Model* model = document()->selectedModel();
+    document()->pushBusy();
+        RenderPlugin* plugin = pluginManager()->newRenderPlugin(action->text());
+        model->setRenderer(plugin);
+    document()->popBusy();
 }
 
 Q_EXPORT_PLUGIN(gui_render)

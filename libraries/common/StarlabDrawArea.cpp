@@ -9,59 +9,27 @@
 
 using namespace qglviewer;
 
-QList<RenderPlugin*> StarlabDrawArea::renderers(){
-    QList<RenderPlugin*> retval; ///< in order
-    foreach(Model* model, document()->models()){
-        Q_ASSERT(model!=NULL);
-        RenderPlugin* renderer = _renderers.value(model,NULL);
-        /// If a renderer didn't exist, instantiate a default and add        
-        if(!renderer){
-            /// Factory a new copy of the renderer
-            QString pluginName = pluginManager()->getPreferredRenderer(model);
-            renderer = pluginManager()->newRenderPlugin(pluginName,model);
-            _renderers[model] = renderer;
-        }        
-        retval.append(renderer);
-    }
-    return _renderers.values(); 
-}
-
-RenderPlugin *StarlabDrawArea::activeRenderer(Model *model){
-    RenderPlugin* plugin = _renderers.value(model,NULL);
-    // if(plugin==NULL) throw StarlabException("No renderer defined for %s",qPrintable(model->name));
-    return plugin;
-}
-
-void StarlabDrawArea::setRenderer(Model* model, QString pluginName){
-    // qDebug("StarlabDrawArea::setRenderer(%s,%s)",qPrintable(model->name), qPrintable(pluginName));
-    document()->pushBusy();
-        if(_renderers.value(model,NULL)) removeRenderer(model);
-        _renderers[model] = pluginManager()->newRenderPlugin(pluginName,model);
-    document()->popBusy();
-}
-
-void StarlabDrawArea::removeRenderer(Model* model){
-    // qDebug() << "StarlabDrawArea::removeRenderer()";
-    document()->pushBusy();
-        RenderPlugin* rend = _renderers.value(model,NULL);
-        if(rend==NULL) throw StarlabException("FATAL: StarlabDrawArea::removeRenderer()");
-        _renderers.remove(model);
-        rend->finalize();
-        rend->deleteLater();
-    document()->popBusy();
-}
-
 void StarlabDrawArea::update(){
     // qDebug() << "StarlabDrawArea::update()";
     
     /// @internal Initialization can act on busy document
     /// Update the metadata needed by the renderer
     /// e.g. stick data in vertex buffer.. etc..
-    foreach(RenderPlugin* renderer, renderers())
-        renderer->init();
+    foreach(Model* model, document()->models()){
+        /// Create instance if renderer missing
+        if(model->renderer()==NULL){
+            QString name = pluginManager()->getPreferredRenderer(model);
+            RenderPlugin* plugin = pluginManager()->newRenderPlugin(name);
+            model->setRenderer(plugin);
+        }
+        
+        /// And then initialize it
+        model->renderer()->init();
+    }
     
     /// Don't update on a busy document
-    if(document()->isBusy()) return;
+    if(document()->isBusy()) 
+        return;
 
     /// This will force a "paint" of the GL window
     updateGL();
@@ -72,9 +40,7 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
 
     /// When document changes, refresh the rendering
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
-    /// When a model is deleted, tell the renderer to stop working on it
-    connect(document(), SIGNAL(deleteScheduled(Model*)), this, SLOT(removeRenderer(Model*)));
-    /// Determines which events are forwarded to Mode plugins
+    /// Determines whether events are forwarded to Mode plugins
     installEventFilter(this);
     
     /// @todo restore trackball
@@ -191,12 +157,12 @@ void StarlabDrawArea::draw(){
     glEnable(GL_MULTISAMPLE); ///< Enables anti-aliasing
 
     /// Render each Model
-    foreach(RenderPlugin* renderer, renderers()){
-        glPushMatrix();
-            glMultMatrixd( document()->transform.data() );
-            if(renderer->model()->isVisible) renderer->render();
-        glPopMatrix();        
-    }   
+    glPushMatrix();
+        glMultMatrixd( document()->transform.data() );
+        foreach(Model* model, document()->models())
+            if(model->isVisible && model->renderer()!=NULL ) 
+                model->renderer()->render();
+    glPopMatrix();        
 
     /// @todo Render decoration plugins
 
@@ -278,7 +244,8 @@ RenderObject::Ray& StarlabDrawArea::drawRay(QVector3D orig, QVector3D dir, float
 /// @internal returning true will prevent the drawArea plugin from intercepting the events!!!
 bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
     /// If a mode is not open, pass *everything* to the drawArea plugin
-    if(!mainWindow()->hasActiveMode()) return false;
+    if(!mainWindow()->hasActiveMode()) 
+        return false;
 
     /// If it is open, pass it to the handlers
     ModePlugin* mode = mainWindow()->activeMode();
