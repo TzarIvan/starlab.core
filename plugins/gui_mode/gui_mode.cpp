@@ -57,7 +57,7 @@ void gui_mode::enterState(STATE state, QAction* action){
     case DEFAULT: 
         // qDebug() << "[DEFAULT]";
         Q_ASSERT(lastActiveModeAction==NULL);
-        Q_ASSERT(mainWindow()->activeMode()==NULL);
+        Q_ASSERT(!mainWindow()->hasModePlugin());
         foreach(QAction* action, modeActionGroup->actions())
             action->setEnabled(true);
         defaultModeAction->setChecked(true);
@@ -65,7 +65,7 @@ void gui_mode::enterState(STATE state, QAction* action){
         break;
     case MODE: 
         // qDebug() << "[MODE]";
-        Q_ASSERT(mainWindow()->activeMode()!=NULL);
+        Q_ASSERT(mainWindow()->hasModePlugin());
         foreach(QAction* action, modeActionGroup->actions())
             action->setEnabled(false);
         defaultModeAction->setEnabled(true);
@@ -76,7 +76,7 @@ void gui_mode::enterState(STATE state, QAction* action){
         break;
     case SUSPENDED: 
         // qDebug() << "[SUSPENDED]";
-        Q_ASSERT(mainWindow()->activeMode()==NULL);
+        Q_ASSERT(mainWindow()->hasModePlugin());
         Q_ASSERT(lastActiveModeAction!=NULL);
         foreach(QAction* action, modeActionGroup->actions())
             action->setEnabled(false);        
@@ -101,54 +101,53 @@ void gui_mode::actionClicked(QAction *action){
             return;
         /// ---------------- CREATING --------------------
         if(action!=defaultModeAction){
-            mainWindow()->setActiveMode( (ModePlugin*) action->parent() );
-            mainWindow()->activeMode()->create();
+            mainWindow()->setModePlugin( (ModePlugin*) action->parent() );
+            mainWindow()->getModePlugin()->create();
+            mainWindow()->resumeModePlugin();
             drawArea()->updateGL();
             lastActiveModeAction = action;
             enterState(MODE,action);
-            Log("Creating plugin: '%1'",qPrintable(action->text()));
+            Log("Creating plugin: '%s'",qPrintable(action->text()));
             return;              
         }
         break;
     case MODE: 
         /// ---------------- TERMINATION --------------------
         if(action==lastActiveModeAction){
-            mainWindow()->getActiveMode()->destroy();
-            mainWindow()->setActiveMode(NULL);
+            Q_ASSERT(mainWindow()->getModePlugin()!=NULL);
+            mainWindow()->getModePlugin()->destroy();
+            mainWindow()->removeModePlugin();
             lastActiveModeAction = NULL;
             enterState(DEFAULT);
-            Log("Terminated plugin: '%1'",qPrintable(action->text()));
+            Log("Terminated plugin: '%s'",qPrintable(action->text()));
             return;            
         }
         /// ---------------- SUSPENSION --------------------
         if(action==defaultModeAction){
             QAction* actionToSuspend = lastActiveModeAction;
             ModePlugin* pluginToSuspend = (ModePlugin*) lastActiveModeAction->parent();
-            mainWindow()->setActiveMode(NULL);
+            mainWindow()->suspendModePlugin();
             pluginToSuspend->suspend();
             enterState(SUSPENDED,actionToSuspend);
-            Log("Suspended plugin: '%1'",qPrintable(actionToSuspend->text()));
+            Log("Suspended plugin: '%s'",qPrintable(actionToSuspend->text()));
             return;
         }
         break;
     case SUSPENDED: 
         /// ---------------- RESUMING --------------------
         Q_ASSERT(action==defaultModeAction);
-        mainWindow()->setActiveMode( (ModePlugin*) lastActiveModeAction->parent() );
+        mainWindow()->resumeModePlugin();
         ((ModePlugin*) lastActiveModeAction->parent())->resume();
         enterState(MODE,lastActiveModeAction);
-        Log("Resumed plugin: '%1'",qPrintable(lastActiveModeAction->text()));
+        Log("Resumed plugin: '%s'",qPrintable(lastActiveModeAction->text()));
         break;
     }
 }
 
-void gui_mode::escapeKeyPressed(){
-    this->actionClicked(defaultModeAction);
-}
-
 void gui_mode::documentChanged(){
     // qDebug("gui_mode::documentChanged()");
-    ModePlugin* iMode = mainWindow()->activeMode();
+    if(!mainWindow()->hasModePlugin()) return;
+    ModePlugin* iMode = mainWindow()->getModePlugin();
 
     switch(state){
     /// But there was no active plugin

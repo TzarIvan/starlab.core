@@ -6,6 +6,7 @@
 #include "StarlabException.h"
 #include "RenderObject.h"
 #include "interfaces/ModePlugin.h"
+#include "interfaces/DecoratePlugin.h"
 
 using namespace qglviewer;
 
@@ -157,6 +158,7 @@ void StarlabDrawArea::draw(){
     glEnable(GL_MULTISAMPLE); ///< Enables anti-aliasing
 
     /// Render each Model
+    /// @todo use plugin rendering if one is specified
     glPushMatrix();
         glMultMatrixd( document()->transform.data() );
         foreach(Model* model, document()->models())
@@ -165,32 +167,49 @@ void StarlabDrawArea::draw(){
     glPopMatrix();        
 
     /// @todo Render decoration plugins
+    glPushMatrix();
+        glMultMatrixd( document()->transform.data() );
 
+        /// @todo use the plugin decorators
+        if(mainWindow()->hasModePlugin() && !mainWindow()->isModePluginSuspended())
+            mainWindow()->getModePlugin()->decorate();            
+        
+        /// @todo use the standard decorators
+        else{
+            foreach(Model* model, document()->models()){
+                if(model->isVisible) 
+                    foreach(DecoratePlugin* decorator, model->decoratePlugins())
+                        decorator->decorate();
+            }
+        }
+    glPopMatrix();        
+
+        
+    /// Render mode decoration
+    if( mainWindow()->hasModePlugin() )
+        mainWindow()->getModePlugin()->decorate();
+    
     /// Render renderable objects
     drawAllRenderObjects();
-
-    /// Render mode decoration
-    if( mainWindow()->hasActiveMode() )
-        mainWindow()->activeMode()->decorate();
 }
 
 void StarlabDrawArea::drawWithNames(){
-    if(mainWindow()->hasActiveMode())
-        mainWindow()->activeMode()->drawWithNames();
+    if(mainWindow()->hasModePlugin())
+        mainWindow()->getModePlugin()->drawWithNames();
 }
 
 void StarlabDrawArea::endSelection(const QPoint & p)
 {
-    if(mainWindow()->hasActiveMode())
-        mainWindow()->activeMode()->endSelection(p);
+    if(mainWindow()->hasModePlugin())
+        mainWindow()->getModePlugin()->endSelection(p);
 	else
 		QGLViewer::endSelection(p);
 }
 
 void StarlabDrawArea::postSelection(const QPoint & p)
 {
-    if(mainWindow()->hasActiveMode())
-        mainWindow()->activeMode()->postSelection(p);
+    if(mainWindow()->hasModePlugin())
+        mainWindow()->getModePlugin()->postSelection(p);
 }
 
 StarlabDrawArea::~StarlabDrawArea(){
@@ -244,11 +263,12 @@ RenderObject::Ray& StarlabDrawArea::drawRay(QVector3D orig, QVector3D dir, float
 /// @internal returning true will prevent the drawArea plugin from intercepting the events!!!
 bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
     /// If a mode is not open, pass *everything* to the drawArea plugin
-    if(!mainWindow()->hasActiveMode()) 
-        return false;
+    if(!mainWindow()->hasModePlugin()) return false;
+    /// Same if the mode plugin is suspended
+    if(mainWindow()->isModePluginSuspended()) return false;
 
     /// If it is open, pass it to the handlers
-    ModePlugin* mode = mainWindow()->activeMode();
+    ModePlugin* mode = mainWindow()->getModePlugin();
     switch(event->type()){
         case QEvent::MouseButtonRelease: return mode->mouseReleaseEvent((QMouseEvent*)event); break;
         case QEvent::MouseButtonPress:   return mode->mousePressEvent((QMouseEvent*)event); break;

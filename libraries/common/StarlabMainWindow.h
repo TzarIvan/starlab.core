@@ -54,12 +54,16 @@ class DYNAMIC_COMMON_EXPORT StarlabMainWindow : public QMainWindow{
                
     /// @{ edit plugin management
     private:
-        ModePlugin* _activeMode;
+        ModePlugin* _modePlugin;
+        bool _isModePluginSuspended;
     public:
-        bool hasActiveMode(){ return _activeMode!=NULL; }
-        void setActiveMode(ModePlugin* mode){ _activeMode=mode; }
-        ModePlugin* activeMode(){ return _activeMode; }
-        ModePlugin* getActiveMode(){ return _activeMode; }
+        bool isModePluginSuspended(){ Q_ASSERT(_modePlugin); return _isModePluginSuspended; }
+        void resumeModePlugin(){ Q_ASSERT(_modePlugin); _isModePluginSuspended=false; }
+        void suspendModePlugin(){ Q_ASSERT(_modePlugin); _isModePluginSuspended=true; }
+        bool hasModePlugin(){ return (_modePlugin!=NULL); }
+        void setModePlugin(ModePlugin* mode){ Q_ASSERT(_modePlugin==NULL); _modePlugin=mode; }
+        void removeModePlugin(){ Q_ASSERT(_modePlugin); _modePlugin=NULL; }
+        ModePlugin* getModePlugin(){ Q_ASSERT(_modePlugin); return _modePlugin; }
     /// @}
     
 public:   
