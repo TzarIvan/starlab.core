@@ -11,8 +11,12 @@
 #include "StarlabDrawArea.h"
 
 StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
-    _application(_application), _activeMode(NULL)
+    _application(_application)
 {   
+    /// Init
+    _modePlugin = NULL;
+    _isModePluginSuspended = false;
+    
     /// Setup central widget
     {
         // Anti-aliasing when using QGLWidget or subclasses

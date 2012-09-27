@@ -24,7 +24,10 @@ public:
     virtual void destroy() {}
     
     /// returns the model that this plugin should be decorating
-    Model* model(){ return _model; }
+    Model* model(){ Q_ASSERT(_model!=NULL); return _model; }
+    
+    /// Allows access to this->drawArea()
+    using StarlabPlugin::drawArea;
 /// @}    
 
 /// @{ Internal Usage
@@ -38,7 +41,7 @@ public:
     }
 private:
     /// @internal Allow it to set _model
-    friend class PluginManager;
+    friend class Model;
     /// @internal The model that this plugin is decorating
     Model* _model;
 /// @}

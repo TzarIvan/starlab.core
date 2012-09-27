@@ -8,6 +8,7 @@
 
 #include "StarlabException.h"
 #include "interfaces/RenderPlugin.h"
+#include "interfaces/DecoratePlugin.h"
 
 Model::Model(QString path, QString name){
     this->path = "";
@@ -43,3 +44,19 @@ void Model::setRenderer(RenderPlugin* plugin){
     plugin->setParent(this);
     _renderer = plugin;
 }
+
+bool Model::hasDecoratePlugin(DecoratePlugin *plugin){
+    return _decoratePlugins.contains(plugin);
+}
+
+
+void Model::removeDecoratePlugin(DecoratePlugin *plugin){
+    _decoratePlugins.removeAll(plugin);
+}
+
+void Model::addDecoratePlugin(DecoratePlugin* plugin){
+    plugin->_model = this;
+    plugin->setParent(this);
+    _decoratePlugins.append(plugin);
+}
+

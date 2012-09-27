@@ -25,6 +25,7 @@ public:
 
 LayerDialog::~LayerDialog(){ delete ui; }
 LayerDialog::LayerDialog(StarlabMainWindow* parent) : QDockWidget(parent){
+    this->setWindowTitle("Document Layers");
     mw=parent;
     
     ui = new Ui::layerDialog();
@@ -89,7 +90,6 @@ void LayerDialog::updateTable(){
     //TODO:Check if the current viewer is a GLArea
     if(!isVisible()) return;
     Document* md = mw->document();
-    this->setWindowTitle(md->name);
     
     /// Setup the layer table
     ui->modelTreeWidget->clear();

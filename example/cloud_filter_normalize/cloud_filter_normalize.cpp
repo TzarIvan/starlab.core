@@ -31,7 +31,7 @@ void cloud_filter_normalize::applyFilter(RichParameterSet* pars){
         QVector3D offset = c->bbox().center();
         
         for(int i=0; i<c->points.size(); i++){
-            QVector4D& pt = c->points[i];
+            QVector3D& pt = c->points[i]->coord;
             pt.setX( (pt.x() - offset.x())/scale );
             pt.setY( (pt.y() - offset.y())/scale );
             pt.setZ( (pt.z() - offset.z())/scale );

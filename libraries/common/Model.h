@@ -49,15 +49,25 @@ public:
     /// @todo use the QGLViewer transformation type here
     // QMatrix4x4 transform; /// Per-model transformation (i.e. alignment matrix in a scan)
 
-/// @{ drawing
+/// @{ Rendering 
 public: 
     RenderPlugin* renderer();
     void setRenderer(RenderPlugin *plugin);
 private:
     RenderPlugin* _renderer;
-    QList<DecoratePlugin*> decoratePlugin;
 /// @}
-   
+
+/// @{ Decorators
+public:
+    typedef QList<DecoratePlugin*> DecoratePlugins;
+    const DecoratePlugins& decoratePlugins(){ return _decoratePlugins; }
+    void removeDecoratePlugin(DecoratePlugin *plugin);
+    void addDecoratePlugin(DecoratePlugin *plugin);
+    bool hasDecoratePlugin(DecoratePlugin *plugin);
+private:
+    DecoratePlugins _decoratePlugins;
+/// @}
+    
 /// @{ Basic geometry, needed for rendering
 public:
     const QBox3D& bbox(){ return _bbox; }

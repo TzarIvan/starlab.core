@@ -33,12 +33,10 @@ private:
 public slots:
     /// This causes changes of states
     void actionClicked(QAction *action);
-    /// This redirects escape keys to an artificial event
-    void escapeKeyPressed();
 /// @}
     
 public slots:   
-    /// Responds to a change in selection. If the plugin specifies its own way 
+    /// Responds to a changes in document. If the plugin specifies its own way 
     /// to respond to the event, this is used. This can be done by overloading 
     /// ModePlugin::documenChanged(). If no custom behavior is provided, we simply 
     /// call ModePlugin::destroy(), ModePlugin::create() in succession.

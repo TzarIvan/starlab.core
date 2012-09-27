@@ -7,8 +7,10 @@ void cloud_render_points::render(){
     glDisable(GL_LIGHTING);
     glPointSize(3);
     glBegin(GL_POINTS);
-        foreach(QVector4D v, cloud()->points)
+        foreach(CloudModel::Point* p, cloud()->points){
+            QVector3D& v=p->coord;
             glVertex3d(v.x(), v.y(), v.z());
+        }
     glEnd();
     glEnable(GL_LIGHTING);
 }

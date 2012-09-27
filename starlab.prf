@@ -104,7 +104,7 @@ equals(STARLAB_TEMPLATE,"appbundle"){
         DATAPATH = $$DEPLOYPATH/Starlab.app/data
         QMAKE_POST_LINK = mkdir -p $$DATAPATH  && cd $$DATAPATH && cp -r $$ROOT/data/* $$DATAPATH && cp $$ROOT/starlab.prf $$DEPLOYPATH/Starlab.app/
         # Correct broken "make clean"
-        macx:QMAKE_CLEAN = rm $$DEPLOYPATH/Starlab.app/plugins/*
+        macx:QMAKE_CLEAN = -rf $$DEPLOYPATH/Starlab.app
     } 
     win32{
         DESTDIR = $$DEPLOYPATH

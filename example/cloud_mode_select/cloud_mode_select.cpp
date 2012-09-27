@@ -103,7 +103,7 @@ void cloud_mode_select::decorate(){
         glBegin(GL_POINTS);
         for(int i = 0; i < vselect.size(); i++){
             if(vselect[i] == true){
-                QVector4D v = cloud()->points[i];
+                QVector3D v = cloud()->points[i]->coord;
                 glVertex3d(v.x(), v.y(), v.z());
             }
         }
@@ -116,7 +116,8 @@ void cloud_mode_select::drawWithNames(){
 
     int i = 0;
 
-    foreach(QVector4D v, cloud()->points){
+    foreach(CloudModel::Point* p, cloud()->points){
+        QVector3D& v = p->coord;
         glPushName(i++);
         glBegin(GL_POINTS);
             glVertex3d(v.x(), v.y(), v.z());

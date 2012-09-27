@@ -16,6 +16,7 @@ void gui_render::update(){
 
     /// Fetch current renderer
     Model* selectedModel = document()->selectedModel();
+    if(selectedModel==NULL) return;
     RenderPlugin* currentRenderer = selectedModel->renderer();
     
     /// Add render modes menu/toolbar entries
