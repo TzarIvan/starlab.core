@@ -1,5 +1,7 @@
 #pragma once
 #include <QApplication>
+#include <QKeyEvent>
+
 class GUIApplication : public QApplication{
 public:
     GUIApplication(int& argc, char* argv[]) : QApplication(argc,argv){
@@ -8,6 +10,9 @@ public:
         setApplicationName("Starlab");
         setApplicationVersion("1.0.1");
         setQuitOnLastWindowClosed(true);
+        
+        /// This filter diables "ESCAPE" globally
+        installEventFilter(this);
     }
     
     /// @todo why is this necessary?
@@ -25,12 +30,25 @@ public:
             }
             /// Restore pointer if it was changed
             qApp->restoreOverrideCursor();
+        } catch(std::exception& e){ \
+            qWarning() << "[std::exception]" << e.what();
+            qWarning() << "[TERMINATING]";
+            exit(-1);
         } catch (...) {
-            qDebug() << "BAD EXCEPTION..";
+            qDebug() << "BAD EXCEPTION!!!";
+            qWarning() << "[TERMINATING]";
+            exit(-1);
         }
         // the event will be propagated to the receiver's parent and 
         // so on up to the top-level object if the receiver is not 
         // interested in the event (i.e., it returns false).
         return false;
+    }
+    
+    bool eventFilter(QObject *, QEvent* event){
+        if(event->type() == QEvent::KeyPress){
+            if( (((QKeyEvent*) event)->key() == Qt::Key_Escape) ) return true;
+        }
+        return false;    
     }
 };
