@@ -15,12 +15,14 @@ public:
     class Value; ///< Forward declaration
 public:
     /// Name of the parameter
+    /// @note this is not the name that will appear in the GUI
     QString name;
     /// Parameter user specified Value
     Value* val;
     /// Default value (if not specified by the user)
     Value* defaultValue;
     /// Description of the parameter
+    /// @todo rename into guiname, the string that will be put in the gui element
     QString description;
     /// Tooltip (mouse hovers) text
     QString tooltip;
@@ -44,7 +46,7 @@ public:
     virtual ~RichParameter(){}
  
     /// Returns a widget. If undefined by RichParameter adds nothing to the frame
-    virtual RichParameterWidget* getWidget(QWidget* /*parent*/){ 
+    virtual RichParameterWidget* getWidget(QWidget* /*parent*/=0){
         throw std::logic_error("Widget for parameter not specified!");
     }
     
