@@ -2,7 +2,7 @@
 #include <QColor>
 #include <QGLFormat> /// @todo why in main.cpp???
 #include "StarlabMainWindow.h"
-#include "GUIApplication.h"
+#include "StarlabApplicationGUI.h"
 #include "StarlabApplication.h"
 #include "StarlabSettings.h"
 #include "FileOpenEater.h"
@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) { 
     try{    
         /// Create QT GUI app
-        GUIApplication app(argc,argv);
+        StarlabApplicationGUI app(argc,argv);
         
         /// Create a starlab application
         StarlabApplication application;    

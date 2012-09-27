@@ -1,10 +1,15 @@
 #pragma once
+#include "dynamic_common_global.h"
 #include <QApplication>
 #include <QKeyEvent>
+#include <QDebug>
+#include "StarlabException.h"
 
-class GUIApplication : public QApplication{
+class DYNAMIC_COMMON_EXPORT StarlabApplicationGUI : public QApplication{
+    Q_OBJECT
+    
 public:
-    GUIApplication(int& argc, char* argv[]) : QApplication(argc,argv){
+    StarlabApplicationGUI(int& argc, char* argv[]) : QApplication(argc,argv){
         QLocale::setDefault(QLocale::C); // Use "C"urrent locale
         setOrganizationName("Free Software Foundation");
         setApplicationName("Starlab");
@@ -45,10 +50,26 @@ public:
         return false;
     }
     
+/// Attempted to intercept every escape events.. failed :(
+#if 0
     bool eventFilter(QObject *, QEvent* event){
-        if(event->type() == QEvent::KeyPress){
-            if( (((QKeyEvent*) event)->key() == Qt::Key_Escape) ) return true;
+        /// Ignore escape "press"
+        if(event->type() == QEvent::KeyPress)
+            if( (((QKeyEvent*) event)->key() == Qt::Key_Escape) )
+                return true;
+
+        /// Emit escape released
+        if(event->type() == QEvent::KeyRelease){
+            if( (((QKeyEvent*) event)->key() == Qt::Key_Escape) ){
+                qDebug() << "emit StarlabApplicationGUI::escapeKeyReleased()";
+                emit escapeKeyReleased();
+                return true;
+            }    
         }
         return false;    
     }
+signals:
+    void escapeKeyReleased();
+#endif
+    
 };
