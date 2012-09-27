@@ -1,22 +1,17 @@
 #pragma once 
-#include <QObject>
 #include <QDockWidget>
 #include "StarlabPlugin.h"
-#include "Callbacks.h"
-#include "Document.h"
-#include "StarlabException.h"
-class StarlabDrawArea;
 
 /**
  * @brief The interface of a plugin which gives you total control over the GUI.           
  * @ingroup StarlabPluginInterfaces 
+ *
+ * @note If you plan to create a widget you should use a ModePluginDockWidget
  */
 class ModePlugin : public StarlabPlugin {
 public: 
-    ModePlugin(){ }
-
     /// @brief can the plugin be used?
-    virtual bool isApplicable(Document* doc) = 0;
+    virtual bool isApplicable() = 0;
     
     /// @{ @name Plugin Creation/Termination
     public:
@@ -28,12 +23,22 @@ public:
         /// @todo is suspend a close?
         virtual void destroy()=0;
 
-        /// Called whenever the selection is changed 
+        /// Called whenever the document is changed 
         /// If you return false (or if you don't overload this function) we will 
         /// just call ModePlugin::destory() and ModePlugin::create() in succession.
-        virtual bool selectionChanged(Model*){ return false; }
+        virtual bool documentChanged(){ return false; }
     /// @} 
-       
+
+    /// @{ @name Support for suspension/resume
+    public:
+        /// Called whenever the plugin is suspended (i.e. ESCAPE)
+        /// If you created GUIs, hide or disable them here
+        virtual void suspend(){}
+        /// Called whenever the plugin is resumed (after a suspend)
+        /// If you created GUIs, hide or disable them here
+        virtual void resume(){}
+    /// @}
+    
     /// @{ @name Rendering events (optional)
     public: 
         virtual void decorate(){}
@@ -67,4 +72,19 @@ public:
     /// @}
 };
 
-Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/1.0")
+class ModePluginDockWidget : public QDockWidget{
+    Q_OBJECT
+public:
+    explicit ModePluginDockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0):
+        QDockWidget(title, parent, flags){ setup(); }
+    explicit ModePluginDockWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0):
+        QDockWidget(parent,flags){ setup(); }
+private:
+    void setup(){
+        // this->setAllowedAreas(Qt::RightDockWidgetArea);
+        /// Disables closable
+        this->setFeatures( (QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable) );
+    }
+};
+
+Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/2.0")

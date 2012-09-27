@@ -23,14 +23,18 @@ SUBDIRS += plugins/render_bbox
 SUBDIRS += plugins/gui_filemenu
 SUBDIRS += plugins/gui_filter
 SUBDIRS += plugins/gui_mode
-SUBDIRS += plugins/gui_selection
+SUBDIRS += plugins/gui_render
+SUBDIRS += plugins/gui_decorate
 SUBDIRS += plugins/gui_windows
 SUBDIRS += plugins/gui_view
 
-#--- EXAMPLES
+#--- EXAMPLES on point cloud
 SUBDIRS += example/cloud
 SUBDIRS += example/cloud_io_pts
 SUBDIRS += example/cloud_filter_normalize
-SUBDIRS += example/cloud_mode_selection
+SUBDIRS += example/cloud_mode_select
 SUBDIRS += example/cloud_render_points
 
+#--- EXAMPLES generic
+SUBDIRS += example/example_mode_withwidget
+ 
