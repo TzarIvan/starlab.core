@@ -13,8 +13,6 @@ void gui_render::update(){
     toolbar()->clear();
     menu()->clear();
 
-    QMenu* renderModeMenu = menu()->addMenu("Render Mode");
-    
     /// Fetch current renderer
     Model* selectedModel = document()->selectedModel();
     RenderPlugin* currentRenderer = drawArea()->activeRenderer(selectedModel);
@@ -35,10 +33,10 @@ void gui_render::update(){
     }
         
     /// @internal menu can be added only after it has been filled :(
-    renderModeMenu->addAction(currentAsDefault);
-    renderModeMenu->addSeparator();
-    renderModeMenu->addActions(renderModeGroup->actions());
-    renderModeMenu->addSeparator();
+    menu()->addAction(currentAsDefault);
+    menu()->addSeparator();
+    menu()->addActions(renderModeGroup->actions());
+    menu()->addSeparator();
     
     /// Connect click events to change in renderer system
     /// @todo why is it triggering 3x events every time? 
