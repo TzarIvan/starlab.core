@@ -99,14 +99,16 @@ void cloud_mode_select::decorate(){
 
     QVector<QVariant> vselect = cloud()->getProperty("selected");
 
-    glBegin(GL_POINTS);
-    for(int i = 0; i < vselect.size(); i++){
-        if(vselect[i] == true){
-            QVector4D v = cloud()->points[i];
-            glVertex3d(v.x(), v.y(), v.z());
+    glDisable(GL_LIGHTING);
+        glBegin(GL_POINTS);
+        for(int i = 0; i < vselect.size(); i++){
+            if(vselect[i] == true){
+                QVector4D v = cloud()->points[i];
+                glVertex3d(v.x(), v.y(), v.z());
+            }
         }
-    }
-    glEnd();
+        glEnd();
+    glEnable(GL_LIGHTING);
 }
 
 void cloud_mode_select::drawWithNames(){
