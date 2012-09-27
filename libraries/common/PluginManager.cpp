@@ -236,12 +236,12 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
 
 QString PluginManager::getPreferredRenderer(Model *model){
     QString key = "DefaultRenderer/"+QString(model->metaObject()->className());
-    QString rendererName = settings()->getString(key);
+    QString rendererName="Bounding Box";
+    if(settings()->contains(key)) 
+        rendererName=settings()->getString(key);
 
     /// Deal with a non-existent preferred plugin
     if(!renderPlugins.contains(rendererName)){
-        rendererName = "Bounding Box";
-
         // Query renderers, if any request to be default
         foreach(RenderPlugin* plugin, renderPlugins)
         {
