@@ -7,7 +7,11 @@ bool cloud_mode_select::mousePressEvent(QMouseEvent* event){
     // qDebug() << "cloud_mode_select::mousePressEvent()";
 
     selectionMode = ADD;
-    drawArea()->setMouseBinding(Qt::LeftButton, QGLViewer::SELECT);
+	
+	// @ibraheem why was this necessary? It broke the suspension mode.. :(
+	/// after suspending, the mouse would not work anymore when I left 
+	/// this line uncommented!!
+    // drawArea()->setMouseBinding(Qt::LeftButton, QGLViewer::SELECT);
 
     // Clear selection
     selection.clear();
