@@ -11,12 +11,15 @@ void gui_decorate::load(){
 void gui_decorate::update(){
     toolbar()->clear();
     menu()->clear();
-
-    /// The stuff from decorative plugins
+   
+    /// Fills the toolbar with applicable decorators
     foreach(DecoratePlugin* plugin, pluginManager()->decoratePlugins){
-        if(!plugin->isApplicable(document()->selectedModel())) continue;
+        if(!plugin->isApplicable(document()->selectedModel())) 
+            continue;
         QAction* action = plugin->action();
         action->setCheckable(true);
+        /// They will be checked if active below
+        action->setChecked(false);
         /// Add to the group (for easy event mngmnt)
         decoratorGroup->addAction( action );
         /// Insert in menus/toolbars
@@ -24,29 +27,26 @@ void gui_decorate::update(){
         if(!action->icon().isNull())
             toolbar()->insertAction(NULL,action);
     }
+
+    /// Mark active decorators as checked    
+    foreach(DecoratePlugin* decorator, document()->selectedModel()->decoratePlugins())
+        decorator->action()->setEnabled(true);        
     
-#if 0
-    /// Mark active decorators menu entries as "checked"
-    foreach(DecoratePlugin* p, m->decorators)
-        p->action()->setChecked(true);
-#endif
-    
-    connect(decoratorGroup, SIGNAL(triggered(QAction*)), this, SLOT(toggleDecorator(QAction*)) );
+    /// Connect it...
+    connect(decoratorGroup, SIGNAL(triggered(QAction*)), this, SLOT(toggleDecorator(QAction*)), Qt::UniqueConnection);
 }
 
 void gui_decorate::toggleDecorator(QAction* action){
-    qDebug() << "TODO: gui_decorate::toggleDecorator()" << action->isChecked();
-#ifdef TODO_REENABLE_DECORATORS
-    DecoratePlugin* dplugin = qobject_cast<DecoratePlugin*>(action->parent());
-    Q_ASSERT(dplugin);
-    Model* model = document()->selectedModel();
+    qDebug() << "gui_decorate::toggleDecorator()" << action->isChecked();
     
-    bool removed = model->decorators.removeOne(dplugin);
-    if(!removed) model->decorators.append(dplugin);
-
-    /// Refresh the window
-    mainWindow()->updateDrawArea();    
-#endif
+    DecoratePlugin* plugin = qobject_cast<DecoratePlugin*>(action->parent());
+    Q_ASSERT(plugin);
+    Model* model = document()->selectedModel();
+    if(model->hasDecoratePlugin(plugin))
+        model->removeDecoratePlugin(plugin);
+    else
+        model->addDecoratePlugin(plugin);
+    drawArea()->updateGL(); /// Refresh the window
 }
 
 Q_EXPORT_PLUGIN(gui_decorate)

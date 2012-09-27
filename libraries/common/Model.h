@@ -61,6 +61,9 @@ private:
 public:
     typedef QList<DecoratePlugin*> DecoratePlugins;
     const DecoratePlugins& decoratePlugins(){ return _decoratePlugins; }
+    void removeDecoratePlugin(DecoratePlugin *plugin);
+    void addDecoratePlugin(DecoratePlugin *plugin);
+    bool hasDecoratePlugin(DecoratePlugin *plugin);
 private:
     DecoratePlugins _decoratePlugins;
 /// @}
