@@ -44,13 +44,15 @@ QStringList extractExtensions(QString iopluginname){
 QString failurecauses_qtplugin(
 "\nPOSSIBLE FAILURE REASONS:\n"
 "  1) plugin needs a DLL which cannot be found in the executable folder\n"
-"  2) Release / debug build mismatch.\n"
-"  3) ... add your reason?");
+"  2) Release / debug build mismatch\n"
+"  3) Missing Q_INTERFACE(...) or Q_EXPORT_PLUGIN(...)\n"
+"  *) any other reason?");
+
 QString failurecauses_starlabplugin(
 "\nPOSSIBLE FAILURE REASONS:\n"
 "  1) starlab PluginManager does not know how to load it\n"
 "  2) Release / debug build mismatch.\n"
-"  3) ... add your reason?");
+"  *) any other reason?");
 
 PluginManager::PluginManager(StarlabSettings* settings) : 
     _settings(settings)
@@ -87,10 +89,11 @@ void PluginManager::loadPlugins() {
         QString path = pluginsDir.absoluteFilePath(fileName);
         QPluginLoader loader(path);
         QObject* plugin = loader.instance();
-        if(!plugin) qDebug() << "Plugin load failure: " << fileName;
-        if(!plugin) throw StarlabException("Plugin " + fileName + " is not a proper *Qt* plugin!! " + failurecauses_qtplugin);
-        // qDebug() << "Loading plugin from file: " << fileName;
-        
+        if(!plugin){
+            qDebug("Plugin '%s' is not a proper *Qt* plugin!! %s", qPrintable(fileName), qPrintable(failurecauses_qtplugin));
+            continue;
+        }
+            
         /// Attempt to load one of the starlab plugins
         bool loadok = false;
         loadok |= load_InputOutputPlugin(plugin);
