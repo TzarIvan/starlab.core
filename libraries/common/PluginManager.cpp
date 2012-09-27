@@ -239,22 +239,35 @@ RenderPlugin *PluginManager::newRenderPlugin(QString pluginName, Model* model){
 
 QString PluginManager::getPreferredRenderer(Model *model){
     QString key = "DefaultRenderer/"+QString(model->metaObject()->className());
-    QString rendererName="Bounding Box";
+    QString rendererName;
     if(settings()->contains(key)) 
         rendererName=settings()->getString(key);
 
-    /// Deal with a non-existent preferred plugin
+    /// Preferred plugins could not be found
     if(!renderPlugins.contains(rendererName)){
-        // Query renderers, if any request to be default
-        foreach(RenderPlugin* plugin, renderPlugins)
-        {
+        foreach(RenderPlugin* plugin, renderPlugins){
             if(plugin->isApplicable(model) && plugin->isDefault()){
                 rendererName = plugin->name();
                 break;
             }
         }
-        settings()->set(key,rendererName);
     }
+    
+    /// Couldn't find one that was marked as isDefault()
+    /// just take the first that is applicable. 
+    /// BBOX renderer should be found here!
+    if(!renderPlugins.contains(rendererName)){
+        foreach(RenderPlugin* plugin, renderPlugins){
+            if(plugin->isApplicable(model)){
+                rendererName = plugin->name();
+                break;
+            }
+        }
+    }
+
+    /// Everything failed..  let's give up
+    if(!renderPlugins.contains(rendererName))
+        throw StarlabException("No suitable render plugin found\nIs it possible you didn't compile the BBOX renderer?");
 
     return rendererName;
 }
