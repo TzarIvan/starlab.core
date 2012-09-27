@@ -22,7 +22,7 @@ class Document;
  *
  * @defgroup StarlabPluginInterfaces Starlab Plugin Interfaces
  */
-class DYNAMIC_COMMON_EXPORT StarlabPlugin : public QObject, public Logger{
+class DYNAMIC_COMMON_EXPORT StarlabPlugin : public Logger{
 public:
     /// Default constructor
     StarlabPlugin();

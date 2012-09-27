@@ -24,8 +24,7 @@ HEADERS += \
     StarlabMainWindow.h \
     RenderObject.h \
     OSQuery.h \
-    OpenGLErrorChecker.h
-
+    OpenGLErrorChecker.h \
 
 SOURCES += \
     Document.cpp \
