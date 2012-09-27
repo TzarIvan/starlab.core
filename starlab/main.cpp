@@ -17,11 +17,10 @@ int main(int argc, char *argv[]) {
         StarlabApplication application;    
         
         /// Create a new window (@internal *new* is important)
-        StarlabMainWindow* mainWindow = new StarlabMainWindow(&application);        
+        StarlabMainWindow* mainWindow = new StarlabMainWindow(&application);
         
         /// Manages I/O requested by Operating system
         FileOpenEater* eater = new FileOpenEater(mainWindow);
-        // app.installEventFilter(eater);
         mainWindow->installEventFilter(eater);
         
         /// Open command line input

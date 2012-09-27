@@ -7,6 +7,7 @@ public:
         setOrganizationName("Free Software Foundation");
         setApplicationName("Starlab");
         setApplicationVersion("1.0.1");
+        setQuitOnLastWindowClosed(true);
     }
     
     /// @todo why is this necessary?

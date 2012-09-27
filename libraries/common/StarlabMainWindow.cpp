@@ -110,14 +110,15 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         }
     }
         
-    /// Delete window on close
-    setAttribute(Qt::WA_DeleteOnClose, true);
-    
     /// Make sure settings are fresh & inform user on where settings are loaded from
     {
         settings()->sync();
         statusBarMessage("Settings loaded from: "+settings()->settingsFilePath(),2);
     }
+}
+
+void StarlabMainWindow::closeEvent(QCloseEvent*){
+    QApplication::exit(0);
 }
 
 void StarlabMainWindow::dropEvent(QDropEvent* event) {

@@ -36,6 +36,11 @@ class DYNAMIC_COMMON_EXPORT StarlabMainWindow : public QMainWindow{
         StarlabApplication* const _application;
     /// @}
 
+    /// @{ Basic GUI behavior
+        /// Quit whole application whenever the main window is closed
+        void closeEvent(QCloseEvent *);        
+    /// @}
+        
     /// @{ DrawArea Management (Center of Starlab window) 
     private:
         /// Manager of main drawing area (MeshLab: GLArea)
@@ -54,6 +59,7 @@ class DYNAMIC_COMMON_EXPORT StarlabMainWindow : public QMainWindow{
         bool hasActiveMode(){ return _activeMode!=NULL; }
         void setActiveMode(ModePlugin* mode){ _activeMode=mode; }
         ModePlugin* activeMode(){ return _activeMode; }
+        ModePlugin* getActiveMode(){ return _activeMode; }
     /// @}
     
 public:   
