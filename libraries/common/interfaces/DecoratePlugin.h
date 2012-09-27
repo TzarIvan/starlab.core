@@ -1,24 +1,33 @@
 #pragma once 
-#include "Model.h"
 #include "StarlabPlugin.h"
-class StarlabDrawArea;
 
 /**
- * @brief Sits on top of render plugin, example: render surface normals
- * @note  #include "StarlabDrawArea.h" in any plugin that inherits...
+ * Decorate your rendering with extra stuff (i.e. normals, selection, etc..)
  * @ingroup StarlabPluginInterfaces 
  */
 class DecoratePlugin : public StarlabPlugin{
+/// @{ DecoratePlugin interface
 public:
-    /// This is similar to a render loop, thus it's called repeteadly
-    virtual void decorate() = 0;
-    /// Allocate/Initialize anything needed in here
-    virtual void startDecorate(){}
-    /// Free resources?
-    virtual void endDecorate() {}
-    /// @note Given the current Model, can the plugin be executed? 
+    /// Overload it and return a new instance of your plugin    
+    virtual DecoratePlugin* factory()=0;  
+    
+    /// Given the current Model, can the plugin be executed? 
     virtual bool isApplicable(Model*) = 0;
     
+    /// This is similar to a render loop, thus it's called repeteadly
+    virtual void decorate() = 0;
+    
+    /// Constructor (allocate resources)
+    virtual void create(){}
+    
+    /// Destructor (free resources)
+    virtual void destroy() {}
+    
+    /// returns the model that this plugin should be decorating
+    Model* model(){ return _model; }
+/// @}    
+
+/// @{ Internal Usage
 public:
     /// @internal A decorator plugin can either be enabled or disabled thus we make its action "Checkable"
     QAction* action(){
@@ -27,6 +36,12 @@ public:
         action->setChecked(false);
         return action;
     }
+private:
+    /// @internal Allow it to set _model
+    friend class PluginManager;
+    /// @internal The model that this plugin is decorating
+    Model* _model;
+/// @}
 };
 
-Q_DECLARE_INTERFACE(DecoratePlugin, "starlab.DecoratePlugin/1.0")
+Q_DECLARE_INTERFACE(DecoratePlugin, "starlab.DecoratePlugin/2.0")

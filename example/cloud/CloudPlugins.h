@@ -8,6 +8,7 @@
 #include "interfaces/FilterPlugin.h"
 #include "interfaces/ModePlugin.h"
 #include "interfaces/RenderPlugin.h"
+#include "interfaces/DecoratePlugin.h"
 
 /// This namescape limits the visibility of these functions to this file
 namespace{
@@ -42,6 +43,13 @@ protected:
 
 class CloudRenderPlugin : public RenderPlugin{
 private:
+    bool isApplicable(Model* model){ return isA(model); }
+protected:
+    CloudModel* cloud(){ return safeCast(model()); }
+};
+
+class CloudDecoratePlugin : public DecoratePlugin{
+private: 
     bool isApplicable(Model* model){ return isA(model); }
 protected:
     CloudModel* cloud(){ return safeCast(model()); }

@@ -31,9 +31,10 @@ SUBDIRS += plugins/gui_view
 #--- EXAMPLES on point cloud
 SUBDIRS += example/cloud
 SUBDIRS += example/cloud_io_pts
+SUBDIRS += example/cloud_render_points
 SUBDIRS += example/cloud_filter_normalize
 SUBDIRS += example/cloud_mode_select
-SUBDIRS += example/cloud_render_points
+SUBDIRS += example/cloud_decorate_selection
 
 #--- EXAMPLES generic
 SUBDIRS += example/example_mode_withwidget
