@@ -72,7 +72,7 @@ void gui_mode::enterState(STATE state, QAction* action){
         defaultModeAction->setChecked(false);
         action->setEnabled(true);
         action->setChecked(true);
-        Log("Plugin '%1' enabled",qPrintable(lastActiveModeAction->text()));
+        Log("Plugin '%s' enabled",qPrintable(lastActiveModeAction->text()));
         break;
     case SUSPENDED: 
         // qDebug() << "[SUSPENDED]";
@@ -89,10 +89,12 @@ void gui_mode::enterState(STATE state, QAction* action){
     
     /// Finally update state
     this->state = state;
+
+	drawArea()->updateGL();
 }
 
 void gui_mode::actionClicked(QAction *action){
-    // qDebug() << QString("gui_mode::actionClicked(%1)").arg(action->text());
+    // qDebug() << QString("gui_mode::actionClicked(%s)").arg(action->text());
     
     switch(state){
     case DEFAULT:
@@ -103,10 +105,9 @@ void gui_mode::actionClicked(QAction *action){
         if(action!=defaultModeAction){
             mainWindow()->setActiveMode( (ModePlugin*) action->parent() );
             mainWindow()->activeMode()->create();
-            drawArea()->updateGL();
             lastActiveModeAction = action;
             enterState(MODE,action);
-            Log("Creating plugin: '%1'",qPrintable(action->text()));
+            Log("Creating plugin: '%s'",qPrintable(action->text()));
             return;              
         }
         break;
@@ -117,7 +118,7 @@ void gui_mode::actionClicked(QAction *action){
             mainWindow()->setActiveMode(NULL);
             lastActiveModeAction = NULL;
             enterState(DEFAULT);
-            Log("Terminated plugin: '%1'",qPrintable(action->text()));
+            Log("Terminated plugin: '%s'",qPrintable(action->text()));
             return;            
         }
         /// ---------------- SUSPENSION --------------------
@@ -127,7 +128,7 @@ void gui_mode::actionClicked(QAction *action){
             mainWindow()->setActiveMode(NULL);
             pluginToSuspend->suspend();
             enterState(SUSPENDED,actionToSuspend);
-            Log("Suspended plugin: '%1'",qPrintable(actionToSuspend->text()));
+            Log("Suspended plugin: '%s'",qPrintable(actionToSuspend->text()));
             return;
         }
         break;
@@ -137,9 +138,11 @@ void gui_mode::actionClicked(QAction *action){
         mainWindow()->setActiveMode( (ModePlugin*) lastActiveModeAction->parent() );
         ((ModePlugin*) lastActiveModeAction->parent())->resume();
         enterState(MODE,lastActiveModeAction);
-        Log("Resumed plugin: '%1'",qPrintable(lastActiveModeAction->text()));
+        Log("Resumed plugin: '%s'",qPrintable(lastActiveModeAction->text()));
         break;
     }
+
+	drawArea()->updateGL();
 }
 
 void gui_mode::escapeKeyPressed(){
@@ -173,6 +176,8 @@ void gui_mode::documentChanged(){
         enterState(DEFAULT);
         return;    
     }
+	
+	drawArea()->updateGL();
 }
 
 

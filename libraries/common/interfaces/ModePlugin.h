@@ -73,7 +73,6 @@ public:
 };
 
 class ModePluginDockWidget : public QDockWidget{
-    Q_OBJECT
 public:
     explicit ModePluginDockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0):
         QDockWidget(title, parent, flags){ setup(); }
@@ -86,5 +85,6 @@ private:
         this->setFeatures( (QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable) );
     }
 };
+
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/2.0")
