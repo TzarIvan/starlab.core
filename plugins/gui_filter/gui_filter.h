@@ -19,6 +19,4 @@ private slots:
     /// callback function that starts the filter, it is called by the 
     /// filter popup when the user presses "ok" or by a command line instruction
     void execute(FilterPlugin* iFilter, RichParameterSet *pars);
-    /// Receives the action that wants to show a tooltip and display it on screen at the current mouse position.
-    void showTooltip(QAction*);
 };

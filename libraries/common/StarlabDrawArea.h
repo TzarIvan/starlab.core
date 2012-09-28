@@ -88,9 +88,11 @@ private:
 /// @}
         
 /// @{ Scene-wide rendering elements (i.e. used for debug)
+public slots:
+    /// Removes all render objects from the scene
+    void deleteAllRenderObjects();    
 public:
     void drawAllRenderObjects();
-    void deleteAllRenderObjects();
     void deleteRenderObject(RenderObject* );
     void addRenderObject(RenderObject::Base*);
     RenderObject::Triangle& drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color=Qt::red);
