@@ -6,6 +6,7 @@
 #include <QDesktopWidget>
 #include <QUrl> /// Drag&Drop
 #include <QApplication>
+#include <QToolTip>
 
 #include "interfaces/GuiPlugin.h"
 #include "StarlabDrawArea.h"
@@ -57,6 +58,10 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         menus << (viewMenu      = menuBar()->addMenu("View"));
         menus << (windowsMenu   = menuBar()->addMenu("Windows"));
         menus << (helpMenu      = menuBar()->addMenu("Help"));
+
+        /// Setup tooltips (mouse hover) for menu entries
+        foreach(QMenu* menu, menus)
+            connect(menu,SIGNAL(hovered(QAction*)),this,SLOT(showActionTooltip(QAction*)));
     }
     
     /// Instantiate Toolbars
@@ -131,6 +136,13 @@ void StarlabMainWindow::dropEvent(QDropEvent* event) {
     if(data->hasUrls())
         foreach(QUrl url, data->urls())
             QApplication::sendEvent(this, new QFileOpenEvent(url));    
+}
+
+void StarlabMainWindow::showActionTooltip(QAction* action){
+    /// @todo can we have the tooltip appear with a delay?
+    QString tip = action->toolTip();
+    if(!tip.isNull())
+        QToolTip::showText(QCursor::pos(), tip);
 }
 
 QSize StarlabMainWindow::sizeHint() const{

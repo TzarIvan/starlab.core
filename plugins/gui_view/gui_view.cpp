@@ -2,16 +2,26 @@
 
 void gui_view::load(){
     /// @todo re-enable them
+    load_clearRenderObjects();
     load_viewfrom();
     // load_fullscreen();
     // load_copypasteviewmatrix();
     load_toggleCameraProjection();
-
     { /// @todo
         // toolBarMenu = viewMenu->addMenu(tr("&ToolBars"));
         // toolBarMenu->addAction(showToolbarStandardAct);
         // connect(toolBarMenu,SIGNAL(aboutToShow()),this,SLOT(updateMenus()));
     }
+}
+
+void gui_view::load_clearRenderObjects(){
+    QAction* action = new QAction (tr("Clear render objects"), this);
+    action->setToolTip("Removes all render objects from the scene. Render objects" \
+                       "are typically used to visually debug the algorithms. "\
+                       "This function allows you to clear them from the scene.");
+    // action->setShortcut(QKeySequence::Copy);
+    connect(action, SIGNAL(triggered()), drawArea(), SLOT(deleteAllRenderObjects()));   
+    mainWindow()->viewMenu->addAction(action);
 }
 
 void gui_view::load_copypasteviewmatrix(){

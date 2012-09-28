@@ -52,7 +52,7 @@ class DYNAMIC_COMMON_EXPORT StarlabMainWindow : public QMainWindow{
         void setupDrawArea(DrawAreaPlugin *plugin);
     /// @}
                
-    /// @{ edit plugin management
+    /// @{ ModePlugin Management
     private:
         ModePlugin* _modePlugin;
         bool _isModePluginSuspended;
@@ -127,15 +127,18 @@ public:
         QList<QString> _oldMessages; ///< Saves all messages sent to statusbar
     /// @}
 
-    /// @{ @name Core Events Management
-    public slots:
-        /// Manages Drag & Drop events
-        virtual void dropEvent(QDropEvent* event);
-        /// @todo precisely why?
-        virtual void dragEnterEvent(QDragEnterEvent* event){ event->accept(); }
-    /// @}
+/// @{ @name Core Events Management
+public slots:
+    /// Manages Drag & Drop events
+    void dropEvent(QDropEvent* event);
+    /// @todo precisely why?
+    void dragEnterEvent(QDragEnterEvent* event){ event->accept(); }
+    /// This slot receives an action and displays a tooltip for it at the current mouse position
+    /// i.e. typically connected to the hovered(QAction*) signal
+    void showActionTooltip(QAction*action);
+/// @}
         
-    public:
+public:
     /// Determines default window size
     QSize sizeHint() const;
 };

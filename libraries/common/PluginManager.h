@@ -62,6 +62,7 @@ public:
         QMap<QString,RenderPlugin*> renderPlugins;        
     public:
         /// Creates a new instance of a render plugin
+        /// @exception if plugin with that name cannot be found
         RenderPlugin* newRenderPlugin(QString pluginName);
         QString getPreferredRenderer(Model* model);
         void setPreferredRenderer(Model* model, RenderPlugin* pluginName);

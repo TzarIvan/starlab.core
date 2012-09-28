@@ -34,12 +34,6 @@ void gui_filter::load(){
     }
 }
 
-/// @todo have the tooltip always display with fixed width at the right hand side of the menu entry (not invasive)
-void gui_filter::showTooltip(QAction* action){
-    QString tip = action->toolTip();
-    QToolTip::showText(QCursor::pos(), tip);
-}
-
 // It is splitted in two functions
 // - startFilter that setup the dialogs and asks for parameters
 // - executeFilter callback invoked when the params have been set up.

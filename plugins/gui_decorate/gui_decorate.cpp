@@ -42,10 +42,16 @@ void gui_decorate::toggleDecorator(QAction* action){
     DecoratePlugin* plugin = qobject_cast<DecoratePlugin*>(action->parent());
     Q_ASSERT(plugin);
     Model* model = document()->selectedModel();
-    if(model->hasDecoratePlugin(plugin))
-        model->removeDecoratePlugin(plugin);
-    else
+    if(action->isChecked()){
+        Q_ASSERT(!model->hasDecoratePlugin(plugin));
         model->addDecoratePlugin(plugin);
+    }
+    else{
+        Q_ASSERT(model->hasDecoratePlugin(plugin));
+        model->removeDecoratePlugin(plugin);
+    }
+
+    /// Update visualization
     drawArea()->updateGL(); /// Refresh the window
 }
 

@@ -224,7 +224,8 @@ QString PluginManager::getFilterStrings(){
 
 RenderPlugin *PluginManager::newRenderPlugin(QString pluginName){
     RenderPlugin *plugin = renderPlugins.value(pluginName,NULL);
-    Q_ASSERT(plugin!=NULL);
+    if(plugin==NULL) 
+        throw StarlabException("Renderer %s could not be found",qPrintable(pluginName));
     RenderPlugin* newplugin = plugin->factory();
     Q_ASSERT(newplugin!=NULL);
     newplugin->_mainWindow = plugin->_mainWindow;
