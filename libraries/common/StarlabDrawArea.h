@@ -46,6 +46,9 @@ public:
 /// @}
  
 /// @{ Rendering specification
+public:
+    void setRenderer(Model* model, QString pluginName);
+    
 public slots:
     void resetViewport();     ///< Restores the default view camera
     void viewFrom(QAction *); ///< Preset camera viewpoints

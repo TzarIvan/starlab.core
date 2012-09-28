@@ -217,6 +217,14 @@ StarlabDrawArea::~StarlabDrawArea(){
     deleteAllRenderObjects();
 }
 
+void StarlabDrawArea::setRenderer(Model *model, QString pluginName){
+    // qDebug("StarlabDrawArea::setRenderer(%s,%s)",qPrintable(model->name), qPrintable(pluginName));
+    document()->pushBusy();
+        RenderPlugin* plugin = pluginManager()->newRenderPlugin(pluginName);
+        model->setRenderer(plugin);
+    document()->popBusy();
+}
+
 void StarlabDrawArea::deleteAllRenderObjects(){
     document()->pushBusy();
 
