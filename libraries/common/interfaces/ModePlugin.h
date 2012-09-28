@@ -53,13 +53,14 @@ public:
 
     /// @{ @name User Input Callbacks (optional)
     public: 
-        virtual bool mousePressEvent    (QMouseEvent* ) { return false; }
-        virtual bool mouseMoveEvent     (QMouseEvent* ) { return false; }
-        virtual bool mouseReleaseEvent  (QMouseEvent* ) { return false; }
-        virtual bool keyReleaseEvent    (QKeyEvent*   ) { return false; }
-        virtual bool keyPressEvent      (QKeyEvent*   ) { return false; }
-        virtual bool tabletEvent        (QTabletEvent*) { return false; }
-        virtual bool wheelEvent         (QWheelEvent* ) { return false; }
+        virtual bool mousePressEvent        (QMouseEvent* ) { return false; }
+        virtual bool mouseMoveEvent         (QMouseEvent* ) { return false; }
+        virtual bool mouseReleaseEvent      (QMouseEvent* ) { return false; }
+        virtual bool keyReleaseEvent        (QKeyEvent*   ) { return false; }
+        virtual bool keyPressEvent          (QKeyEvent*   ) { return false; }
+        virtual bool tabletEvent            (QTabletEvent*) { return false; }
+        virtual bool wheelEvent             (QWheelEvent* ) { return false; }
+        virtual bool mouseDoubleClickEvent  (QMouseEvent* ) { return false; }
     /// @}
     
     /// @{ Access to properties
