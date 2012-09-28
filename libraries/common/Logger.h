@@ -1,5 +1,6 @@
 #pragma once 
 #include <QObject>
+#include "dynamic_common_global.h"
 
 #ifdef WIN32
     #define VSPRINTF vsprintf_s
@@ -8,7 +9,7 @@
 #endif
 
 /// @todo re-think logging system or simply eliminate it
-class Logger : public QObject{
+class DYNAMIC_COMMON_EXPORT Logger : public QObject{
     Q_OBJECT
     
     /// Maybe use flags for multiple usage?

@@ -1,13 +1,11 @@
 #pragma once
-#include "dynamic_common_global.h"
 #include <QApplication>
 #include <QKeyEvent>
 #include <QDebug>
 #include "StarlabException.h"
 
-class DYNAMIC_COMMON_EXPORT StarlabApplicationGUI : public QApplication{
-    Q_OBJECT
-    
+class StarlabApplicationGUI : public QApplication{
+
 public:
     StarlabApplicationGUI(int& argc, char* argv[]) : QApplication(argc,argv){
         QLocale::setDefault(QLocale::C); // Use "C"urrent locale
@@ -15,11 +13,8 @@ public:
         setApplicationName("Starlab");
         setApplicationVersion("1.0.1");
         setQuitOnLastWindowClosed(true);
-        
-        /// This filter diables "ESCAPE" globally
-        installEventFilter(this);
     }
-    
+
     /// @todo why is this necessary?
     bool notify( QObject * rec, QEvent * ev ){
         try{
@@ -48,28 +43,5 @@ public:
         // so on up to the top-level object if the receiver is not 
         // interested in the event (i.e., it returns false).
         return false;
-    }
-    
-/// Attempted to intercept every escape events.. failed :(
-#if 0
-    bool eventFilter(QObject *, QEvent* event){
-        /// Ignore escape "press"
-        if(event->type() == QEvent::KeyPress)
-            if( (((QKeyEvent*) event)->key() == Qt::Key_Escape) )
-                return true;
-
-        /// Emit escape released
-        if(event->type() == QEvent::KeyRelease){
-            if( (((QKeyEvent*) event)->key() == Qt::Key_Escape) ){
-                qDebug() << "emit StarlabApplicationGUI::escapeKeyReleased()";
-                emit escapeKeyReleased();
-                return true;
-            }    
-        }
-        return false;    
-    }
-signals:
-    void escapeKeyReleased();
-#endif
-    
+    }    
 };

@@ -61,6 +61,15 @@ private:
     void drawWithNames();     ///< Draws to the symbols buffer
 /// @}
 
+/// @{ OpenGL buffers
+public slots:
+    std::vector< std::vector<float> > depthBuffer();
+private:
+    void *readBuffer(GLenum format, GLenum type);
+    void *depth_buffer;
+    bool captureDepthBuffer;
+/// @}
+
 /// @{ Selection functions
 private:
     void endSelection(const QPoint&);
@@ -72,6 +81,10 @@ public:
 /// @{ ModePlugin management
 private:
     bool eventFilter(QObject *object, QEvent *event);
+/// @}
+
+/// @{ Default mouse & keyboard management
+    void mouseDoubleClickEvent( QMouseEvent * e );
 /// @}
         
 /// @{ Scene-wide rendering elements (i.e. used for debug)

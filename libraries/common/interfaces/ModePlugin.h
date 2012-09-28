@@ -53,13 +53,14 @@ public:
 
     /// @{ @name User Input Callbacks (optional)
     public: 
-        virtual bool mousePressEvent    (QMouseEvent* ) { return false; }
-        virtual bool mouseMoveEvent     (QMouseEvent* ) { return false; }
-        virtual bool mouseReleaseEvent  (QMouseEvent* ) { return false; }
-        virtual bool keyReleaseEvent    (QKeyEvent*   ) { return false; }
-        virtual bool keyPressEvent      (QKeyEvent*   ) { return false; }
-        virtual bool tabletEvent        (QTabletEvent*) { return false; }
-        virtual bool wheelEvent         (QWheelEvent* ) { return false; }
+        virtual bool mousePressEvent        (QMouseEvent* ) { return false; }
+        virtual bool mouseMoveEvent         (QMouseEvent* ) { return false; }
+        virtual bool mouseReleaseEvent      (QMouseEvent* ) { return false; }
+        virtual bool keyReleaseEvent        (QKeyEvent*   ) { return false; }
+        virtual bool keyPressEvent          (QKeyEvent*   ) { return false; }
+        virtual bool tabletEvent            (QTabletEvent*) { return false; }
+        virtual bool wheelEvent             (QWheelEvent* ) { return false; }
+        virtual bool mouseDoubleClickEvent  (QMouseEvent* ) { return false; }
     /// @}
     
     /// @{ Access to properties
@@ -73,7 +74,6 @@ public:
 };
 
 class ModePluginDockWidget : public QDockWidget{
-    Q_OBJECT
 public:
     explicit ModePluginDockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0):
         QDockWidget(title, parent, flags){ setup(); }
@@ -86,5 +86,6 @@ private:
         this->setFeatures( (QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable) );
     }
 };
+
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/2.0")

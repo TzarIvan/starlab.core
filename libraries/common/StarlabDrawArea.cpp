@@ -52,6 +52,9 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
 
     /// Value of 100.0 forbids spinning
     camera()->frame()->setSpinningSensitivity(100);
+
+    /// Disable saving state to file
+    setStateFileName( QString::null );
     
     /// @todo setup View->ToggleFPS
     /// @todo why is update broken when nothing is moving?
@@ -62,6 +65,8 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
     /// @todo Add screenshot to View->Take Screenshot
     // Keyboard + Mouse behavior
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+
+    this->captureDepthBuffer = false;
 }
 
 void StarlabDrawArea::resetViewport(){
@@ -164,7 +169,10 @@ void StarlabDrawArea::draw(){
         foreach(Model* model, document()->models())
             if(model->isVisible && model->renderer()!=NULL ) 
                 model->renderer()->render();
-    glPopMatrix();        
+    glPopMatrix();
+
+    /// Buffers
+    if(captureDepthBuffer) depth_buffer = readBuffer(GL_DEPTH_COMPONENT, GL_FLOAT);
 
     /// @todo Render decoration plugins
     glPushMatrix();
@@ -198,6 +206,30 @@ void StarlabDrawArea::drawWithNames(){
         mainWindow()->getModePlugin()->drawWithNames();
 }
 
+std::vector< std::vector<float> > StarlabDrawArea::depthBuffer()
+{
+    int h = height(), w = width();
+    std::vector< std::vector<float> > dbuffer(h, std::vector<float>(w,0));
+
+    captureDepthBuffer = true;
+    updateGL();
+
+    if(!depth_buffer) return dbuffer;
+
+    for(int y = 0; y < h; y++){
+        for(int x = 0; x < w; x++){
+            uint idx = ((y*w)+x);
+            dbuffer[y][x] = ((GLfloat*)depth_buffer)[idx];
+        }
+    }
+
+    delete depth_buffer;
+
+    captureDepthBuffer = false;
+
+    return dbuffer;
+}
+
 void StarlabDrawArea::endSelection(const QPoint & p)
 {
     if(mainWindow()->hasModePlugin())
@@ -210,6 +242,24 @@ void StarlabDrawArea::postSelection(const QPoint & p)
 {
     if(mainWindow()->hasModePlugin())
         mainWindow()->getModePlugin()->postSelection(p);
+}
+
+void* StarlabDrawArea::readBuffer(GLenum format, GLenum type)
+{
+    void * data = NULL;
+    int w = this->width(), h = this->height();
+    switch(format)
+    {
+    case GL_DEPTH_COMPONENT:
+        data = new GLfloat[w*h];
+        break;
+
+    case GL_RGBA:
+        data = new GLubyte[w*h*4];
+        break;
+    }
+    glReadPixels(0, 0, w, h, format, type, data);
+    return data;
 }
 
 StarlabDrawArea::~StarlabDrawArea(){
@@ -283,8 +333,31 @@ bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
         case QEvent::MouseMove:          return mode->mouseMoveEvent((QMouseEvent*)event); break;
         case QEvent::KeyPress:           return mode->keyPressEvent((QKeyEvent*)event); break;
         case QEvent::Wheel:              return mode->wheelEvent((QWheelEvent*)event); break;
+        case QEvent::MouseButtonDblClick:return mode->mouseDoubleClickEvent((QMouseEvent *)event); break;
         default: return false;
-    }  
+    }
+}
+
+void StarlabDrawArea::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    bool found = false;
+    qglviewer::Vec p = camera()->pointUnderPixel(e->pos(), found);
+
+    // Regaular behavior when clicking background
+    if(!found){
+        QGLViewer::mouseDoubleClickEvent(e);
+        camera()->setRevolveAroundPoint(this->sceneCenter());
+        camera()->showEntireScene();
+        return;
+    }
+
+    camera()->setRevolveAroundPointFromPixel(e->pos());
+
+    // Animate to a zoomed position
+    Frame newFrame(*camera()->frame());
+    Vec newPos = p + (-camera()->viewDirection() * sceneRadius() * 0.25);
+    newFrame.setPosition(newPos.x, newPos.y, newPos.z);
+    camera()->interpolateTo( newFrame, 0.25);
 }
 
 void StarlabDrawArea::deleteRenderObject(RenderObject* /*object*/){
