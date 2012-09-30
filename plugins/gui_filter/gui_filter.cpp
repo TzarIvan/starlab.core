@@ -12,9 +12,6 @@
 #include <QElapsedTimer>
 
 void gui_filter::load(){
-    /// Setup tooltips (mouse hover) for menu entries
-    connect(mainWindow()->filterMenu, SIGNAL(hovered(QAction*)), this, SLOT(showTooltip(QAction*)) );
-
     /// Fill the menu with plugin names and make connections
     foreach(FilterPlugin* plugin, pluginManager()->filterPlugins.values()){
         QAction* action = plugin->action();
