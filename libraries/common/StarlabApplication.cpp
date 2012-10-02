@@ -50,11 +50,10 @@ bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
     
     /// Checks a suitable plugin exists
     InputOutputPlugin* iIO = pluginManager()->modelExtensionToPlugin[extension];
+    if(iIO == NULL) throw StarlabException("File '%s' has not been opened becase format '%s' not supported", qPrintable(basename), qPrintable(extension));
     
     /// Checks file existence
-    if(iIO == NULL)            throw StarlabException("File '%s' has not been opened, format %s not supported", qPrintable(basename), qPrintable(extension));
-    if(!fileInfo.exists())     throw StarlabException("File '%s' does not exist", qPrintable(path));
-    if(!fileInfo.isReadable()) throw StarlabException("File '%s' is not readable", qPrintable(path));
+    iIO->checkReadable(path);
     
     /// Calls the plugin for open operation
     document()->pushBusy();
