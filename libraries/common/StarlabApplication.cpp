@@ -139,7 +139,7 @@ void StarlabApplication::executeFilter(Model* model, QString filterName){
     pars->destructor();
 }
 
-QString StarlabApplication::starlabDirectory(){
+QDir StarlabApplication::starlabDirectory(){
     QDir baseDir(QApplication::applicationDirPath());
     if( OSQuery::isMac() ){            
         baseDir.cdUp();
@@ -149,7 +149,14 @@ QString StarlabApplication::starlabDirectory(){
     if( OSQuery::isWin() )
         return QCoreApplication::applicationDirPath();
     if( OSQuery::isLinux() )
-        throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
-    throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
+        throw StarlabException("TODO: FIX THE INI LOAD PATH FOR LINUX!!!");
+
+    /// @todo is there better way of doing this without having to return dummy?
+    Q_ASSERT(false);
+    return QDir("");
+}
+
+QDir StarlabApplication::executionDirectory(){
+    return QFileInfo("./").absoluteDir();
 }
 

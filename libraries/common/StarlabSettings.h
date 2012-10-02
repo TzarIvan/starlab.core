@@ -41,14 +41,20 @@ public:
 
         
     /// @{ Settings I/O
-        /// Where will the "ini" file be saved?
+        /// Where will the "ini" file be loaded/saved from?
+        /// If the execution path contains a starlab.ini file we will it.
+        /// Otherwise we use the one stored at:
+        /// - Win: $$STARLAB/starlab.ini
+        /// - Mac: $$STARLAB/starlab.ini
+        /// - Linux: ~/.starlab
         QString settingsFilePath();
-        /// @todo load settings from file
-        void load(const QString& filename="");
-        /// @todo save settings to file
-        void save(const QString& filename="");
-    /// @}
     
+        /// @todo load settings from file & hooks in GUI
+        // void load(const QString& filename="");
+        
+        /// @todo save settings to file & hooks in GUI
+        // void save(const QString& filename="");
+    /// @}
     
     /// Print to string (e.g. qDebug() << this->toString() )
     QByteArray toLocal8Bit();
