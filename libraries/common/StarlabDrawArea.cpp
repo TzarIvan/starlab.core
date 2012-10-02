@@ -49,7 +49,7 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
 
     /// Default camera
     camera()->setType(Camera::ORTHOGRAPHIC);
-
+    
     /// Value of 100.0 forbids spinning
     camera()->frame()->setSpinningSensitivity(100);
 
@@ -154,7 +154,7 @@ void StarlabDrawArea::init(){
     settings()->setDefault( key, QVariant(QColor(50,50,60)) );
     setBackgroundColor( settings()->getQColor(key) );
 
-    camera()->setUpVector(Vec(0,0,1));
+    camera()->setUpVector(Vec(0,1,0));
 
     resetViewport();
 }
