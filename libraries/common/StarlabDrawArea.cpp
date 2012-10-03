@@ -167,8 +167,10 @@ void StarlabDrawArea::draw(){
     glPushMatrix();
         glMultMatrixd( document()->transform.data() );
         foreach(Model* model, document()->models())
-            if(model->isVisible && model->renderer()!=NULL ) 
+            if(model->isVisible && model->renderer()!=NULL ){ 
+                qglColor(model->color);
                 model->renderer()->render();
+            }
     glPopMatrix();
 
     /// Buffers
