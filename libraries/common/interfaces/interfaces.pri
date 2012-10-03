@@ -6,7 +6,8 @@ HEADERS+=   \
             interfaces/GuiPlugin.h \
             interfaces/FilterPlugin.h \
             interfaces/DecoratePlugin.h \
-            interfaces/ModePlugin.h
+            interfaces/ModePlugin.h \
+    interfaces/ModePluginDockWidget.h
 
 SOURCES += \
     interfaces/StarlabPlugin.cpp
