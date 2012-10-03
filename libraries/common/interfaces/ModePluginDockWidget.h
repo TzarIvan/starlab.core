@@ -24,6 +24,7 @@ private:
         /// Dock widgets don't have a default frame, create one
         QFrame* frame = new QFrame(this);
         QVBoxLayout* layout = new QVBoxLayout();
+        layout->setAlignment( Qt::AlignTop );
         frame->setLayout(layout);
         this->setWidget(frame);
     }
