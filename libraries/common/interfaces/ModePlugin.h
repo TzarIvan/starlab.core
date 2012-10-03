@@ -1,5 +1,4 @@
 #pragma once 
-#include <QDockWidget>
 #include "StarlabPlugin.h"
 
 /**
@@ -73,19 +72,43 @@ public:
     /// @}
 };
 
+
+#include <QDockWidget>
+#include <QFrame>
+#include <QVBoxLayout>
+#include <QMainWindow>
 class ModePluginDockWidget : public QDockWidget{
 public:
-    explicit ModePluginDockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0):
-        QDockWidget(title, parent, flags){ setup(); }
-    explicit ModePluginDockWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0):
-        QDockWidget(parent,flags){ setup(); }
+    explicit ModePluginDockWidget(const QString &title, QMainWindow *parent = 0, Qt::WindowFlags flags = 0):
+        QDockWidget(title, (QWidget*) parent, flags){ setup(); }
+    explicit ModePluginDockWidget(QMainWindow *parent = 0, Qt::WindowFlags flags = 0):
+        QDockWidget((QWidget*) parent,flags){ setup(); }
+
+public:
+    /// Use this to add widgets to the layout
+    void addWidget(QWidget *w){
+        Q_ASSERT(layout());
+        Q_ASSERT(widget());
+        this->widget()->layout()->addWidget(w);
+    }
+    /// Docks the widget on the right hand side of the main window
+    void dockMe(){
+        QMainWindow* mainWindow = dynamic_cast<QMainWindow*>( this->parent() );
+        mainWindow->addDockWidget(Qt::RightDockWidgetArea,this);
+    }
+
 private:
     void setup(){
         // this->setAllowedAreas(Qt::RightDockWidgetArea);
         /// Disables closable
         this->setFeatures( (QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable) );
+        
+        /// Dock widgets don't have a default frame, create one
+        QFrame* frame = new QFrame(this);
+        QVBoxLayout* layout = new QVBoxLayout();
+        frame->setLayout(layout);
+        this->setWidget(frame);
     }
 };
-
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/2.0")
