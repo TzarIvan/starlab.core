@@ -79,7 +79,7 @@ void StarlabDrawArea::resetViewport(){
     Vec max_bound(maxbound.x(),maxbound.y(),maxbound.z());
 
     camera()->fitBoundingBox( min_bound, max_bound );
-    camera()->setSceneRadius((max_bound - min_bound).norm()*0.6);
+    camera()->setSceneRadius((max_bound - min_bound).norm() * 0.4);
     camera()->setSceneCenter((min_bound + max_bound) * 0.5);
     camera()->showEntireScene();
 }
