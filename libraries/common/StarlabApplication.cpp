@@ -50,11 +50,10 @@ bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
     
     /// Checks a suitable plugin exists
     InputOutputPlugin* iIO = pluginManager()->modelExtensionToPlugin[extension];
+    if(iIO == NULL) throw StarlabException("File '%s' has not been opened becase format '%s' not supported", qPrintable(basename), qPrintable(extension));
     
     /// Checks file existence
-    if(iIO == NULL)            throw StarlabException("File '%s' has not been opened, format %s not supported", qPrintable(basename), qPrintable(extension));
-    if(!fileInfo.exists())     throw StarlabException("File '%s' does not exist", qPrintable(path));
-    if(!fileInfo.isReadable()) throw StarlabException("File '%s' is not readable", qPrintable(path));
+    iIO->checkReadable(path);
     
     /// Calls the plugin for open operation
     document()->pushBusy();
@@ -140,7 +139,7 @@ void StarlabApplication::executeFilter(Model* model, QString filterName){
     pars->destructor();
 }
 
-QString StarlabApplication::starlabDirectory(){
+QDir StarlabApplication::starlabDirectory(){
     QDir baseDir(QApplication::applicationDirPath());
     if( OSQuery::isMac() ){            
         baseDir.cdUp();
@@ -150,7 +149,14 @@ QString StarlabApplication::starlabDirectory(){
     if( OSQuery::isWin() )
         return QCoreApplication::applicationDirPath();
     if( OSQuery::isLinux() )
-        throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
-    throw StarlabException("TODO: FIX THE INI LOAD PATH!!!");
+        throw StarlabException("TODO: FIX THE INI LOAD PATH FOR LINUX!!!");
+
+    /// @todo is there better way of doing this without having to return dummy?
+    Q_ASSERT(false);
+    return QDir("");
+}
+
+QDir StarlabApplication::executionDirectory(){
+    return QFileInfo("./").absoluteDir();
 }
 

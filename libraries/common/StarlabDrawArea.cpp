@@ -49,7 +49,7 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
 
     /// Default camera
     camera()->setType(Camera::ORTHOGRAPHIC);
-
+    
     /// Value of 100.0 forbids spinning
     camera()->frame()->setSpinningSensitivity(100);
 
@@ -79,7 +79,7 @@ void StarlabDrawArea::resetViewport(){
     Vec max_bound(maxbound.x(),maxbound.y(),maxbound.z());
 
     camera()->fitBoundingBox( min_bound, max_bound );
-    camera()->setSceneRadius((max_bound - min_bound).norm()*0.6);
+    camera()->setSceneRadius((max_bound - min_bound).norm() * 0.4);
     camera()->setSceneCenter((min_bound + max_bound) * 0.5);
     camera()->showEntireScene();
 }
@@ -154,7 +154,7 @@ void StarlabDrawArea::init(){
     settings()->setDefault( key, QVariant(QColor(50,50,60)) );
     setBackgroundColor( settings()->getQColor(key) );
 
-    camera()->setUpVector(Vec(0,0,1));
+    camera()->setUpVector(Vec(0,1,0));
 
     resetViewport();
 }
@@ -167,8 +167,10 @@ void StarlabDrawArea::draw(){
     glPushMatrix();
         glMultMatrixd( document()->transform.data() );
         foreach(Model* model, document()->models())
-            if(model->isVisible && model->renderer()!=NULL ) 
+            if(model->isVisible && model->renderer()!=NULL ){ 
+                qglColor(model->color);
                 model->renderer()->render();
+            }
     glPopMatrix();
 
     /// Buffers

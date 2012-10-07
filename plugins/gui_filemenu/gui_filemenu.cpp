@@ -110,6 +110,9 @@ void gui_filemenu::reload_selection(){
         if(newmodel==NULL)
             throw StarlabException("Impossible ot reload model");
         
+        /// Compute its BBOX, otherwise rendering will not work
+        newmodel->updateBoundingBox();
+        
         /// Replace and set as selected model
         mainWindow()->document()->replaceModel(selection,newmodel);
         mainWindow()->document()->setSelectedModel(newmodel);        
@@ -118,12 +121,6 @@ void gui_filemenu::reload_selection(){
     /// Inform the user
     mainWindow()->statusBarMessage("Model '"+ newmodel->name +"' reloaded from path: " + newmodel->path,5000);
 }
-
-
-
-
-
-
 
 #if 0
 QAction *recentFileActs[MAXRECENTFILES];

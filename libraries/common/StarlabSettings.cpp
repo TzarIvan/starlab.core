@@ -14,15 +14,22 @@ StarlabSettings::StarlabSettings(StarlabApplication* application) :
     /// Defaults   
     setDefault("lastUsedDirectory",QDir::homePath());
     setDefault("autostartWithAction","");
-    
-    /// Now override any hardcoded with the ones specified by the user parameters
-    load();
 }
 
 QString StarlabSettings::settingsFilePath(){
-    if(OSQuery::isMac() || OSQuery::isWin()) return _application->starlabDirectory() + "/settings.ini";
-    if(OSQuery::isLinux()) return QDir::homePath() + ".starlab";
-    exit(-1);
+    /// Attempt to use local file
+    QString path = _application->executionDirectory().absoluteFilePath("settings.ini");
+    QFileInfo fi(path);
+    if( fi.exists() && fi.isReadable() )
+        return path;
+    
+    /// Otherwise load system file
+    if(OSQuery::isMac() || OSQuery::isWin()) 
+        return _application->starlabDirectory().absoluteFilePath("settings.ini");
+    if(OSQuery::isLinux()) 
+        return QDir::homePath() + ".starlab";
+    Q_ASSERT(false);
+    return "";
 }
 
 /// Display only settings in "starlab" group
@@ -78,6 +85,3 @@ QString StarlabSettings::getString(const QString &key){ return get(key).toString
 QStringList StarlabSettings::getStringList(const QString &key){ return get(key).toStringList(); }
 QColor StarlabSettings::getQColor(const QString &key){ return get(key).value<QColor>(); }
 float StarlabSettings::getFloat(const QString &key){ return get(key).toFloat(); }
-
-void StarlabSettings::load(const QString& /*filename*/){ }
-void StarlabSettings::save(const QString& /*filename*/){ }

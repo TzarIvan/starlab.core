@@ -1,5 +1,4 @@
 #pragma once 
-#include <QDockWidget>
 #include "StarlabPlugin.h"
 
 /**
@@ -70,22 +69,8 @@ public:
         using StarlabPlugin::mainWindow;
         using StarlabPlugin::application;
         using StarlabPlugin::pluginManager;
+        Model* selection(){ return document()->selectedModel(); }    
     /// @}
 };
-
-class ModePluginDockWidget : public QDockWidget{
-public:
-    explicit ModePluginDockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0):
-        QDockWidget(title, parent, flags){ setup(); }
-    explicit ModePluginDockWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0):
-        QDockWidget(parent,flags){ setup(); }
-private:
-    void setup(){
-        // this->setAllowedAreas(Qt::RightDockWidgetArea);
-        /// Disables closable
-        this->setFeatures( (QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable) );
-    }
-};
-
 
 Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/2.0")

@@ -36,10 +36,11 @@ int main(int argc, char *argv[]){
         
         /// Print a bunch of examples to command line
         if(parser->showExamples){
+            QString exampleFilepath = starlab->starlabDirectory().absoluteFilePath("data/sphere.pts");
             qDebug("starterm --help");
             qDebug("starterm --list-filters");
-            qDebug("starterm --filter=Normalize --save-overwrite %s/data/sphere.pts", qPrintable(starlab->starlabDirectory()));
-            qDebug("starterm --list-filters %s/data/sphere.pts ", qPrintable(starlab->starlabDirectory()));
+            qDebug("starterm --filter=Normalize --save-overwrite %s", qPrintable(exampleFilepath));
+            qDebug("starterm --list-filters %s", qPrintable(exampleFilepath));
             return 0;
         }
         

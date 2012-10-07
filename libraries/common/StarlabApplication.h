@@ -43,6 +43,10 @@ public:
     /// Mac: /Applications/Starlab.app
     /// Win: C:/Program Files/starlab
     /// Lin: ????
-    QString starlabDirectory();
-    static QString version(){ return "1.0.2 alpha"; }
+    QDir starlabDirectory();
+    
+    /// Where was starlab executed from?
+    QDir executionDirectory();
+    
+    static QString version(){ return "1.0.4 alpha"; }
 };
