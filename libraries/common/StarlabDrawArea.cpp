@@ -172,7 +172,7 @@ void StarlabDrawArea::draw(){
     glPopMatrix();
 
     /// Buffers
-    if(captureDepthBuffer) depth_buffer = readBuffer(GL_DEPTH_COMPONENT, GL_FLOAT);
+    if(captureDepthBuffer) depth_buffer = (GLfloat*)readBuffer(GL_DEPTH_COMPONENT, GL_FLOAT);
 
     /// @todo Render decoration plugins
     glPushMatrix();

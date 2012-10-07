@@ -43,12 +43,22 @@ public:
 
 	my_kd_tree * tree;
 
+    NanoKdTree(){
+        tree = NULL;
+    }
+
+    ~NanoKdTree(){
+        delete tree;
+    }
+
 	void addPoint(const Vector3 & p){
 		cloud.pts.push_back(p);
 	}
 
 	void build()
 	{
+        if(tree) delete tree;
+
 		// construct a kd-tree index:
 		tree = new my_kd_tree(3 /*dim*/, cloud, KDTreeSingleIndexAdaptorParams(10 /* max leaf */) );
 		tree->buildIndex();
@@ -58,22 +68,38 @@ public:
 	{
         k = k < (int)cloud.pts.size() ? k : cloud.pts.size();
 
+		ret_matches.clear();
+		ret_matches.resize(k);
+
 		std::vector<size_t> ret_index(k);
 		std::vector<double> out_dist(k);
 
 		tree->knnSearch(&p[0], k, &ret_index[0], &out_dist[0]);
 
 		for(int i = 0; i < k; i++)
-			ret_matches.push_back( std::make_pair(ret_index[i], out_dist[i]) );
+			ret_matches[i] = std::make_pair(ret_index[i], out_dist[i]);
 
 		return k;
 	}
 
-	size_t ball_search(Vector3 p, double search_radius, KDResults & ret_matches)
+    size_t ball_search(Vector3 p, double search_radius, KDResults & ret_matches = KDResults())
 	{
+		ret_matches.clear();
+
 		nanoflann::SearchParams params;
 		//params.sorted = false;
 
 		return tree->radiusSearch(&p[0], search_radius, ret_matches, params);
 	}
+
+    int closest(Vector3 p)
+    {
+        KDResults match;
+        this->k_closest(p, 1, match);
+
+        if(!match.size())
+            return -1;
+        else
+            return match[0].first;
+    }
 };
