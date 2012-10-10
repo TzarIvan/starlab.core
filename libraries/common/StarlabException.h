@@ -23,16 +23,12 @@ public:
     /// This throws an exeption with a format similar to a printf
     /// Make sure you are passing actual char* or it will terminate badly!!
     StarlabException(const char *format, ...){
-        char buffer[256];
+        const size_t buffer_length = 256;
+        char buffer[buffer_length];
         va_list args;
         va_start (args, format);
-
-#ifdef WIN32
-        vsprintf_s (buffer,format, args);
-#else
-        vsprintf (buffer,format, args);
-#endif
-
+            /// @note http://www.tin.org/bin/man.cgi?section=3&topic=vsnprintf
+            vsnprintf (buffer,buffer_length,format, args);
         va_end (args);
         errmsg = QString(buffer);
     }

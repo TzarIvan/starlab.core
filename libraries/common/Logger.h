@@ -19,10 +19,11 @@ public:
     // void Log(int Level, const char * f, ... ) ;
     
     void Log(const char *format, ...){
-        char buffer[256];
+        const size_t buffer_length=256;
+        char buffer[buffer_length];
         va_list args;
         va_start (args, format);
-        VSPRINTF(buffer,format, args);
+        vsnprintf(buffer,buffer_length,format, args);
         va_end (args);
         QString todo(buffer);
         emit showmessage( QString(buffer) );
