@@ -134,10 +134,13 @@ public slots:
     /// @todo precisely why?
     void dragEnterEvent(QDragEnterEvent* event){ event->accept(); }
     /// This slot receives an action and displays a tooltip for it at the current mouse position
-    /// i.e. typically connected to the hovered(QAction*) signal
-    void showActionTooltip(QAction*action);
 /// @}
-        
+
+#ifdef TODO_SHOW_ACTION_TOOLTIP
+    /// i.e. typically connected to the hovered(QAction*) signal to show tooltips
+    void showActionTooltip(QAction*action);
+#endif
+    
 public:
     /// Determines default window size
     QSize sizeHint() const;

@@ -59,9 +59,12 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         menus << (windowsMenu   = menuBar()->addMenu("Windows"));
         menus << (helpMenu      = menuBar()->addMenu("Help"));
 
+/// @todo this was annoying and caused bugs, temporarily disabled
+#ifdef TODO_SHOW_ACTION_TOOLTIP
         /// Setup tooltips (mouse hover) for menu entries
         foreach(QMenu* menu, menus)
             connect(menu,SIGNAL(hovered(QAction*)),this,SLOT(showActionTooltip(QAction*)));
+#endif
     }
     
     /// Instantiate Toolbars
@@ -138,12 +141,15 @@ void StarlabMainWindow::dropEvent(QDropEvent* event) {
             QApplication::sendEvent(this, new QFileOpenEvent(url));    
 }
 
+
+#ifdef TODO_SHOW_ACTION_TOOLTIP
 void StarlabMainWindow::showActionTooltip(QAction* action){
     /// @todo can we have the tooltip appear with a delay?
     QString tip = action->toolTip();
     if(!tip.isNull())
         QToolTip::showText(QCursor::pos(), tip);
 }
+#endif
 
 QSize StarlabMainWindow::sizeHint() const{
     QRect geom = QApplication::desktop()->screenGeometry();

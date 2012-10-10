@@ -66,7 +66,7 @@ public slots:
     std::vector< std::vector<float> > depthBuffer();
 private:
     void *readBuffer(GLenum format, GLenum type);
-    void *depth_buffer;
+    GLfloat *depth_buffer;
     bool captureDepthBuffer;
 /// @}
 
