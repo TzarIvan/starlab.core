@@ -151,7 +151,8 @@ void StarlabDrawArea::viewFrom(QAction * a){
 void StarlabDrawArea::init(){
     /// Background color from settings file
     QString key = "DefaultBackgroundColor";
-    settings()->setDefault( key, QVariant(QColor(50,50,60)) );
+    // settings()->setDefault( key, QVariant(QColor(50,50,60)) );
+    settings()->setDefault( key, QVariant(QColor(255,255,255)) );
     setBackgroundColor( settings()->getQColor(key) );
 
     camera()->setUpVector(Vec(0,1,0));
