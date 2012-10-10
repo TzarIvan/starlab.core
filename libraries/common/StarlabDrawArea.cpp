@@ -360,6 +360,9 @@ void StarlabDrawArea::mouseDoubleClickEvent(QMouseEvent *e)
     Vec newPos = p + (-camera()->viewDirection() * sceneRadius() * 0.25);
     newFrame.setPosition(newPos.x, newPos.y, newPos.z);
     camera()->interpolateTo( newFrame, 0.25);
+
+    // Log the position
+    mainWindow()->statusBarMessage(QString("Center at x = %1 | y = %2 | z = %3").arg(p.x).arg(p.y).arg(p.z));
 }
 
 void StarlabDrawArea::deleteRenderObject(RenderObject* /*object*/){
