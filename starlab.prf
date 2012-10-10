@@ -66,7 +66,7 @@ equals(STARLAB_TEMPLATE,"plugin"){
     INCLUDEPATH += $$_PRO_FILE_PWD_
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/plugins
     win32: DESTDIR = \"$$DEPLOYPATH/plugins\"
-    unix:!macx: error(TODO)
+    linux: error("STARLAB_TEMPLATE=plugin not ready for linux")
 
     # Windows warnings
     win32: DEFINES += _CRT_SECURE_NO_WARNINGS
