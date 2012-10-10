@@ -141,12 +141,15 @@ void StarlabMainWindow::dropEvent(QDropEvent* event) {
             QApplication::sendEvent(this, new QFileOpenEvent(url));    
 }
 
+
+#ifdef TODO_SHOW_ACTION_TOOLTIP
 void StarlabMainWindow::showActionTooltip(QAction* action){
     /// @todo can we have the tooltip appear with a delay?
     QString tip = action->toolTip();
     if(!tip.isNull())
         QToolTip::showText(QCursor::pos(), tip);
 }
+#endif
 
 QSize StarlabMainWindow::sizeHint() const{
     QRect geom = QApplication::desktop()->screenGeometry();
