@@ -1,5 +1,3 @@
-system(qmake -set QMAKEFEATURES $$PWD) # QT-BUG
-
 TEMPLATE = subdirs
 CONFIG += ordered
 OTHER_FILES += starlab.prf

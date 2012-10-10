@@ -59,9 +59,12 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         menus << (windowsMenu   = menuBar()->addMenu("Windows"));
         menus << (helpMenu      = menuBar()->addMenu("Help"));
 
+/// @todo this was annoying and caused bugs, temporarily disabled
+#ifdef TODO_SHOW_ACTION_TOOLTIP
         /// Setup tooltips (mouse hover) for menu entries
         foreach(QMenu* menu, menus)
             connect(menu,SIGNAL(hovered(QAction*)),this,SLOT(showActionTooltip(QAction*)));
+#endif
     }
     
     /// Instantiate Toolbars
