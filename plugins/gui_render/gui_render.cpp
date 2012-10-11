@@ -50,10 +50,9 @@ void gui_render::triggerSetDefaultRenderer(){
     // qDebug() << "gui_render::triggerSetDefaultRenderer()";
     RenderPlugin* renderer = document()->selectedModel()->renderer();
     pluginManager()->setPreferredRenderer(document()->selectedModel(),renderer);
-    QString message;
-    message.sprintf("Preferred renderer for '%s' set to '%s'",
-                    qPrintable(document()->selectedModel()->metaObject()->className()),
-                    qPrintable(renderer->name()));
+    QString message = QString("Preferred renderer for \"%1\" set to \"2\"")
+                              .arg(document()->selectedModel()->metaObject()->className())
+                              .arg(renderer->name());
     mainWindow()->statusBarMessage(message);
 }
 
