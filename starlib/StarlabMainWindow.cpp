@@ -177,7 +177,7 @@ void StarlabMainWindow::triggerFilterByName(QString name){
 
 /// @todo Implement this function...
 void StarlabMainWindow::triggerMenuActionByName(QString name){
-    QAction* trigger_me;
+    QAction* trigger_me = NULL;
     foreach(QMenu* menu, menus)
         foreach(QAction* action, menu->actions())
             if(action->text()==name)
