@@ -64,7 +64,6 @@ HEADERS += \
     StarlabException.h \
     StarlabApplication.h \
     PluginManager.h \
-    Logger.h \
     StarlabDrawArea.h \
     StarlabMainWindow.h \
     RenderObject.h \

@@ -3,16 +3,11 @@
 # @note $$PWD gives the absolute location of *this* file on disk
 ROOT = $$PWD
 
-defineTest( linux64 ){
-    unix{
-        contains( $$system(uname -i), x86_64 ) {
-            return true;  # 64-bit Linux
-        } else {
-            return false; # 32-bit Linux
-        }
-    } else {
-        return false;
-    }
+defineTest( linux ){
+    unix:!mac: return true;
+    # 64-bit Linux
+    # unix:!mac:contains( $$system(uname -i), x86_64 ): return true;
+    return false;
 }
 
 # Where will the library be deployed? You can change
