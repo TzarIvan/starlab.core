@@ -4,9 +4,9 @@
 #include <QVector>
 #include <QAction>
 #include <QKeySequence>
+
+#include "StarlabException.h"
 #include "Model.h"
-#include "Document.h"
-#include "Logger.h"
 
 class RichParameterSet;
 class StarlabDrawArea;
@@ -18,10 +18,11 @@ class Document;
 
 /** 
  * @brief The superclass of any starlab plugin
- *
  * @defgroup StarlabPluginInterfaces Starlab Plugin Interfaces
  */
-class STARLIB_EXPORT StarlabPlugin : public Logger{
+class STARLIB_EXPORT StarlabPlugin : public QObject{
+
+/// @{ basic plugin definition
 public:
     /// Default constructor
     StarlabPlugin();
@@ -43,40 +44,62 @@ public:
     
     /// What shortcut would you like me to use for this plugin?
     virtual QKeySequence shortcut(){ return QKeySequence(); }
+/// @}
     
-    /// @{ action management
-    public:
-        /// @brief assembles an action from name+icon
-        /// @note the action's parent is the plugin!!
-        QAction* action(); 
-    protected:
-        QAction* _action;
-    /// @}
+/// @{ action management
+public:
+    /// @brief assembles an action from name+icon
+    /// @note the action's parent is the plugin!!
+    QAction* action();
+
+protected:
+    QAction* _action;
+/// @}
         
-    /// @{ Quick access to the Starlab resources
-    private:
-        Document*           document();
-        StarlabApplication* application();
-        StarlabSettings*    settings();
-        PluginManager*      pluginManager();
-        StarlabMainWindow*  mainWindow();
-        StarlabDrawArea*    drawArea();
-    private:
-        friend class StarlabApplication;
-        friend class StarlabMainWindow;
-        friend class PluginManager;
-        StarlabApplication* _application;
-        StarlabMainWindow* _mainWindow;
-    /// @}
+/// @{ Quick access to the Starlab resources
+private:
+    Document*           document();
+    StarlabApplication* application();
+    StarlabSettings*    settings();
+    PluginManager*      pluginManager();
+    StarlabMainWindow*  mainWindow();
+    StarlabDrawArea*    drawArea();
+private:
+    friend class StarlabApplication;
+    friend class StarlabMainWindow;
+    friend class PluginManager;
+    StarlabApplication* _application;
+    StarlabMainWindow* _mainWindow;
+/// @}
         
-    /// @{ friendship trick
-        friend class DecoratePlugin;
-        friend class DrawAreaPlugin;
-        friend class FilterPlugin;
-        friend class GuiPlugin;
-        friend class InputOutputPlugin;
-        friend class ModePlugin;
-        friend class ProjectInputOutputPlugin;
-        friend class RenderPlugin;
-    /// @}
+/// @{ friendship trick
+    friend class GuiPlugin;
+    friend class InputOutputPlugin;
+    friend class ProjectInputOutputPlugin;
+    friend class FilterPlugin;
+    friend class DecoratePlugin;
+    friend class ModePlugin;
+    friend class RenderPlugin;
+/// @}
+
+/// @{ logging system
+signals:
+    void showmessage(QString message);
+public:
+    /// Maybe use flags for multiple usage?
+    // enum LOGTYPE{STATUSBAR, TERMINAL};
+public:
+    void Log(const char *format, ...){
+        const size_t buffer_length=256;
+        char buffer[buffer_length];
+        va_list args;
+        va_start (args, format);
+        vsnprintf(buffer,buffer_length,format, args);
+        va_end (args);
+        QString todo(buffer);
+        emit showmessage( QString(buffer) );
+    }
+    // void Log(int Level, const char * f, ... ) ;
+/// @}
+
 };
