@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-#include "CmdLineparser.h"
+#include "CmdLineParser.h"
 #include "StarlabApplication.h"
 #include "PluginManager.h"
 #include "interfaces/FilterPlugin.h"
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
         /// Requested filters appropriate to given input
         if(parser->listFilters && !document->models().size()){
             Model* model = document->selectedModel();
-            qDebug("Available filters (Model:%s):", qPrintable(model->metaObject()->className()));
+            qDebug() << QString("Available filters (Model:%1):").arg( model->metaObject()->className() );
             foreach(FilterPlugin* filter, starlab->applicableFilters(model))
                 qDebug("--> %s \t %s", qPrintable(filter->name()), qPrintable(filter->description()));
         }
