@@ -141,7 +141,7 @@ QString PluginManager::getBaseDirPath(){
 QString PluginManager::getPluginDirPath() {
     QDir pluginsDir(getBaseDirPath());
     if(!pluginsDir.exists("plugins"))
-        throw StarlabException("Serious error. Unable to find the plugins directory.");
+        throw StarlabException("Serious error. Unable to find the plugins directory at %s.", qPrintable(pluginsDir.absoluteFilePath("plugins")) );
     pluginsDir.cd("plugins");
     return pluginsDir.absolutePath();
 }
