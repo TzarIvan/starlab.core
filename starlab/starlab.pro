@@ -5,7 +5,7 @@
 
 CONFIG += starlab
 STARLAB_TEMPLATE = appbundle
-STARLAB_DEPENDS += common 
+STARLAB_DEPENDS += starlib
 
 HEADERS += FileOpenEater.h \
     StarlabApplicationGUI.h

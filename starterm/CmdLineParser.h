@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QVariant>
-#include "QCommandLine/QCommandLine.h"
+#include "QCommandLine.h"
 
 class CmdLineParser : public QObject{
     Q_OBJECT

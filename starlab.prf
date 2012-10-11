@@ -1,7 +1,19 @@
-# DOC: http://developer.qt.nokia.com/doc/qt-4.8/qmake-variable-reference.html
-
-# $$PWD gives the location of *this* file on disk
+# @see http://developer.qt.nokia.com/doc/qt-4.8/qmake-variable-reference.html
+# @see http://doc.qt.digia.com/latest//qmake-advanced-usage.html
+# @note $$PWD gives the absolute location of *this* file on disk
 ROOT = $$PWD
+
+defineTest( linux64 ){
+    unix{
+        contains( $$system(uname -i), x86_64 ) {
+            return true;  # 64-bit Linux
+        } else {
+            return false; # 32-bit Linux
+        }
+    } else {
+        return false;
+    }
+}
 
 # Where will the library be deployed? You can change
 # this by using an environment variable: "STARLAB_DEPLOYPATH"
@@ -30,15 +42,15 @@ equals(STARLAB_TEMPLATE,"dynamic"){
     TEMPLATE = lib
     CONFIG *= dynamiclib
     OTHER_FILES *= *.prf
-    DEFINES *= $$upper($$LIBNAME)_SHARED_EXPORT
+    DEFINES *= $$upper($$LIBNAME)_EXPORT
     INCLUDEPATH += .
     DEPENDPATH  += .
 
     macx{
         # library file deploys to lib folder
         # NOTE: fixes broken install_name, so we can run from anywhere
-        DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/lib/
-        LIBS += -install_name @executable_path/../lib/lib"$$LIBNAME".1.dylib
+        DESTDIR = $$DEPLOYPATH/Starlab.app/Contents/MacOS
+        LIBS += -install_name @executable_path/lib"$$LIBNAME".1.dylib
 
         #---------------- DEPLOY HEADERS ----------------
         # copy all (DECLARED!!) headers in the include folder
@@ -57,8 +69,8 @@ equals(STARLAB_TEMPLATE,"dynamic"){
 }
 
 equals(STARLAB_TEMPLATE,"plugin"){
-    STARLAB_DEPENDS *= common parameters
-    STARLAB_EXTERNAL *= qglviewer
+    STARLAB_DEPENDS *= starlib
+    QT += opengl xml
 		
     TEMPLATE = lib
     CONFIG += plugin
@@ -122,7 +134,7 @@ for(lib, STARLAB_DEPENDS){
     #---------------------- COMPILE TIME ---------------------------------------
     DIRNAME = $$dirname(lib)
     isEmpty(DIRNAME) {
-        LIBRARY_DIRECTORY = $$ROOT/libraries/$$lib/
+        LIBRARY_DIRECTORY = $$ROOT/$$lib/
         INCLUDEPATH *= $$LIBRARY_DIRECTORY
         DEPENDPATH  *= $$LIBRARY_DIRECTORY
         !exists($$LIBRARY_DIRECTORY) : error("depends fail, could not find:" $$LIBRARY_DIRECTORY)
@@ -134,9 +146,9 @@ for(lib, STARLAB_DEPENDS){
         !exists($$LIBRARY_DIRECTORY) : error("depends fail, could not find:" $$LIBRARY_DIRECTORY)
     }
 
-    # Link time depends
+    #------------------------- LINK TIME ---------------------------------------
     mac{
-        LIBS *= -L$$DEPLOYPATH/Starlab.app/Contents/lib
+        LIBS *= -L$$DEPLOYPATH/Starlab.app/Contents/MacOS/
         LIBS *= -l"$$lib"
     }
     win32{

@@ -1,6 +1,6 @@
 #pragma once
 #include "interfaces/ModePlugin.h"
-#include "StarlabMainWindow.h"
+#include "interfaces/ModePluginDockWidget.h"
 
 class example_mode_withwidget : public ModePlugin{
     Q_OBJECT

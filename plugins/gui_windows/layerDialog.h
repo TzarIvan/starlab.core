@@ -2,7 +2,7 @@
 
 #include <QtGui>
 #include "Model.h"
-#include "RichParameterSet.h"
+#include "parameters/RichParameterSet.h"
 #include "StarlabMainWindow.h"
 
 class GLArea;

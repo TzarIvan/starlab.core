@@ -1,7 +1,7 @@
 #include "FilterDockWidget.h"
 #include "interfaces/FilterPlugin.h"
 #include "ui_FilterDockWidget.h"
-#include "ParametersFrame.h"
+#include "parameters/ParametersFrame.h"
 
 FilterDockWidget::FilterDockWidget(FilterPlugin* filterPlugin, RichParameterSet *pars, QWidget *parent) :
     QDockWidget(parent),

@@ -1,6 +1,6 @@
 #include "example_mode_withwidget.h"
-#include "RichParameterSet.h"
-#include "ParametersFrame.h"
+#include "parameters/RichParameterSet.h"
+#include "parameters/ParametersFrame.h"
 
 void example_mode_withwidget::create(){
     qDebug() << "example_mode_withwidget::created()";  

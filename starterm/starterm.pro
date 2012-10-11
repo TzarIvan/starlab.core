@@ -1,9 +1,11 @@
 CONFIG += starlab
 STARLAB_TEMPLATE = console
-STARLAB_DEPENDS += common parameters
-
-SOURCES += main.cpp \
-    CmdLineParser.cpp
+STARLAB_DEPENDS = starlib
 
 HEADERS += \
+    QCommandLine.h \
     CmdLineParser.h
+
+SOURCES += main.cpp \
+    QCommandLine.cpp \
+    CmdLineParser.cpp

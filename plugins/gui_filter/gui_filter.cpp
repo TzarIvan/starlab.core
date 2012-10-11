@@ -7,7 +7,7 @@
 #include "OSQuery.h"
 #include "FilterDockWidget.h"
 #include "StarlabMainWindow.h"
-#include "RichParameterSet.h"
+#include "parameters/RichParameterSet.h"
 #include "interfaces/FilterPlugin.h"
 #include <QElapsedTimer>
 

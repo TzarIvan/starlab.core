@@ -1,7 +1,7 @@
 #include "cloud_filter_normalize.h"
 #include "CloudModel.h"
 #include "StarlabDrawArea.h"
-#include "RichParameterSet.h"
+#include "parameters/RichParameterSet.h"
 
 QString printBounding(QBox3D box){
     QString retval;

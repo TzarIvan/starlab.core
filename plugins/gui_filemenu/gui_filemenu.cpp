@@ -52,7 +52,7 @@ void gui_filemenu::open(){
 void gui_filemenu::save(){
     try 
     {
-        DEB qDebug() << "[[ENTERING]] gui_filemenu::save()";
+        // qDebug() << "[[ENTERING]] gui_filemenu::save()";
         if(document()->models().size()==0) return;        
         
         if(true){
