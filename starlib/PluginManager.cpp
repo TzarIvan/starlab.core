@@ -244,7 +244,7 @@ DecoratePlugin* PluginManager::newDecoratePlugin(QString pluginName, Model* mode
     DecoratePlugin* newplugin = plugin->factory();
     newplugin->_mainWindow = plugin->_mainWindow;
     newplugin->_application = plugin->_application;
-    /// If model is deleted so it is this instance of decorator
+    model->addDecoratePlugin(newplugin);
     newplugin->_action = plugin->action();
     return newplugin;
 }
