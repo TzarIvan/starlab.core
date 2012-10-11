@@ -7,6 +7,7 @@
 
 #include "StarlabException.h"
 #include "Model.h"
+#include "Document.h"
 
 class RichParameterSet;
 class StarlabDrawArea;
@@ -14,13 +15,13 @@ class StarlabApplication;
 class StarlabMainWindow;
 class StarlabSettings;
 class PluginManager;
-class Document;
 
 /** 
  * @brief The superclass of any starlab plugin
  * @defgroup StarlabPluginInterfaces Starlab Plugin Interfaces
  */
 class STARLIB_EXPORT StarlabPlugin : public QObject{
+    Q_OBJECT
 
 /// @{ basic plugin definition
 public:
