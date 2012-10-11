@@ -11,19 +11,17 @@ Model* cloud_io_pts::open(QString path){
 
     char line[100];       
     float x,y,z;
-    int err;
 
     /// Skip whites & #
     while( !feof(in) ){
-		fgets(line, 100, in);
-		if(strlen(line) > 4 && line[0] != '#')
-			break;
-	}
-
+        if( fgets(line, 100, in) )
+            if(strlen(line) > 4 && line[0] != '#')
+                break;
+    }
     /// Read data
     while( !feof(in) ){
-        err = fscanf(in, "%f %f %f", &x,&y,&z);
-        model->points.push_back( new Point(x,y,z) );
+        if( fscanf(in, "%f %f %f", &x,&y,&z)==3 )
+            model->points.push_back( new Point(x,y,z) );
     }
     
     fclose(in);
