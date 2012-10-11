@@ -1,5 +1,6 @@
 #pragma once
 #include <QDebug>
+#include <QVariant>
 #include <QString>
 #include "global.h"
 #include "Model.h"
