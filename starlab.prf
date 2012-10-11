@@ -3,31 +3,18 @@
 # @note $$PWD gives the absolute location of *this* file on disk
 ROOT = $$PWD
 
-defineTest( linux ){
-    unix:!mac: return true;
-    # 64-bit Linux
-    # unix:!mac:contains( $$system(uname -i), x86_64 ): return true;
-    return false;
-}
+# @todo attempt to use this: e.g. i386
+# to create a condition to check for linux
+# $$system(uname -i);
 
 # Where will the library be deployed? You can change
 # this by using an environment variable: "STARLAB_DEPLOYPATH"
 DEPLOYPATH = $$(STARLAB_DEPLOYPATH)
 isEmpty(DEPLOYPATH) {
-    macx{
-        DEPLOYPATH = /Applications
-    }
-    win32{
-        DEPLOYPATH = $$[BUILD_PATH]/StarlabPackage
-    } 
-    linux{
-        error("fix deploy rules")
-        DEPLOYPATH = $$PWD/StarlabPackage
-    }
-}
 
-defineTest( myprintf ){ 
-    system( echo \"$$1\" ) 
+    macx:      DEPLOYPATH = /Applications
+    win32:     DEPLOYPATH = $$[BUILD_PATH]/StarlabPackage
+    unix:!mac: DEPLOYPATH = $$system(echo $HOME)/Desktop/Starlab.app
 }
 
 #----------------------- STARLAB_TEMPLATE -----------------------------------
@@ -54,13 +41,8 @@ equals(STARLAB_TEMPLATE,"dynamic"){
         # QMAKE_POST_LINK = mkdir -p $$HEADERS_DESTDIR && cd $$_PRO_FILE_PWD_ && rsync -cR $$HEADERS $$HEADERS_DESTDIR
     }
 
-    win32{
-        DESTDIR = $$DEPLOYPATH
-    }
-
-    unix:!macx{
-        DESTDIR = $$DEPLOYPATH
-    }
+    win32: DESTDIR = $$DEPLOYPATH
+    unix:!macx: DESTDIR = $$DEPLOYPATH
 }
 
 equals(STARLAB_TEMPLATE,"plugin"){
@@ -73,7 +55,7 @@ equals(STARLAB_TEMPLATE,"plugin"){
     INCLUDEPATH += $$_PRO_FILE_PWD_
     macx: DESTDIR = $$DEPLOYPATH/Starlab.app/plugins
     win32: DESTDIR = \"$$DEPLOYPATH/plugins\"
-    linux: error("STARLAB_TEMPLATE=plugin not ready for linux")
+    unix:!mac: DESTDIR = $$DEPLOYPATH/plugins
 
     # Windows warnings
     win32: DEFINES += _CRT_SECURE_NO_WARNINGS
@@ -104,7 +86,8 @@ equals(STARLAB_TEMPLATE,"console"){
 equals(STARLAB_TEMPLATE,"appbundle"){
     TEMPLATE = app
     TARGET = starlab
-
+    win32: DESTDIR = $$DEPLOYPATH
+    unix:!mac: DESTDIR = $$DEPLOYPATH
     macx{
         DESTDIR = $$DEPLOYPATH
         # Copy data & PRF into app bundle
@@ -113,9 +96,6 @@ equals(STARLAB_TEMPLATE,"appbundle"){
         # Correct broken "make clean"
         macx:QMAKE_CLEAN = -rf $$DEPLOYPATH/Starlab.app
     } 
-    win32{
-        DESTDIR = $$DEPLOYPATH
-    }
 }
 
 #------------------------ STARLAB_DEPENDS --------------------------------------
@@ -150,7 +130,7 @@ for(lib, STARLAB_DEPENDS){
         LIBS *= $$DEPLOYPATH/"$$lib".lib
     }
     unix:!macx{
-        LIBS *= -L$$ROOT/distrib
+        LIBS *= -L$$DEPLOYPATH
         LIBS *= -l"$$lib"
         QMAKE_LFLAGS += -Wl,--rpath=.
     }
