@@ -1,7 +1,5 @@
-CONFIG += starlab 
-STARLAB_TEMPLATE += plugin 
-
-QT += opengl
+load($$PWD/../../starlab.prf)
+StarlabTemplate(plugin)
 
 HEADERS = render_bbox.h
 SOURCES = render_bbox.cpp

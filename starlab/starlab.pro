@@ -1,11 +1,6 @@
-# THIS PROJECT GENERATES THE:
-#   osx)    Starlab.app bundle
-#   win32)  the program folder
-#   linux)  ??? TODO
-
-CONFIG += starlab
-STARLAB_TEMPLATE = appbundle
-STARLAB_DEPENDS += starlib
+# this project generates the application bundle Starlab.app
+load($$PWD/../starlab.prf)
+StarlabTemplate(appbundle)
 
 HEADERS += FileOpenEater.h \
     StarlabApplicationGUI.h

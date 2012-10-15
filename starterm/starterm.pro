@@ -1,6 +1,5 @@
-CONFIG += starlab
-STARLAB_TEMPLATE = console
-STARLAB_DEPENDS = starlib
+load($$PWD/../starlab.prf)
+StarlabTemplate(console)
 
 HEADERS += \
     QCommandLine.h \

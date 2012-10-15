@@ -1,6 +1,6 @@
-CONFIG += starlab
-STARLAB_TEMPLATE += plugin 
-STARLAB_DEPENDS += ../cloud
+load($$PWD/../../starlab.prf)
+StarlabTemplate(plugin)
+StarlabDepends(../cloud)
 
 HEADERS += cloud_filter_normalize.h
 SOURCES += cloud_filter_normalize.cpp

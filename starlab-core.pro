@@ -1,4 +1,3 @@
-system(qmake -set QMAKEFEATURES $$PWD) # QT-BUG
 TEMPLATE = subdirs
 CONFIG += ordered
 OTHER_FILES += starlab.prf
@@ -17,7 +16,6 @@ SUBDIRS += plugins/gui_decorate
 SUBDIRS += plugins/gui_windows
 SUBDIRS += plugins/gui_view
 SUBDIRS += plugins/project_io_starlab
-
 
 #--- EXAMPLES
 SUBDIRS += example/cloud

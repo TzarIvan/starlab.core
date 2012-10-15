@@ -1,7 +1,5 @@
-CONFIG += starlab
-STARLAB_TEMPLATE += plugin
-
-#DEFINES *= DEBUG_THIS_PLUGIN
+load($$PWD/../../starlab.prf)
+StarlabTemplate(plugin)
 
 HEADERS += gui_filemenu.h
 SOURCES += gui_filemenu.cpp

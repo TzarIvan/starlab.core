@@ -1,11 +1,7 @@
-CONFIG += starlab
-STARLAB_TEMPLATE = dynamic
-STARLAB_DEPENDS = starlib
+load($$PWD/../../starlab.prf)
+StarlabTemplate(sharedlib)
 
-# Dependencies
-QT += xml opengl
 DEFINES += EXPORTFLAG
-OTHER_FILES += *.prf
 
 HEADERS += \
     CloudModel.h \

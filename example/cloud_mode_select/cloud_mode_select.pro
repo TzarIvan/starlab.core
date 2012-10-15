@@ -1,8 +1,6 @@
-CONFIG += starlab 
-STARLAB_TEMPLATE += plugin 
-STARLAB_DEPENDS += ../cloud
-
-QT += opengl
+load($$PWD/../../starlab.prf)
+StarlabTemplate(plugin)
+StarlabDepends(../cloud)
 
 HEADERS += cloud_mode_select.h 
 SOURCES += cloud_mode_select.cpp

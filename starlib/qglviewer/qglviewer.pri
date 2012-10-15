@@ -6,6 +6,9 @@ INCLUDEPATH += qglviewer
 # Is this needed inside?
 DEFINES += QGLVIEWER_STATIC
 
+# because we are not including vectorial headers
+DEFINES += NO_VECTORIAL_RENDER
+
 HEADERS *= \
     qglviewer/qglviewer.h \
     qglviewer/camera.h \

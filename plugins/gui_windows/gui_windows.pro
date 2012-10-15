@@ -1,7 +1,5 @@
-CONFIG += starlab
-STARLAB_TEMPLATE = plugin
-
-#DEFINES += DEBUG_PLUGIN_WINDOWSMENU
+load($$PWD/../../starlab.prf)
+StarlabTemplate(plugin)
 
 HEADERS += gui_windows.h \
     layerDialog.h

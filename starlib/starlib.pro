@@ -1,10 +1,15 @@
-CONFIG += starlab
-STARLAB_TEMPLATE = dynamic
+load(../starlab.prf)
+StarlabTemplate(sharedlib)
+
+VERSION=2.0
 
 #--- EXPORT RULES (necessary in win32)
 HEADERS += starlib_global.h
 win32: DEFINES += STARLIB
 
+# ---------------------------------------------
+# --               EXERNALS                  --
+# ---------------------------------------------
 include(qt3d/qt3d.pri)
 include(qglviewer/qglviewer.pri)
 
