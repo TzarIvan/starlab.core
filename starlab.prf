@@ -26,8 +26,8 @@ defineTest( checkSupportedOsAndCompiler ){
     win32: return(true)
     # @todo return false if not 64 bits 
     mac: return(true)
-    # @todo return false if not 64 bits 
-    linux-g++: contains(QMAKE_TARGET.arch, x86_64): return(true)
+    # @todo return false if not 32 bits see "contains(QMAKE_TARGET.arch, x86_64)"
+    unix:!mac: return(true)
     return(false)
 }
 !checkSupportedOsAndCompiler():error(Your OS/compiler is not supported.)
@@ -71,8 +71,10 @@ unix:!mac: PLUGINSPATH    = $$STARLABPREFIX/StarlabPackage/plugins
 #-------------------------------------------------------------------------------
 PROJECTBASENAME=$$basename(_PRO_FILE_)
 !equals(PROJECTBASENAME,starlib.pro){
-    win32: LIBS *= $$LIBRARIESPATH/starlib.lib
-    unix:  LIBS *= -L$$LIBRARIESPATH -lstarlib
+    win32:      LIBS *= $$LIBRARIESPATH/starlib.lib
+    mac:        LIBS *= -L$$LIBRARIESPATH -lstarlib
+    unix:!mac:  LIBS *= -L$$LIBRARIESPATH -lstarlib
+    unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
     DEPENDPATH  *= $$PWD/starlib
     INCLUDEPATH *= $$PWD/starlib
 }
@@ -105,10 +107,9 @@ defineTest(StarlabTemplate){
         CONFIG += dynamiclib
         OTHER_FILES *= *.prf
         # even though it's not a plugin this removes the *.0.0.dylib links
-        unix:CONFIG += plugin
+        mac:CONFIG += plugin
         # make mac libraries behave like in windows
         mac:LIBS += -install_name @executable_path/lib"$$LIBNAME".dylib
-        unix:!mac: error(TODO: make linux libraries behave like in windows)
     }
 
     equals(STARLAB_TEMPLATE,"plugin"){
@@ -172,10 +173,11 @@ defineTest( StarlabDepends ){
         LIBNAME = $$basename(LIBNAME)
         win32:      LIBS += $$LIBRARIESPATH/"$$LIBNAME".dylib
         mac:        LIBS += $$LIBRARIESPATH/lib"$$LIBNAME".dylib
-        mac:!unix:  LIBS += $$LIBRARIESPATH/lib"$$LIBNAME".so
-        mac:!unix:  QMAKE_LFLAGS += -Wl,--rpath=.
+        unix:!mac:  LIBS += -L$$LIBRARIESPATH -l"$$LIBNAME"
+        unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
     }
 
+    export(QMAKE_LFLAGS)
     export(INCLUDEPATH)
     export(DEPENDPATH)
     export(LIBS)
