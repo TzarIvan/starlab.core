@@ -1,4 +1,6 @@
 QT += opengl xml
+# linux does not have GLU included in += opengl
+unix:!mac: LIBS += -lGLU
 
 DEPENDPATH  += qglviewer
 INCLUDEPATH += qglviewer
