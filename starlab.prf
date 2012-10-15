@@ -107,7 +107,7 @@ defineTest(StarlabTemplate){
         CONFIG += dynamiclib
         OTHER_FILES *= *.prf
         # even though it's not a plugin this removes the *.0.0.dylib links
-        mac:CONFIG += plugin
+        unix:CONFIG += plugin
         # make mac libraries behave like in windows
         mac:LIBS += -install_name @executable_path/lib"$$LIBNAME".dylib
     }
