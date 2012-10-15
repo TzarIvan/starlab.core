@@ -1,8 +1,6 @@
 load(../starlab.prf)
 StarlabTemplate(sharedlib)
 
-VERSION=2.0
-
 #--- EXPORT RULES (necessary in win32)
 HEADERS += starlib_global.h
 win32: DEFINES += STARLIB
