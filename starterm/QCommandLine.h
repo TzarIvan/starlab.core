@@ -3,14 +3,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
-
-// For a Windows DLL
-#if defined(QCOMMANDLINE)
-#  define QCOMMANDLINE_EXPORT Q_DECL_EXPORT
-#else
-#  define QCOMMANDLINE_EXPORT Q_DECL_IMPORT
-#endif
-
 class QCoreApplication;
 
 struct QCommandLineConfigEntry;
@@ -33,8 +25,7 @@ public:
 /**
  * @brief Main class used to convert parse command line
  */
-// class QCOMMANDLINE_EXPORT QCommandLine : public QObject
-class QCOMMANDLINE_EXPORT QCommandLine : public QObject{
+class QCommandLine : public QObject{
   Q_OBJECT
 public:
     /**
