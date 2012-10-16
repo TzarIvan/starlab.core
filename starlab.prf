@@ -160,9 +160,9 @@ defineTest( StarlabDepends ){
     !load("$$LIBNAME".prf) : error(StarlabDepends("$$LIBNAME") failed. See http://readme)
     
     #--------------- RUN TIME DEPENDENCY --------------
-    win32:      LIBS += $$LIBRARIESPATH/"$$LIBNAME".dylib
-    mac:        LIBS += $$LIBRARIESPATH/lib"$$LIBNAME".dylib
-    unix:!mac:  LIBS += -L$$LIBRARIESPATH -l"$$LIBNAME"
+    win32:      LIBS *= $$LIBRARIESPATH/"$$LIBNAME".dylib
+    mac:        LIBS *= $$LIBRARIESPATH/lib"$$LIBNAME".dylib
+    unix:!mac:  LIBS *= -L$$LIBRARIESPATH -l"$$LIBNAME"
     unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
 
     export(QMAKE_LFLAGS)
