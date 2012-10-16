@@ -7,10 +7,10 @@
 # should be aware of
 # @see http://doc.qt.digia.com/latest//qmake-advanced-usage.html
 # @see http://developer.qt.nokia.com/doc/qt-4.8/qmake-variable-reference.html
-# 
+#
 # @interal Meaning of $$PWD 
-#   - when loaded as: load(starlab.prf) then gives the directory of this file
-#   - when loaded as: CONFIG = starlab then gives the directory of this file
+#   - within a function call PWD is relative to the project file
+#   - within the body of this file it is the path of this file
 #-------------------------------------------------------------------------------
 
 #--------------------------- CHECK COMPATIBILITY -------------------------------
@@ -94,8 +94,8 @@ defineTest(StarlabTemplate){
     STARLAB_TEMPLATE=$$1 #retrieve parameter
     
     # always depend from current stuff    
-    DEPENDPATH  += $$_PRO_FILE_PWD_
-    INCLUDEPATH += $$_PRO_FILE_PWD_
+    DEPENDPATH  *= $$_PRO_FILE_PWD_
+    INCLUDEPATH *= $$_PRO_FILE_PWD_
     
     # Windows warnings
     win32: DEFINES += _CRT_SECURE_NO_WARNINGS
@@ -116,8 +116,6 @@ defineTest(StarlabTemplate){
         QT += opengl xml
         TEMPLATE = lib
         CONFIG += plugin
-        DEPENDPATH += $$_PRO_FILE_PWD_
-        INCLUDEPATH += $$_PRO_FILE_PWD_
         DESTDIR = $$PLUGINSPATH
     }    
 
@@ -150,32 +148,22 @@ defineTest(StarlabTemplate){
     export(QT)
 }
 
-
-
+#-------------------------- SPECIFIES A DLL DEPENDENCY -------------------------
+# In your .pro file you call this function to specify what type of project you 
+# are trying to build. This is done by calling one of:
+#-------------------------------------------------------------------------------
 defineTest( StarlabDepends ){
     LIBNAME=$$1
     
-    # dependency specified just with the library name
+    #------------ COMPILE TIME DEPENDENCY -------------
     # search for PRF in the default QMAKEFEATURES paths
-    # PRF takes full control of importing dependency
-    DIRNAME = $$dirname(LIBNAME)
-    isEmpty(DIRNAME) {
-        load("$$LIBNAME".prf)
-        return(true)    
-    }
-
-    # dependency specified with a relative path
-    else {
-        LIBRARY_DIRECTORY = $$_PRO_FILE_PWD_/$$lib
-        !exists($$LIBRARY_DIRECTORY) : error("depends fail, could not find:" $$LIBRARY_DIRECTORY)
-        INCLUDEPATH *= $$_PRO_FILE_PWD_/$$LIBNAME
-        DEPENDPATH  *= $$_PRO_FILE_PWD_/$$LIBNAME
-        LIBNAME = $$basename(LIBNAME)
-        win32:      LIBS += $$LIBRARIESPATH/"$$LIBNAME".dylib
-        mac:        LIBS += $$LIBRARIESPATH/lib"$$LIBNAME".dylib
-        unix:!mac:  LIBS += -L$$LIBRARIESPATH -l"$$LIBNAME"
-        unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
-    }
+    !load("$$LIBNAME".prf) : error(StarlabDepends("$$LIBNAME") failed. See http://readme)
+    
+    #--------------- RUN TIME DEPENDENCY --------------
+    win32:      LIBS += $$LIBRARIESPATH/"$$LIBNAME".dylib
+    mac:        LIBS += $$LIBRARIESPATH/lib"$$LIBNAME".dylib
+    unix:!mac:  LIBS += -L$$LIBRARIESPATH -l"$$LIBNAME"
+    unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
 
     export(QMAKE_LFLAGS)
     export(INCLUDEPATH)
@@ -183,10 +171,20 @@ defineTest( StarlabDepends ){
     export(LIBS)
 }
 
-#------------------------ STARLAB_EXTERNALS -----------------------------------
-#STARLAB_EXTERNAL = $$unique(STARLAB_EXTERNAL)
-#for(lib, STARLAB_EXTERNAL){
-#    PRFFILENAME = $$ROOT/external/$$lib/"$$lib".prf
-#    exists( $$PRFFILENAME )  : load($$PRFFILENAME)
-#    !exists( $$PRFFILENAME ) : error("Cannot find '"$$lib".prf'")
-#}
+#------------------------ SPECIFIES AN EXTERNAL DEPENDENCY ---------------------
+defineTest( StarlabExternal ){
+    LIBNAME=$$1
+    # first check in the current path
+    PRFPATH_1=$$_PRO_FILE_PWD_/"$$LIBNAME".prf
+    exists($$PRFPATH_1){
+        load($$PRFPATH_1)
+        return(true)
+    }
+    # then check in the starlab externals folder
+    !load($$LIBNAME) : error(StarlabExternal("$$LIBNAME") failed. See http://readme)
+    
+    export(DEPENDPATH)  #< not necessary
+    export(INCLUDEPATH)
+    export(DEFINES)
+    export(LIBS)
+}

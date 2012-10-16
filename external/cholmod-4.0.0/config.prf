@@ -1,3 +1,6 @@
+# Part of suitesparse 4.0.0
+# http://www.cise.ufl.edu/research/sparse/SuiteSparse/
+
 #---------- CHOLMOD ----------
 INCLUDEPATH += $$PWD/include
 win32{
