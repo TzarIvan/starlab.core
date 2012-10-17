@@ -42,7 +42,7 @@ defineTest( checkSupportedOsAndCompiler ){
 #-------------------------------------------------------------------------------
 # attempt to see if user specified a path
 STARLABPREFIX = $$(STARLABPREFIX)
-isEmpty(STARLABPREFIX):mac:        STARLABPREFIX = $$PWD
+isEmpty(STARLABPREFIX):mac:        STARLABPREFIX = /Applications
 isEmpty(STARLABPREFIX):win32:      STARLABPREFIX = $$PWD
 isEmpty(STARLABPREFIX):unix:!mac:  STARLABPREFIX = $$PWD
 
@@ -128,6 +128,16 @@ defineTest(StarlabTemplate){
         }
     }
 
+    equals(STARLAB_TEMPLATE, "modelprf"){
+        LIBNAME = $$basename(PWD)
+        DEPENDPATH  *= $$PWD
+        INCLUDEPATH *= $$PWD
+        win32:      LIBS *= $$LIBRARIESPATH/"$$LIBNAME".dylib
+        mac:        LIBS *= $$LIBRARIESPATH/lib"$$LIBNAME".dylib
+        unix:!mac:  LIBS *= -L$$LIBRARIESPATH -l"$$LIBNAME"
+        unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.        
+    }
+
     equals(STARLAB_TEMPLATE,"console"){
         # QT += gui # gui has to be left as QColor and others are still used
         QT += core  
@@ -137,6 +147,7 @@ defineTest(StarlabTemplate){
     }
 
     # @internal because we are inside a function we need to "export" variables
+    export(QMAKE_LFLAGS)
     export(DESTDIR)
     export(TEMPLATE)
     export(CONFIG)
@@ -146,29 +157,6 @@ defineTest(StarlabTemplate){
     export(LIBS)
     export(VERSION)
     export(QT)
-}
-
-#-------------------------- SPECIFIES A DLL DEPENDENCY -------------------------
-# In your .pro file you call this function to specify what type of project you 
-# are trying to build. This is done by calling one of:
-#-------------------------------------------------------------------------------
-defineTest( StarlabDepends ){
-    LIBNAME=$$1
-    
-    #------------ COMPILE TIME DEPENDENCY -------------
-    # search for PRF in the default QMAKEFEATURES paths
-    !load("$$LIBNAME".prf) : error(StarlabDepends("$$LIBNAME") failed. See http://readme)
-    
-    #--------------- RUN TIME DEPENDENCY --------------
-    win32:      LIBS *= $$LIBRARIESPATH/"$$LIBNAME".dylib
-    mac:        LIBS *= $$LIBRARIESPATH/lib"$$LIBNAME".dylib
-    unix:!mac:  LIBS *= -L$$LIBRARIESPATH -l"$$LIBNAME"
-    unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
-
-    export(QMAKE_LFLAGS)
-    export(INCLUDEPATH)
-    export(DEPENDPATH)
-    export(LIBS)
 }
 
 #------------------------ SPECIFIES AN EXTERNAL DEPENDENCY ---------------------

@@ -1,21 +1,21 @@
 # Part of suitesparse 4.0.0
 # http://www.cise.ufl.edu/research/sparse/SuiteSparse/
 
-#---------- CHOLMOD ----------
+DEFINES += CHOLMOD
+
 INCLUDEPATH += $$PWD/include
+
 win32{
     # static library (Windows)
     LIBS += -L$$PWD/lib/win32 
     LIBS += -llibcholmod -llibgoto_CHOLMOD -llibmetis_CHOLMOD -llibamd -llibcamd -llibcolamd -llibccolamd
 }
 mac{
-    LIBS += -L$$PWD/lib/darwin11
-    # LIBS += -lcholmod -lamd -lcamd -lcolamd -lccolamd
+    # static library (Mac)
+    LIBS += -L$$PWD/lib/osx64
     LIBS += -lamd -lcamd -lccolamd -lcholmod -lcolamd -lcxsparse -lblas
 }
 unix:!macx{
-    LIBS += -L$$PWD/lib/unix
+    # use the system libraries
     LIBS += -lamd -lcamd -lccolamd -lcholmod -lcolamd -lcxsparse -lblas
 }
-
-DEFINES += CHOLMOD
