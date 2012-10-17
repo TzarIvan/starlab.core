@@ -1,10 +1,6 @@
 load($$PWD/../starlab.prf)
 StarlabTemplate(sharedlib)
 
-#--- EXPORT RULES (necessary in win32)
-win32: DEFINES += STARLIB
-HEADERS += starlib_global.h
-
 # ---------------------------------------------
 # --               EXERNALS                  --
 # ---------------------------------------------

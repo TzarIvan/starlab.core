@@ -7,6 +7,9 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
+#--- WINDOWS PATH
+system(qmake -set WINDOWS_BUILD_PATH $$OUT_PWD)
+
 #--- SPECIFIES CORE CONFIGURATION
 system(qmake -set STARLAB   $$PWD/starlab.prf)
 system(qmake -set QHULL     $$PWD/external/qhull-2012.1/config.prf)

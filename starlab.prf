@@ -43,7 +43,7 @@ defineTest( checkSupportedOsAndCompiler ){
 # attempt to see if user specified a path
 STARLABPREFIX = $$(STARLABPREFIX)
 isEmpty(STARLABPREFIX):mac:        STARLABPREFIX = /Applications
-isEmpty(STARLABPREFIX):win32:      STARLABPREFIX = $$PWD
+isEmpty(STARLABPREFIX):win32:      STARLABPREFIX = $$[WINDOWS_BUILD_PATH]/..
 isEmpty(STARLABPREFIX):unix:!mac:  STARLABPREFIX = $$(HOME)/Desktop
 
 #------------------------------- STARALB PATHS ---------------------------------
@@ -114,6 +114,8 @@ defineTest(StarlabTemplate){
         unix:CONFIG += plugin
         # make mac libraries behave like in windows
         mac:LIBS += -install_name @executable_path/lib"$$LIBNAME".dylib
+        # import / export directive in win32
+        win32:DEFINES *= DYNAMIC_$$upper($$LIBNAME)
     }
 
     equals(STARLAB_TEMPLATE,"plugin"){
@@ -124,7 +126,8 @@ defineTest(StarlabTemplate){
     }    
 
     equals(STARLAB_TEMPLATE,"appbundle"){
-        DESTDIR=$$EXECUTABLEPATH
+        TEMPLATE = app
+        DESTDIR = $$EXECUTABLEPATH
         mac{
             CONFIG *= app_bundle
             BUNDLENAME = Starlab.app
@@ -136,10 +139,10 @@ defineTest(StarlabTemplate){
         LIBNAME = $$basename(PWD)
         DEPENDPATH  *= $$PWD
         INCLUDEPATH *= $$PWD
-        win32:      LIBS *= $$LIBRARIESPATH/"$$LIBNAME".dylib
+        win32:      LIBS *= -L$$LIBRARIESPATH -l"$$LIBNAME"
         mac:        LIBS *= $$LIBRARIESPATH/lib"$$LIBNAME".dylib
         unix:!mac:  LIBS *= -L$$LIBRARIESPATH -l"$$LIBNAME"
-        unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.        
+        unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
     }
 
     equals(STARLAB_TEMPLATE,"console"){
@@ -147,6 +150,7 @@ defineTest(StarlabTemplate){
         QT += core  
         CONFIG += console
         CONFIG -= app_bundle
+        TEMPLATE = app
         DESTDIR = $$EXECUTABLEPATH
     }
 
@@ -157,8 +161,12 @@ defineTest(StarlabTemplate){
     export(CONFIG)
     export(INCLUDEPATH)
     export(DEPENDPATH)
+    export(DEFINES)
     export(OTHER_FILES)
     export(LIBS)
     export(VERSION)
     export(QT)
 }
+
+# Windows specific
+win32: DEFINES += _CRT_SECURE_NO_WARNINGS # disable 'unsafe' warnings

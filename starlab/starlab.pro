@@ -2,6 +2,9 @@
 load($$PWD/../starlab.prf)
 StarlabTemplate(appbundle)
 
+TARGET = starlab
+win32:DESTDIR = $$EXECUTABLEPATH
+
 HEADERS += FileOpenEater.h \
     StarlabApplicationGUI.h
 SOURCES += main.cpp
