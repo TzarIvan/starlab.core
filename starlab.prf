@@ -77,6 +77,10 @@ PROJECTBASENAME=$$basename(_PRO_FILE_)
     unix:!mac:  QMAKE_LFLAGS *= -Wl,--rpath=.
     DEPENDPATH  *= $$PWD/starlib
     INCLUDEPATH *= $$PWD/starlib
+    DEPENDPATH  *= $$PWD/starlib/parameters
+    INCLUDEPATH *= $$PWD/starlib/parameters
+    DEPENDPATH  *= $$PWD/starlib/interfaces
+    INCLUDEPATH *= $$PWD/starlib/interfaces
 }
 
 #---------------------- SPECIFIES TEMPLATE FOR A PROEJCT -----------------------
@@ -157,22 +161,4 @@ defineTest(StarlabTemplate){
     export(LIBS)
     export(VERSION)
     export(QT)
-}
-
-#------------------------ SPECIFIES AN EXTERNAL DEPENDENCY ---------------------
-defineTest( StarlabExternal ){
-    LIBNAME=$$1
-    # first check in the current path
-    PRFPATH_1=$$_PRO_FILE_PWD_/"$$LIBNAME".prf
-    exists($$PRFPATH_1){
-        load($$PRFPATH_1)
-        return(true)
-    }
-    # then check in the starlab externals folder
-    !load($$LIBNAME) : error(StarlabExternal("$$LIBNAME") failed. See http://readme)
-    
-    export(DEPENDPATH)  #< not necessary
-    export(INCLUDEPATH)
-    export(DEFINES)
-    export(LIBS)
 }

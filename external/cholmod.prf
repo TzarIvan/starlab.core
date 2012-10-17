@@ -1,1 +1,0 @@
-load($$PWD/cholmod-4.0.0/config.prf)

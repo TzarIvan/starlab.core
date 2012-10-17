@@ -8,16 +8,15 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 #--- SPECIFIES CORE CONFIGURATION
-system(qmake -set STARLAB  $$PWD/starlab.prf)
-system(qmake -set QHULL    $$PWD/external/qhull.prf)
-system(qmake -set CHOLMOD  $$PWD/external/cholmod.prf)
-system(qmake -set EIGEN    $$PWD/external/eigen.prf)
+system(qmake -set STARLAB   $$PWD/starlab.prf)
+system(qmake -set QHULL     $$PWD/external/qhull-2012.1/config.prf)
+system(qmake -set CHOLMOD   $$PWD/external/cholmod-4.0.0/config.prf)
+system(qmake -set EIGEN     $$PWD/external/eigen-3.1.0-rc1/config.prf)
+system(qmake -set NANOFLANN $$PWD/external/nanoflann-113/config.prf)
+system(qmake -set MATLAB    $$PWD/external/matlab.prf)
 
 #--- AND LIST THESE FOR REFERENCE
 OTHER_FILES += starlab.prf              #< starlab core features
-OTHER_FILES += external/qhull.prf       #< StarlabExternal(qhull)
-OTHER_FILES += external/eigen.prf       #< StarlabExternal(eigen)
-OTHER_FILES += external/cholmod.prf     #< StarlabExternal(cholmod)
 
 #--- THREE CORE BUILD APP/LIBRARIES
 SUBDIRS += starlib   #< SHARED LIBRARY
