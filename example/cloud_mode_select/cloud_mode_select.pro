@@ -1,6 +1,6 @@
-load($$PWD/../../starlab.prf)
+load($$[STARLAB])
+load($$[CLOUD])
 StarlabTemplate(plugin)
-StarlabDepends(../cloud)
 
 HEADERS += cloud_mode_select.h 
 SOURCES += cloud_mode_select.cpp

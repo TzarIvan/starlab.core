@@ -1,6 +1,6 @@
-load($$PWD/../../starlab.prf)
+load($$[STARLAB])
+load($$[CLOUD])
 StarlabTemplate(plugin)
-StarlabDepends(../cloud)
 
 HEADERS += cloud_decorate_selection.h
 SOURCES += cloud_decorate_selection.cpp

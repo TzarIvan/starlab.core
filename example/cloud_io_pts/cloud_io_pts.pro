@@ -1,6 +1,6 @@
-load($$PWD/../../starlab.prf)
+load($$[STARLAB])
+load($$[CLOUD])
 StarlabTemplate(plugin)
-StarlabDepends(../cloud)
 
 HEADERS += cloud_io_pts.h
 SOURCES += cloud_io_pts.cpp

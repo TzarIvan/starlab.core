@@ -1,4 +1,4 @@
-load($$PWD/../../starlab.prf)
+load($$[STARLAB])
 StarlabTemplate(plugin)
 
 HEADERS += example_mode_withwidget.h 
