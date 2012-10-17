@@ -44,7 +44,7 @@ defineTest( checkSupportedOsAndCompiler ){
 STARLABPREFIX = $$(STARLABPREFIX)
 isEmpty(STARLABPREFIX):mac:        STARLABPREFIX = /Applications
 isEmpty(STARLABPREFIX):win32:      STARLABPREFIX = $$PWD
-isEmpty(STARLABPREFIX):unix:!mac:  STARLABPREFIX = $$PWD
+isEmpty(STARLABPREFIX):unix:!mac:  STARLABPREFIX = $$(HOME)/Desktop
 
 #------------------------------- STARALB PATHS ---------------------------------
 #
