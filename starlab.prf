@@ -42,9 +42,14 @@ defineTest( checkSupportedOsAndCompiler ){
 #-------------------------------------------------------------------------------
 # attempt to see if user specified a path
 STARLABPREFIX = $$(STARLABPREFIX)
-isEmpty(STARLABPREFIX):mac:        STARLABPREFIX = /Applications
-isEmpty(STARLABPREFIX):win32:      STARLABPREFIX = $$[WINDOWS_BUILD_PATH]/..
-isEmpty(STARLABPREFIX):unix:!mac:  STARLABPREFIX = $$(HOME)/Desktop
+isEmpty(STARLABPREFIX){
+    mac:        STARLABPREFIX = /Applications
+    win32:      STARLABPREFIX = $$(HOMEDRIVE)$$(HOMEPATH)/Desktop
+    unix:!mac:  STARLABPREFIX = $$(HOME)/Desktop
+    ## @todo this warning is useful, but it will be fired every single time
+    ##       the PRF file is loaded. Any better solution?
+    # warning(STARLABPREFIX defaulted to $$STARLABPREFIX)
+}
 
 #------------------------------- STARALB PATHS ---------------------------------
 #
