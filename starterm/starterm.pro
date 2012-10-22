@@ -1,7 +1,7 @@
 load($$PWD/../starlab.prf)
 StarlabTemplate(console)
 
-TARGET = starlab
+TARGET = starterm
 
 HEADERS += \
     QCommandLine.h \
