@@ -56,6 +56,7 @@ public slots:
     void setPerspectiveProjection();
     void setOrthoProjection();
     void setIsoProjection();
+    void setBackgroundSolidColor();
 private:
     void init();              ///< Initializes the scene
     void draw();              ///< Draws the whole scene
@@ -101,7 +102,7 @@ public:
     RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
     RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
 /// @}
-    
+
 public slots:
     /// Updates the draw area, this is not the OpenGL update, this updates all
     /// the metadata needed by all models for correct rendering!! 

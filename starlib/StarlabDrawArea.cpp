@@ -1,5 +1,6 @@
 #include <QGLWidget>
 #include <QMouseEvent>
+#include <QColorDialog>
 
 #include "StarlabDrawArea.h"
 #include "Document.h"
@@ -146,6 +147,25 @@ void StarlabDrawArea::viewFrom(QAction * a){
     camera()->interpolateTo(f,0.25);
 
     camera()->setSceneCenter(c);
+}
+
+void StarlabDrawArea::setBackgroundSolidColor(){
+    QColorDialog cd;
+
+    // Predefind background colors
+    cd.setCustomColor(0, QColor(255,255,255).rgb());
+    cd.setCustomColor(1, QColor(208,212,240).rgb());
+    cd.setCustomColor(2, QColor(50,50,60).rgb());
+    cd.setCustomColor(3, QColor(0,0,0).rgb());
+
+    QColor newBGcolor = cd.getColor(backgroundColor());
+
+    QString key = "DefaultBackgroundColor";
+    settings()->set( key, QVariant( newBGcolor ) );
+    settings()->sync();
+    setBackgroundColor( settings()->getQColor(key) );
+
+    updateGL();
 }
 
 void StarlabDrawArea::init(){
