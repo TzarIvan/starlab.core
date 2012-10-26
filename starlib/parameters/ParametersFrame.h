@@ -26,11 +26,16 @@ public:
         vLayout->setAlignment(Qt::AlignTop);
         // Show only when loading frame content
         this->hide();
+        
+        // when gui changes, read the values into the parameters
+        connect(this,SIGNAL(parameterChanged()),SLOT(readValues()));
     }
     
     void load(RichParameterSet* parameters);
-    void readValues();
     void toggleHelp(){}
+    
+public slots:
+    void readValues();
    
 signals:
     void dynamicFloatChanged(int mask);
