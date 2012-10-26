@@ -2,6 +2,10 @@
 #include <qgl.h>
 
 void render_bbox::render(){
+    /// Set line width
+    /// @todo this should become a parameter
+    glLineWidth(1.0f);
+    
     /// Setup BBOX color
     QBox3D bbox = model()->bbox();
     QColor& c = model()->color;
