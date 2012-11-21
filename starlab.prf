@@ -105,9 +105,6 @@ defineTest(StarlabTemplate){
     # always depend from current stuff    
     DEPENDPATH  *= $$_PRO_FILE_PWD_
     INCLUDEPATH *= $$_PRO_FILE_PWD_
-    
-    # Windows warnings
-    win32: DEFINES += _CRT_SECURE_NO_WARNINGS
 
     equals(STARLAB_TEMPLATE,"sharedlib"){
         DESTDIR = $$LIBRARIESPATH
@@ -160,6 +157,9 @@ defineTest(StarlabTemplate){
         DESTDIR = $$EXECUTABLEPATH
     }
 
+    # Windows warnings
+    win32: DEFINES += _CRT_SECURE_NO_WARNINGS
+
     # @internal because we are inside a function we need to "export" variables
     export(QMAKE_LFLAGS)
     export(DESTDIR)
@@ -174,5 +174,3 @@ defineTest(StarlabTemplate){
     export(QT)
 }
 
-# Windows specific
-win32: DEFINES += _CRT_SECURE_NO_WARNINGS # disable 'unsafe' warnings

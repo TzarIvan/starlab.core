@@ -12,6 +12,7 @@ void gui_view::load(){
         // toolBarMenu->addAction(showToolbarStandardAct);
         // connect(toolBarMenu,SIGNAL(aboutToShow()),this,SLOT(updateMenus()));
     }
+    load_backgroundColor();
 }
 
 void gui_view::load_clearRenderObjects(){
@@ -87,6 +88,15 @@ void gui_view::load_toggleCameraProjection(){
         // uses Orthographic projection + moves camera position
         QAction* action = new QAction (tr("Isometric View"), this);
         connect(action, SIGNAL(triggered()), drawArea(), SLOT(setIsoProjection()));
+        menu->addAction(action);
+    }
+}
+
+void gui_view::load_backgroundColor(){
+    QMenu* menu = mainWindow()->viewMenu->addMenu("Viewport background");
+    {
+        QAction* action = new QAction (tr("Solid Color.."), this);
+        connect(action, SIGNAL(triggered()), drawArea(), SLOT(setBackgroundSolidColor()));
         menu->addAction(action);
     }
 }
