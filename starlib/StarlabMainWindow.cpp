@@ -30,9 +30,12 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         _drawArea->setAcceptDrops(true);
     }
     
-    /// Register all plugins access functionality
-    foreach(StarlabPlugin* plugin, pluginManager()->plugins())
+    /// Register all plugins with the window
+    foreach(StarlabPlugin* plugin, pluginManager()->plugins()){
         plugin->_mainWindow = this;
+        connect(plugin,SIGNAL(logmessage(QString)), this, SLOT(statusBarMessage(QString)));
+        connect(plugin,SIGNAL(logprogress(QString,float)), this, SLOT(progressBarPercentage(QString,float)));
+    }
     
     
     /// Sets window icon/name

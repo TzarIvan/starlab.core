@@ -85,10 +85,12 @@ private:
 
 /// @{ logging system
 signals:
-    void showmessage(QString message);
+    void logmessage(QString message);
+    void logprogress(QString origin, float perc);
 public:
     /// Maybe use flags for multiple usage?
     // enum LOGTYPE{STATUSBAR, TERMINAL};
+    // void Log(int Level, const char * f, ... ) ;
 public:
     void Log(const char *format, ...){
         const size_t buffer_length=256;
@@ -97,10 +99,13 @@ public:
         va_start (args, format);
         vsnprintf(buffer,buffer_length,format, args);
         va_end (args);
-        QString todo(buffer);
-        emit showmessage( QString(buffer) );
+		QString msg(buffer);
+        qDebug() << msg;
+        emit logmessage( msg );
     }
-    // void Log(int Level, const char * f, ... ) ;
+    void Progress(float val){
+        emit logprogress(this->name(), val);
+    }
 /// @}
 
 };
