@@ -76,9 +76,9 @@ void gui_filemenu::save(){
             
             if(success){
                 QFileInfo finfo(model->path);
-                mainWindow()->statusBarMessage("Saved model at path: " + finfo.absoluteFilePath(),2.0f);
+                mainWindow()->setStatusBarMessage("Saved model at path: " + finfo.absoluteFilePath(),2.0f);
             } else {            
-                mainWindow()->statusBarMessage("Save operation failed...",2.0f);
+                mainWindow()->setStatusBarMessage("Save operation failed...",2.0f);
             }
         } else {
             throw StarlabException("gui_file::save() modes 2...4 not implemented");
@@ -119,7 +119,7 @@ void gui_filemenu::reload_selection(){
     mainWindow()->document()->popBusy();
 
     /// Inform the user
-    mainWindow()->statusBarMessage("Model '"+ newmodel->name +"' reloaded from path: " + newmodel->path,5000);
+    mainWindow()->setStatusBarMessage("Model '"+ newmodel->name +"' reloaded from path: " + newmodel->path,5000);
 }
 
 #if 0

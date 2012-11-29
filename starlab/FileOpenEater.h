@@ -13,9 +13,9 @@ protected:
         if (event->type() == QEvent::FileOpen) {
             QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
             QString target = fileEvent->file();
-            mainWindow->statusBarMessage("Loading file '"+target+"'",0.0);
+            mainWindow->setStatusBarMessage("Loading file '"+target+"'",0.0);
             mainWindow->application()->load(target);
-            mainWindow->statusBarMessage("The file '"+target+"' has been loaded",2.0);
+            mainWindow->setStatusBarMessage("The file '"+target+"' has been loaded",2.0);
             return true;
         } else {
             /// use standard event processing

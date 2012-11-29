@@ -30,11 +30,9 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         _drawArea->setAcceptDrops(true);
     }
     
-    /// Register all plugins with the window
+    /// Register all plugins with the main window
     foreach(StarlabPlugin* plugin, pluginManager()->plugins()){
         plugin->_mainWindow = this;
-        connect(plugin,SIGNAL(logmessage(QString)), this, SLOT(statusBarMessage(QString)));
-        connect(plugin,SIGNAL(logprogress(QString,float)), this, SLOT(progressBarPercentage(QString,float)));
     }
     
     
@@ -128,7 +126,7 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     /// Make sure settings are fresh & inform user on where settings are loaded from
     {
         settings()->sync();
-        statusBarMessage("Settings loaded from: "+settings()->settingsFilePath(),2);
+        setStatusBarMessage("Settings loaded from: "+settings()->settingsFilePath(),2);
     }
 }
 
@@ -163,7 +161,7 @@ QSize StarlabMainWindow::sizeHint() const{
 
 void StarlabMainWindow::triggerFilterByName(QString name){
     name = name.toLower();
-    statusBarMessage("Auto-triggering filter: '" + name + "'.");
+    setStatusBarMessage("Auto-triggering filter: '" + name + "'.");
     bool isFound=false;   
     
     /// Search the "filter" menu for the proper plugin
@@ -174,7 +172,7 @@ void StarlabMainWindow::triggerFilterByName(QString name){
         }
     
     if(!isFound){
-        statusBarMessage("Filter '"+name+"' was requested but could not be found.");
+        setStatusBarMessage("Filter '"+name+"' was requested but could not be found.");
     }
 }
 
@@ -187,11 +185,11 @@ void StarlabMainWindow::triggerMenuActionByName(QString name){
                 trigger_me = action;
     
     if(trigger_me){
-        statusBarMessage("Auto-Started: '"+ name + "'",10);
+        setStatusBarMessage("Auto-Started: '"+ name + "'",10);
         trigger_me->trigger();
     }
     else
-        statusBarMessage("[WARNING] Auto-Started failed: '"+ name + "'",10);
+        setStatusBarMessage("[WARNING] Auto-Started failed: '"+ name + "'",10);
 }
 
 void StarlabMainWindow::update(){
@@ -221,7 +219,7 @@ void StarlabMainWindow::update(){
     }
 }
 
-void StarlabMainWindow::statusBarMessage(QString message, float timeout_seconds){
+void StarlabMainWindow::setStatusBarMessage(QString message, double timeout_seconds){
     /// Setup tooltip of old messages
     _oldMessages.prepend(message);
     QString tooltipMessage = "Message Log (first is recent):";
@@ -233,11 +231,20 @@ void StarlabMainWindow::statusBarMessage(QString message, float timeout_seconds)
     _statusBar->update();
 }
 
-void StarlabMainWindow::progressBarPercentage(QString actor, float completion){
-    _statusBar->showMessage(actor); ///< @todo is 0 timeout appropriate?    
-    _progressBar->show();
+void StarlabMainWindow::setProgressBarValue(double completion){
+    completion = qBound(completion, 0.0, 1.0);
+    // _statusBar->showMessage(actor); ///< @todo is 0 timeout appropriate?    
     _progressBar->setEnabled(true);
-    _progressBar->setValue(completion);
+    _progressBar->setValue(completion*100);
+    _progressBar->show();
+    /// Make sure we can see something, redraw event processed
+    /// http://lists.trolltech.com/qt-interest/2008-08/msg00325.html
+    QApplication::processEvents();
+}
+
+void StarlabMainWindow::closeProgressBar(){
+    _progressBar->hide();
+    _progressBar->reset();
 }
 
 void StarlabMainWindow::hideToolbarOnEmptyMessage(QString /*message*/){

@@ -72,7 +72,7 @@ void gui_mode::enterState(STATE state, QAction* action){
         defaultModeAction->setChecked(false);
         action->setEnabled(true);
         action->setChecked(true);
-        Log("Plugin '%s' enabled",qPrintable(lastActiveModeAction->text()));
+        showMessage("Plugin '%s' enabled",qPrintable(lastActiveModeAction->text()));
         break;
     case SUSPENDED: 
         // qDebug() << "[SUSPENDED]";
@@ -107,7 +107,7 @@ void gui_mode::actionClicked(QAction *action){
             drawArea()->updateGL();
             lastActiveModeAction = action;
             enterState(MODE,action);
-            Log("Creating plugin: '%s'",qPrintable(action->text()));
+            showMessage("Creating plugin: '%s'",qPrintable(action->text()));
             return;              
         }
         break;
@@ -119,7 +119,7 @@ void gui_mode::actionClicked(QAction *action){
             mainWindow()->removeModePlugin();
             lastActiveModeAction = NULL;
             enterState(DEFAULT);
-            Log("Terminated plugin: '%s'",qPrintable(action->text()));
+            showMessage("Terminated plugin: '%s'",qPrintable(action->text()));
             return;            
         }
         /// ---------------- SUSPENSION --------------------
@@ -129,7 +129,7 @@ void gui_mode::actionClicked(QAction *action){
             mainWindow()->suspendModePlugin();
             pluginToSuspend->suspend();
             enterState(SUSPENDED,actionToSuspend);
-            Log("Suspended plugin: '%s'",qPrintable(actionToSuspend->text()));
+            showMessage("Suspended plugin: '%s'",qPrintable(actionToSuspend->text()));
             return;
         }
         break;
@@ -139,7 +139,7 @@ void gui_mode::actionClicked(QAction *action){
         mainWindow()->resumeModePlugin();
         ((ModePlugin*) lastActiveModeAction->parent())->resume();
         enterState(MODE,lastActiveModeAction);
-        Log("Resumed plugin: '%s'",qPrintable(lastActiveModeAction->text()));
+        showMessage("Resumed plugin: '%s'",qPrintable(lastActiveModeAction->text()));
         break;
     }
 }

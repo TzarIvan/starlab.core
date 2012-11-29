@@ -114,11 +114,12 @@ public:
     public slots:
         /// Show message on statusbar, default timeout is 2 seconds
         /// Message stays permanent with timeout_seconds set to 0
-        virtual void statusBarMessage(QString message, float timeout_seconds=2.0f);
+        void setStatusBarMessage(QString message, double timeout_seconds=2.0);
         /// Sets statusbar progress to a certain value
         /// @par Who is performing an action?
         /// @par What's the completion? [0..1]
-        virtual void progressBarPercentage(QString actor, float completion);
+        void setProgressBarValue(double completion);
+        void closeProgressBar();        
     private slots: 
         void hideToolbarOnEmptyMessage(QString message);
     private:

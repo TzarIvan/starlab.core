@@ -88,10 +88,11 @@ void gui_filter::execute(FilterPlugin* iFilter, RichParameterSet* parameters) {
 
             iFilter->applyFilter(parameters);
 
-            mainWindow()->statusBarMessage("Filter '"+ iFilter->name() +"' Executed " + QString("(%1ms).").arg(t.elapsed()),5000);
+            mainWindow()->setStatusBarMessage("Filter '"+ iFilter->name() +"' Executed " + QString("(%1ms).").arg(t.elapsed()),5000);
         } STARLAB_CATCH_BLOCK
     document()->popBusy();
     qApp->restoreOverrideCursor();
+    mainWindow()->closeProgressBar();
 }
 
 Q_EXPORT_PLUGIN(gui_filter)

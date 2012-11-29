@@ -49,4 +49,19 @@ QAction *StarlabPlugin::action(){
     return _action;
 }
 
+void StarlabPlugin::showMessage(const char *format, ...){
+    const size_t buffer_length=256;
+    char buffer[buffer_length];
+    va_list args;
+    va_start (args, format);
+    vsnprintf(buffer,buffer_length,format, args);
+    va_end (args);
+    QString msg(buffer);
+    mainWindow()->setStatusBarMessage(msg,20.0);
+    qDebug() << msg;
+}
 
+void StarlabPlugin::showProgress(double val){
+    mainWindow()->setStatusBarMessage( "Executing: '" + this->name() + "'..." );
+    mainWindow()->setProgressBarValue(val);
+}

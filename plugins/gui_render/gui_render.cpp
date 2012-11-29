@@ -53,7 +53,7 @@ void gui_render::triggerSetDefaultRenderer(){
     QString message = QString("Preferred renderer for \"%1\" set to \"2\"")
                               .arg(document()->selectedModel()->metaObject()->className())
                               .arg(renderer->name());
-    mainWindow()->statusBarMessage(message);
+    mainWindow()->setStatusBarMessage(message);
 }
 
 void gui_render::triggerRenderModeAction(QAction* action){
