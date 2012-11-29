@@ -57,11 +57,16 @@ void StarlabPlugin::showMessage(const char *format, ...){
     vsnprintf(buffer,buffer_length,format, args);
     va_end (args);
     QString msg(buffer);
-    mainWindow()->setStatusBarMessage(msg,20.0);
+    /// Show on terminal
     qDebug() << msg;
+    /// And on window
+    if( mainWindow() )
+        mainWindow()->setStatusBarMessage(msg,20.0);
 }
 
 void StarlabPlugin::showProgress(double val){
-    mainWindow()->setStatusBarMessage( "Executing: '" + this->name() + "'..." );
-    mainWindow()->setProgressBarValue(val);
+    if( mainWindow() ){
+        mainWindow()->setStatusBarMessage( "Executing: '" + this->name() + "'..." );
+        mainWindow()->setProgressBarValue(val);
+    }
 }
