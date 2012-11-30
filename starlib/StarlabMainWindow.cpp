@@ -176,6 +176,12 @@ void StarlabMainWindow::triggerFilterByName(QString name){
     }
 }
 
+void StarlabMainWindow::setModePlugin(ModePlugin* mode){ 
+    Q_ASSERT(_modePlugin==NULL); 
+    _modePlugin=mode;
+    emit modePluginSet(mode);
+}
+
 /// @todo Implement this function...
 void StarlabMainWindow::triggerMenuActionByName(QString name){
     QAction* trigger_me = NULL;
