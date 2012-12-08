@@ -9,40 +9,37 @@
 #include "interfaces/FilterPlugin.h"
 
 int main(int argc, char *argv[]) { 
-    try{    
-        /// Create QT GUI app
-        StarlabApplicationGUI app(argc,argv);
-        
-        /// Create a starlab application
-        StarlabApplication application;    
-        
-        /// Create a new window (@internal *new* is important)
-        StarlabMainWindow* mainWindow = new StarlabMainWindow(&application);
-        
-        /// Manages I/O requested by Operating system
-        FileOpenEater* eater = new FileOpenEater(mainWindow);
-        mainWindow->installEventFilter(eater);
-        
-        /// Open command line input
-        for(int i=1; i<argc; i++)
-            QApplication::sendEvent(mainWindow, new QFileOpenEvent(argv[i]));
-        
-        /// Automatically load layer menu if I opened more than one model    
-        if(mainWindow->document()->models().size()>=2)
-            mainWindow->triggerMenuActionByName("Show Layers Dialog");    
-    
-        /// Show the window 
-        /// (@internal see QWidget::activateWindow)
-        mainWindow->showNormal();
-        mainWindow->activateWindow();
-        mainWindow->raise();
-        
-        /// Auto-start a user-specified action
-        QString actionName = application.settings()->getString("autostartWithAction");
-        if(!actionName.isEmpty()) mainWindow->triggerMenuActionByName(actionName);
-        
-        /// Starts the event loop
-        return app.exec();    
-    }
-    STARLAB_CATCH_BLOCK
+	/// Create QT GUI app
+	StarlabApplicationGUI app(argc,argv);
+
+	/// Create a starlab application
+	StarlabApplication application;    
+
+	/// Create a new window (@internal *new* is important)
+	StarlabMainWindow* mainWindow = new StarlabMainWindow(&application);
+
+	/// Manages I/O requested by Operating system
+	FileOpenEater* eater = new FileOpenEater(mainWindow);
+	mainWindow->installEventFilter(eater);
+
+	/// Open command line input
+	for(int i=1; i<argc; i++)
+	    QApplication::sendEvent(mainWindow, new QFileOpenEvent(argv[i]));
+
+	/// Automatically load layer menu if I opened more than one model    
+	if(mainWindow->document()->models().size()>=2)
+	    mainWindow->triggerMenuActionByName("Show Layers Dialog");    
+
+	/// Show the window 
+	/// (@internal see QWidget::activateWindow)
+	mainWindow->showNormal();
+	mainWindow->activateWindow();
+	mainWindow->raise();
+
+	/// Auto-start a user-specified action
+	QString actionName = application.settings()->getString("autostartWithAction");
+	if(!actionName.isEmpty()) mainWindow->triggerMenuActionByName(actionName);
+
+	/// Starts the event loop
+	return app.exec();    
 }

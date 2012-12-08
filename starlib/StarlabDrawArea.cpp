@@ -11,6 +11,9 @@
 
 using namespace qglviewer;
 
+/// By default the static instance is NULL
+StarlabDrawArea* StarlabDrawArea::_staticInstance = NULL;
+
 void StarlabDrawArea::update(){
     // qDebug() << "StarlabDrawArea::update()";
     
@@ -68,6 +71,10 @@ StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow)
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 
     this->captureDepthBuffer = false;
+    
+    /// Saves a static instance
+    Q_ASSERT(StarlabDrawArea::_staticInstance==NULL);
+    StarlabDrawArea::_staticInstance = this;
 }
 
 void StarlabDrawArea::resetViewport(){
@@ -316,6 +323,17 @@ void StarlabDrawArea::addRenderObject(RenderObject::Base * obj)
 {
     renderObjectList.append(obj);
 }
+
+
+/// @todo add polygon drawing?
+#if 0
+for(uint i=0; i<poly.size()-2; i++){
+    Point_2 p0 = poly[0]; // pivot 
+    Point_2 p1 = poly[(i+1)%poly.size()];
+    Point_2 p2 = poly[(i+2)%poly.size()];
+    StarlabDrawArea::instance()->drawTriangle( toQt(p0), toQt(p1), toQt(p2) );
+}
+#endif
 
 RenderObject::Triangle& StarlabDrawArea::drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color){
     RenderObject::Triangle* triangle = new RenderObject::Triangle(p1,p2,p3,color);

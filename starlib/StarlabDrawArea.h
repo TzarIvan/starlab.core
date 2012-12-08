@@ -31,6 +31,15 @@ class Model;
 class STARLIB_EXPORT StarlabDrawArea : public QGLViewer{
     Q_OBJECT
     
+/// @{ static instancing
+private:
+    static StarlabDrawArea* _staticInstance;
+public:
+    /// @return Returns a pointer to the application's DrawArea instance.
+    ///         if no instance has been allocated, NULL is returned
+    static StarlabDrawArea* instance(){ return _staticInstance; }
+/// @}    
+    
 /// @{ core
 public:
     /// Constructor
