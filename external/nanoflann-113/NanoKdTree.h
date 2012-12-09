@@ -92,7 +92,7 @@ public:
 		return tree->radiusSearch(&p[0], search_radius, ret_matches, params);
 	}
 
-    int closest(Vector3 p)
+    int closest(Vector3 & p)
     {
         KDResults match;
         this->k_closest(p, 1, match);
@@ -102,4 +102,9 @@ public:
         else
             return match[0].first;
     }
+
+	inline bool has(Vector3 & p)
+	{
+		return closest(p) >= 0;
+	}
 };
