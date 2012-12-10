@@ -103,8 +103,10 @@ public:
             return match[0].first;
     }
 
-	inline bool has(Vector3 & p)
+	inline bool has(Vector3 & p, Scalar eps_distance = 1e-7)
 	{
-		return closest(p) >= 0;
+		KDResults match;
+		ball_search(p, eps_distance, match);
+		return match.size();
 	}
 };
