@@ -33,5 +33,15 @@ class example_mode_withwidget : public ModePlugin{
 
 /// @{ Local data    
     ModePluginDockWidget* dockwidget;
-/// @} 
+/// @}
+
+/// @{ Python exposed functions
+/// 
+/// Public slots can be used by the python console. This, for example, 
+/// can be accessed in the python console by typing "mode.myfunction(123)"
+public slots:
+    void myfunction(int i){
+        qDebug() << "I am " << i;
+    }
+/// @}
 };

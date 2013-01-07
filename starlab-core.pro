@@ -16,7 +16,7 @@ system(qmake -set NANOFLANN $$PWD/external/nanoflann-113/config.prf)
 system(qmake -set MATLAB    $$PWD/external/matlab.prf)
 
 #--- AND LIST THESE FOR REFERENCE
-OTHER_FILES += starlab.prf              #< starlab core features
+OTHER_FILES += starlab.prf      #< starlab core features
 
 #--- THREE CORE BUILD APP/LIBRARIES
 SUBDIRS += starlib   #< SHARED LIBRARY
@@ -24,13 +24,13 @@ SUBDIRS += starterm  #< TERMINAL APPLICATION
 SUBDIRS += starlab   #< GUI APPLICATION
 
 #--- AND THE CORE PLUGINS TO COMPLEMENT
-SUBDIRS += plugins/render_bbox
-SUBDIRS += plugins/gui_filemenu
-SUBDIRS += plugins/gui_filter
-SUBDIRS += plugins/gui_mode
+SUBDIRS += plugins/render_bbox  #< the default renderer, applies to any model
+SUBDIRS += plugins/gui_filemenu #< gui/logic of "menu=>file"
+SUBDIRS += plugins/gui_filter   #< gui/logic of "menu=>filter"
+SUBDIRS += plugins/gui_mode     #< gui/logic of "menu=>mode"
 SUBDIRS += plugins/gui_render
 SUBDIRS += plugins/gui_decorate
-SUBDIRS += plugins/gui_windows
+SUBDIRS += plugins/gui_windows  #< gui/logic of "menu=>windows"
 SUBDIRS += plugins/gui_view
 
 #--- MORE ADVANCED PLUGINS
