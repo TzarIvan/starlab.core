@@ -82,7 +82,13 @@ public:
 		return k;
 	}
 
-    size_t ball_search(Vector3 p, double search_radius, KDResults & ret_matches = KDResults())
+    size_t ball_search(Vector3 p, double search_radius)
+    {
+        KDResults ret_matches;
+        return ball_search(p, search_radius, ret_matches);
+    }
+
+    size_t ball_search(Vector3 p, double search_radius, KDResults & ret_matches)
 	{
 		ret_matches.clear();
 
