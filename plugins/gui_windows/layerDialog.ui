@@ -46,6 +46,13 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="deleteModel">
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="moveModelUp">
         <property name="text">
          <string>↑</string>

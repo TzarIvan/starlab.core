@@ -134,3 +134,8 @@ void LayerDialog::on_moveModelDown_released(){
     /// @todo model up/down in layer
     qDebug() << "TODO: move model down in layer";    
 }
+
+void LayerDialog::on_deleteModel_released(){
+    /// @todo delete model from document
+    qDebug() << "TODO: delete model from document";
+}

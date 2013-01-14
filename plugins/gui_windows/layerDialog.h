@@ -24,7 +24,7 @@ public:
     ~LayerDialog();
     LayerDialog(StarlabMainWindow* mainwindow = 0);
     void updateDecoratorParsView();
-
+    
 public slots:
     /// Fills/Updates the layer table with content
     void updateTable();
@@ -35,7 +35,11 @@ public slots:
     void modelItemClicked(QTreeWidgetItem * , int );
     void showEvent( QShowEvent * event );
     void showContextMenu(const QPoint& pos);
+
+/// @{ slots for buttons at bottom of layer dialog
 private slots:
     void on_moveModelUp_released();
     void on_moveModelDown_released();
+    void on_deleteModel_released();
+/// @}
 };
