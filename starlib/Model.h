@@ -15,16 +15,12 @@ class StarlabDrawArea;
 class STARLIB_EXPORT Model : public QObject{
     Q_OBJECT
 
-/// @{ Overload these to obtain a BASIC new datatype
+/// @{ Constructors
 public:
     /// Basic constructor
     Model(QString path, QString name=QString());
+/// @}        
     
-    /// Compute the bounding box for the model
-    /// @internal necessary because we have to compute the BBOX of the scene
-    virtual void updateBoundingBox() = 0;
-/// @}
-            
 /// @{ Overload these to customize appearance in the Layers dialog
 public:
     /// A class that describes this class of models in the layer editor. The 
@@ -70,11 +66,21 @@ private:
     
 /// @{ Basic geometry, needed for rendering
 public:
+    /// Retrieves a reference to the model bounding box
     const QBox3D& bbox(){ return _bbox; }
-protected: 
+    
+    /// @brief Overload to compute the bounding box for the current model: this->_bbox
+    /// @note this necessary because we have to have a plausible BBOX for the scene, 
+    ///       so that things like the view matrix can be determined
+    virtual void updateBoundingBox() = 0;
+    
+    /// @brief Forces the bounding box to be set to a particular value
+    void force_set_bbox(const QBox3D& newbbox){ _bbox = newbbox; }
+    
+protected:
     /// Per-model bounding box (before transform is applied)
     QBox3D _bbox;
 /// @}        
 };
 
-Q_DECLARE_INTERFACE(Model, "starlab.interface.Model/1.0")
+Q_DECLARE_INTERFACE(Model, "starlab.interface.Model/1.1")
