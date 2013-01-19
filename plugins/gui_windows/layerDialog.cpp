@@ -24,9 +24,12 @@ public:
 };
 
 LayerDialog::~LayerDialog(){ delete ui; }
-LayerDialog::LayerDialog(StarlabMainWindow* parent) : QDockWidget(parent){
+
+LayerDialog::LayerDialog(StarlabMainWindow* mainWindow) : 
+    QDockWidget(mainWindow)
+{
     this->setWindowTitle("Document Layers");
-    mw=parent;
+    this->mainWindow=mainWindow;
     
     ui = new Ui::layerDialog();
     setWindowFlags( windowFlags() | Qt::WindowStaysOnTopHint | Qt::SubWindow );
@@ -53,15 +56,16 @@ LayerDialog::LayerDialog(StarlabMainWindow* parent) : QDockWidget(parent){
 void LayerDialog::modelItemClicked(QTreeWidgetItem* item , int column_number){
     LayersWidgetModelItem* mitem = dynamic_cast<LayersWidgetModelItem*>(item); 
     if(mitem){
-        mw->document()->pushBusy();
+        mainWindow->document()->pushBusy();
             /// Clicked on the eye, toggle visibility
             if( column_number==0 )
                 mitem->model.isVisible = !mitem->model.isVisible;
             /// A click on any column makes a selection
-            if( column_number>0  )
-                mw->document()->setSelectedModel( &( mitem->model ) );
+            if( column_number>0  ){
+                mainWindow->document()->setSelectedModel( &( mitem->model ) );
+            }
             updateTable();
-        mw->document()->popBusy();
+        mainWindow->document()->popBusy();
     }
 }
 
@@ -89,7 +93,7 @@ void LayerDialog::showContextMenu(const QPoint& /*pos*/){
 void LayerDialog::updateTable(){
     //TODO:Check if the current viewer is a GLArea
     if(!isVisible()) return;
-    Document* md = mw->document();
+    Document* md = mainWindow->document();
     
     /// Setup the layer table
     ui->modelTreeWidget->clear();
@@ -110,7 +114,7 @@ void LayerDialog::updateTable(){
         mi->decorateLayersWidgedItem(item);
                 
         // Change color if currently selected
-        if(mi == mw->document()->selectedModel()){
+        if(mi == mainWindow->document()->selectedModel()){
             item->setBackground(1,QBrush(Qt::yellow));
             item->setForeground(1,QBrush(Qt::blue));
         }

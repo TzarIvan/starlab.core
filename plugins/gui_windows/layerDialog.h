@@ -18,7 +18,7 @@ class LayerDialog : public QDockWidget{
     Q_OBJECT
 private:
     Ui::layerDialog* ui;
-    StarlabMainWindow* mw;
+    StarlabMainWindow* mainWindow;
     
 public:
     ~LayerDialog();
