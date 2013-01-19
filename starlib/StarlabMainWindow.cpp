@@ -102,6 +102,9 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
         /// @brief Whenever there is nothing to show, hide the toolbar.
         /// @todo add a timer that disables it after a while otherwise it's kind of annoying
         connect(_statusBar, SIGNAL(messageChanged(QString)), this, SLOT(hideToolbarOnEmptyMessage(QString)) );
+        
+        /// Show visual notification for changes in selection
+        connect(document(), SIGNAL(selectionChanged(Model*)), this, SLOT(selectionChanged(Model*)));
     }
     
     /// Intercepts the "open" events sent directly by the Operative System in this->eventFilter
@@ -257,4 +260,8 @@ void StarlabMainWindow::hideToolbarOnEmptyMessage(QString /*message*/){
     // qDebug() << "NEW MESSAGE: " << message;
     /// @todo disabled as it's annoying to see it popping in/out
     // if(message.isEmpty())  _statusBar->hide();
+}
+
+void StarlabMainWindow::selectionChanged(Model *selected){
+    this->setStatusBarMessage("Selected model has been changed to '" + selected->name + "'", 3);
 }

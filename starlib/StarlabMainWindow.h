@@ -20,6 +20,8 @@ class DrawAreaPlugin;
 class STARLIB_EXPORT StarlabMainWindow : public QMainWindow{
     Q_OBJECT
     
+    
+    
 /// @{ Core
 public:
     StarlabMainWindow(StarlabApplication *_application);
@@ -36,10 +38,22 @@ private:
     StarlabApplication* const _application;
 /// @}
 
+    
+    
+    
 /// @{ Basic GUI behavior
     /// Quit whole application whenever the main window is closed
     void closeEvent(QCloseEvent *);        
+    
+private slots:
+    /// @brief Update the whole Starlab Window (reloads toolbar & menus)
+    /// @note See drawArea if that's what you want to update
+    void update();
+    
 /// @}
+    
+    
+    
     
 /// @{ DrawArea Management (Center of Starlab window) 
 private:
@@ -50,6 +64,9 @@ public:
     StarlabDrawArea* drawArea(){ return _drawArea; }
 /// @}
            
+    
+    
+    
 /// @{ ModePlugin Management
 private:
     ModePlugin* _modePlugin;
@@ -70,6 +87,9 @@ public:
     ModePlugin* getModePlugin(){ Q_ASSERT(_modePlugin); return _modePlugin; }
 /// @}
     
+    
+    
+    
 /// @{ @name Window's menus (in order)
 public:
     QMenu *preferencesMenu; ///< @todo settings menu, refer to MeshLab
@@ -86,6 +106,9 @@ private:
     QList<QMenu*> menus;    ///< List of pointers to all the above
 /// @}
 
+    
+    
+    
 /// @{ @name Window's toolbars (in order)
 public:
     QToolBar *mainToolbar;      ///< Core icons, always visible regardless
@@ -97,22 +120,24 @@ private:
     QList<QToolBar*> toolbars; ///< List of all available toolbars
 /// @}
     
-public:
     
-/// @brief Executes a filter by name, achieving the same effect as clicking on an action. 
-/// @todo what if two filters have the same name?
-void triggerFilterByName(QString name);
-
-
-/// @brief Executes a menu command by name, achieving the same effect as clicking on an action. 
-void triggerMenuActionByName(QString name);
     
-private slots:
-    /// @brief Update the whole Starlab Window (reloads toolbar & menus)
-    /// @note See drawArea if that's what you want to update
-    void update();
+    
+/// @{ @name automatic action trigger
+/// @todo is there a way of making these global variables?
+public slots:
+    /// @brief Executes a filter by name, achieving the same effect as clicking on an action. 
+    /// @todo what if two filters have the same name?
+    void triggerFilterByName(QString name);
 
-/// @{ @name Window's statusbar management
+    /// @brief Executes a menu command by name, achieving the same effect as clicking on an action. 
+    void triggerMenuActionByName(QString name);
+/// @}
+    
+    
+    
+    
+/// @{ @name status bar management
 public slots:
     /// Show message on statusbar, default timeout is 2 seconds
     /// Message stays permanent with timeout_seconds set to 0
@@ -124,12 +149,18 @@ public slots:
     void closeProgressBar();        
 private slots: 
     void hideToolbarOnEmptyMessage(QString message);
+    /// @brief notifies changes in selection with a message on the statusbar
+    /// @todo  also change base color of model for an instant!
+    void selectionChanged(Model* selected);
 private:
     QStatusBar*      _statusBar; ///< This should not be touched, use this->setStatusBarMessage
     QProgressBar*  _progressBar; ///< This should not be touched, use this->setProgressBarPercentage
     QList<QString> _oldMessages; ///< Saves all messages sent to statusbar
 /// @}
 
+    
+    
+    
 /// @{ @name Core Events Management
 public slots:
     /// Manages Drag & Drop events
@@ -139,14 +170,18 @@ public slots:
     /// This slot receives an action and displays a tooltip for it at the current mouse position
 /// @}
 
-#ifdef TODO_SHOW_ACTION_TOOLTIP
-    /// i.e. typically connected to the hovered(QAction*) signal to show tooltips
-    void showActionTooltip(QAction*action);
-#endif
+      
     
+    
+/// @{ @name GUI elements
+private:
+    /// i.e. typically connected to the hovered(QAction*) signal to show tooltips
+    // void showActionTooltip(QAction*action);
 public:
     /// Determines default window size
     QSize sizeHint() const;
+/// @} 
+    
 };
  
-Q_DECLARE_INTERFACE(StarlabMainWindow, "starlab.StarlabMainWindow/1.1")
+Q_DECLARE_INTERFACE(StarlabMainWindow, "starlab.StarlabMainWindow/1.2")
