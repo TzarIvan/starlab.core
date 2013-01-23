@@ -238,6 +238,9 @@ void StarlabMainWindow::setStatusBarMessage(QString message, double timeout_seco
     _statusBar->showMessage(message, (int)timeout_seconds*1000);
     _statusBar->show();
     _statusBar->update();
+    /// Make sure we can see something, redraw event processed
+    /// http://lists.trolltech.com/qt-interest/2008-08/msg00325.html
+    QApplication::processEvents();
 }
 
 void StarlabMainWindow::setProgressBarValue(double completion){
