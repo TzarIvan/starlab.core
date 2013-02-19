@@ -6,6 +6,8 @@
 #include "starlib_global.h"
 #include "StarlabApplication.h"
 
+namespace Starlab{
+
 class STARLIB_EXPORT StarlabSettings{
     
 private: 
@@ -59,3 +61,5 @@ public:
     /// Print to string (e.g. qDebug() << this->toString() )
     QByteArray toLocal8Bit();
 };
+
+} // namespace

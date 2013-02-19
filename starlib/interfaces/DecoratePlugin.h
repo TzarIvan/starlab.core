@@ -41,10 +41,10 @@ public:
     }
 private:
     /// @internal Allow it to set _model
-    friend class Model;
+    friend class Starlab::Model;
     /// @internal The model that this plugin is decorating
     Model* _model;
 /// @}
 };
 
-Q_DECLARE_INTERFACE(DecoratePlugin, "starlab.DecoratePlugin/2.0")
+Q_DECLARE_INTERFACE(DecoratePlugin, "Starlab::DecoratePlugin/2.0")

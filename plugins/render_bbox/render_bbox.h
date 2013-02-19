@@ -1,5 +1,5 @@
 #pragma once
-#include "interfaces/RenderPlugin.h"
+#include "RenderPlugin.h"
 
 class render_bbox : public RenderPlugin{
     Q_OBJECT

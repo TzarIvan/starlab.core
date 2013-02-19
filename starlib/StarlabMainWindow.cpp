@@ -11,6 +11,8 @@
 #include "GuiPlugin.h"
 #include "StarlabDrawArea.h"
 
+using namespace Starlab;
+
 StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     _application(_application)
 {   

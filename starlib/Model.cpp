@@ -10,6 +10,8 @@
 #include "RenderPlugin.h"
 #include "DecoratePlugin.h"
 
+using namespace Starlab;
+
 Model::Model(QString path, QString name){
     this->path = "";
     this->name = "";

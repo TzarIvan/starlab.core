@@ -6,8 +6,8 @@
 #include "StarlabException.h"
 #include "Document.h"
 
-class StarlabApplication;
 class RichParameterSet;
+
 
 /** 
  * @ingroup StarlabPluginInterfaces 
@@ -42,7 +42,7 @@ protected:
         return fi.completeBaseName();
     }
 private:
-    friend class StarlabApplication;
+    friend class Starlab::StarlabApplication;
     /// This is called before InputOutputPlugin::open(...), no need to do check existance yourself
     void checkReadable(QString path){
         QFileInfo fi(path);
@@ -54,3 +54,4 @@ private:
 };
 
 Q_DECLARE_INTERFACE(InputOutputPlugin, "starlab.InputOutputPlugin/1.0")
+

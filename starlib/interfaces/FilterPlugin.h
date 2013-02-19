@@ -2,8 +2,6 @@
 #include "Model.h"
 #include "StarlabPlugin.h"
 
-class RichParameterSet;
-
 class FilterPlugin : public StarlabPlugin{
 public:
     virtual void applyFilter(RichParameterSet*) = 0;
@@ -18,4 +16,4 @@ public:
     /// @}
 };
 
-Q_DECLARE_INTERFACE(FilterPlugin, "starlab.FilterPlugin/1.2")
+Q_DECLARE_INTERFACE(FilterPlugin, "Starlab::FilterPlugin/2.0")

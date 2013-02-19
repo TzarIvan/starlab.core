@@ -19,6 +19,8 @@
     QString LIB_EXTENSION_FILTER("*.so");
 #endif
 
+using namespace Starlab;
+    
 /// Input: a string like "[SurfaceMesh] Object File Format (*.off,*.off2)"
 /// Returns a lowercase stringlist: {"off","off2"}
 QStringList extractExtensions(QString iopluginname){

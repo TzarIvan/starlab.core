@@ -2,6 +2,8 @@
 #include "FilterPlugin.h"
 #include "parameters/RichParameterSet.h"
 
+using namespace Starlab;
+
 StarlabApplication::StarlabApplication(){
     /// Instantiate resources
     _settings      = new StarlabSettings(this);

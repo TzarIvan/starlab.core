@@ -4,6 +4,8 @@
 #include "PluginManager.h"
 #include "StarlabSettings.h"
 
+namespace Starlab{
+
 /// @note QApplication is for GUI, QCoreApplication is for command line stuff
 class STARLIB_EXPORT StarlabApplication{
     
@@ -50,3 +52,5 @@ public:
     
     static QString version(){ return "1.0.4 alpha"; }
 };
+
+} // Namespace

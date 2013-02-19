@@ -28,6 +28,7 @@ HEADERS += \
     parameters/RichStringSet.h \
     parameters/ParametersFrame.h \
     parameters/LineEditWidget.h \  
+    Starlab.h
 
 SOURCES += \ 
     parameters/RichParameterSet.cpp \

@@ -73,4 +73,4 @@ public:
     /// @}
 };
 
-Q_DECLARE_INTERFACE(ModePlugin, "starlab.ModePlugin/2.0")
+Q_DECLARE_INTERFACE(ModePlugin, "Starlab::ModePlugin/2.0")

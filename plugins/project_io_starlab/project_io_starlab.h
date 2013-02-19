@@ -1,7 +1,5 @@
 #pragma once
-
-#include "interfaces/ProjectInputOutputPlugin.h"
-class StarlabApplication;
+#include "ProjectInputOutputPlugin.h"
 
 class project_io_starlab : public ProjectInputOutputPlugin{
     Q_OBJECT

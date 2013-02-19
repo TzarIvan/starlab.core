@@ -11,10 +11,9 @@
 #include "StarlabMainWindow.h"
 #include "starlib_global.h"
 
-class Document;
-class StarlabSettings;
 class QGLWidget;
-class Model;
+
+namespace Starlab{
 
 #ifndef GL_MULTISAMPLE
 #define GL_MULTISAMPLE  0x809D
@@ -121,3 +120,5 @@ protected:
     /// Handles to additional render objects, created by draw??() methods, deleted by ~StarlabDrawArea()
     QList<RenderObject::Base*> renderObjectList;
 };
+
+} // namespace

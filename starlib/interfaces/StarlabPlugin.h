@@ -6,15 +6,13 @@
 #include <QKeySequence>
 
 #include "StarlabException.h"
+#include "Starlab.h"
 #include "Model.h"
 #include "Document.h"
 
 class RichParameterSet;
-class StarlabDrawArea;
-class StarlabApplication;
-class StarlabMainWindow;
-class StarlabSettings;
-class PluginManager;
+
+using namespace Starlab;
 
 /** 
  * @brief The superclass of any starlab plugin
@@ -66,9 +64,9 @@ private:
     StarlabMainWindow*  mainWindow();
     StarlabDrawArea*    drawArea();
 private:
-    friend class StarlabApplication;
-    friend class StarlabMainWindow;
-    friend class PluginManager;
+    friend class Starlab::StarlabApplication;
+    friend class Starlab::StarlabMainWindow;
+    friend class Starlab::PluginManager;
     StarlabApplication* _application;
     StarlabMainWindow* _mainWindow;
 /// @}

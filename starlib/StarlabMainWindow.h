@@ -13,8 +13,10 @@
 #include "Document.h"
 #include "starlib_global.h"
 
+namespace Starlab{
+
 class PluginManager;
-class DrawAreaPlugin;
+//class DrawAreaPlugin;
 
 /// The basic structure of the stalab window to which plugins (i.e. GUI plugins) interface
 class STARLIB_EXPORT StarlabMainWindow : public QMainWindow{
@@ -184,4 +186,6 @@ public:
     
 };
  
-Q_DECLARE_INTERFACE(StarlabMainWindow, "starlab.StarlabMainWindow/1.2")
+} // namespace
+
+Q_DECLARE_INTERFACE(Starlab::StarlabMainWindow, "starlab.StarlabMainWindow/1.2")

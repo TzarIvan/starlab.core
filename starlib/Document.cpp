@@ -2,6 +2,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+using namespace Starlab;
+
 Document::Document(){
     /// @todo does EIGEN offer a way of doing this?
     transform.setToIdentity();

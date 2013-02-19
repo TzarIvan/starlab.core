@@ -6,9 +6,6 @@
 #include "StarlabException.h"
 #include "Document.h"
 
-class StarlabApplication;
-class RichParameterSet;
-
 /** 
  * @brief Plugin interface to perform I/O of project files
  * @ingroup StarlabPluginInterfaces 
@@ -26,4 +23,4 @@ public:
     virtual void save(const QString& path, Document& document) = 0;
 };
 
-Q_DECLARE_INTERFACE(ProjectInputOutputPlugin, "starlab.ProjectInputOutputPlugin/1.0")
+Q_DECLARE_INTERFACE(ProjectInputOutputPlugin, "Starlab::ProjectInputOutputPlugin/2.0")

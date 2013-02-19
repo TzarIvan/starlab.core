@@ -6,11 +6,13 @@
 #include "qt3d/math3d/qbox3d.h"
 #include "starlib_global.h"
 
+/// @{ forward declarations
+class QTreeWidgetItem;
 class DecoratePlugin;
 class RenderPlugin;
-class QTreeWidgetItem;
-class StarlabDrawArea;
+/// @}
 
+namespace Starlab{
 /// Interface of the basic characteristics that every model needs to have
 class STARLIB_EXPORT Model : public QObject{
     Q_OBJECT
@@ -83,4 +85,6 @@ protected:
 /// @}        
 };
 
-Q_DECLARE_INTERFACE(Model, "starlab.interface.Model/1.1")
+} /// namespace 
+
+Q_DECLARE_INTERFACE(Starlab::Model, "Starlab::Model/2.0")

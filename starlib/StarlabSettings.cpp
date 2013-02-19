@@ -5,6 +5,8 @@
 #include "StarlabSettings.h"
 #include "StarlabException.h"
 
+using namespace Starlab;
+
 StarlabSettings::StarlabSettings(StarlabApplication* application) :
     _application(application)
 {

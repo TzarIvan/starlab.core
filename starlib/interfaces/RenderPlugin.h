@@ -24,7 +24,7 @@ public:
     virtual void finalize(){}    
     
     /// @brief returns the model that this plugin should be rendering
-    Model* model(){ return _model; }
+    Starlab::Model* model(){ return _model; }
 
     /// @brief Overload it and return a new instance of your plugin    
     virtual RenderPlugin* factory()=0;
@@ -34,10 +34,10 @@ public:
 /// @}
     
 /// @{ Internal Usage
-friend class Model;
+friend class Starlab::Model;
 private:
-    Model* _model;
+    Starlab::Model* _model;
 /// @}
 };
 
-Q_DECLARE_INTERFACE(RenderPlugin, "starlab.RenderPlugin/2.0")
+Q_DECLARE_INTERFACE(RenderPlugin, "Starlab::RenderPlugin/2.0")

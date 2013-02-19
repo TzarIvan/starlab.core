@@ -25,4 +25,4 @@ protected:
     using StarlabPlugin::drawArea; 
 };
 
-Q_DECLARE_INTERFACE(GuiPlugin, "starlab.GuiPlugin/1.0")
+Q_DECLARE_INTERFACE(GuiPlugin, "Starlab::GuiPlugin/2.0")

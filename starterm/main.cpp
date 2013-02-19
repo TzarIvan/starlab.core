@@ -4,6 +4,8 @@
 #include "PluginManager.h"
 #include "interfaces/FilterPlugin.h"
 
+using namespace Starlab;
+
 QString safeCopyPath(QString path){
     QFileInfo fi(path);                 /// /tmp/archive.tar.gz
     QString dir = fi.absolutePath();    /// /tmp

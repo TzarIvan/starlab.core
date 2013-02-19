@@ -9,6 +9,7 @@
 #include "ModePlugin.h"
 #include "DecoratePlugin.h"
 
+using namespace Starlab;
 using namespace qglviewer;
 
 /// By default the static instance is NULL
@@ -306,12 +307,11 @@ void StarlabDrawArea::setRenderer(Model *model, QString pluginName){
 }
 
 void StarlabDrawArea::deleteAllRenderObjects(){
-    document()->pushBusy();
-
-    qDeleteAll(renderObjectList.begin(), renderObjectList.end());
-    renderObjectList.clear();
-
-    document()->popBusy();
+    // Render objects are not part of the document
+    // document()->pushBusy();
+        qDeleteAll(renderObjectList.begin(), renderObjectList.end());
+        renderObjectList.clear();
+    // document()->popBusy();
 }
 
 void StarlabDrawArea::drawAllRenderObjects(){

@@ -3,6 +3,8 @@
 #include "StarlabException.h"
 #include "starlib_global.h"
 
+namespace Starlab{
+
 class STARLIB_EXPORT Document : public QObject{
     Q_OBJECT 
     
@@ -71,3 +73,5 @@ private:
     void emit_hasChanged();
 /// @}
 };
+
+} // namespace

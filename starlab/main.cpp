@@ -8,6 +8,8 @@
 #include "FileOpenEater.h"
 #include "interfaces/FilterPlugin.h"
 
+using namespace Starlab;
+
 int main(int argc, char *argv[]) { 
 	/// Create QT GUI app
 	StarlabApplicationGUI app(argc,argv);

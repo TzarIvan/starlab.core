@@ -1,11 +1,11 @@
 #pragma once
 #include "StarlabMainWindow.h"
 class FileOpenEater : public QObject{
-  Q_OBJECT
+    Q_OBJECT
 private:
-    StarlabMainWindow* const mainWindow;
+    Starlab::StarlabMainWindow* const mainWindow;
 public:
-    FileOpenEater(StarlabMainWindow* mainWindow) : mainWindow(mainWindow){
+    FileOpenEater(Starlab::StarlabMainWindow* mainWindow) : mainWindow(mainWindow){
         setParent(mainWindow);
     }       
 protected:

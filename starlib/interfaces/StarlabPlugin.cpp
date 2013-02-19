@@ -3,6 +3,8 @@
 #include "StarlabPlugin.h"
 #include "StarlabMainWindow.h"
 
+using namespace Starlab;
+
 StarlabPlugin::StarlabPlugin(){ 
     _mainWindow = NULL;
     _application = NULL;

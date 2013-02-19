@@ -1,21 +1,22 @@
 #pragma once
-
 #include <QMap>
 #include <QObject>
 #include <QDir>
 #include "starlib_global.h"
 
-/// Forward declarations
-class DrawAreaPlugin;
-class RenderPlugin;
-class DecoratePlugin;
-class FilterPlugin;
-class GuiPlugin;
-class ModePlugin;
-
-/// @todo why am I not allowed to forward declare these?
-#include "interfaces/InputOutputPlugin.h"
-#include "interfaces/ProjectInputOutputPlugin.h"
+/// @{ forward declarations
+    class DrawAreaPlugin;
+    class RenderPlugin;
+    class DecoratePlugin;
+    class FilterPlugin;
+    class GuiPlugin;
+    class ModePlugin;
+    /// @todo why am I not allowed to forward declare these?
+    #include "interfaces/InputOutputPlugin.h"
+    #include "interfaces/ProjectInputOutputPlugin.h"
+/// @}
+    
+namespace Starlab{
 
 /// \brief This class provides the basic tools for managing all the plugins. It is used by both meshlab and meshlab server.
 class STARLIB_EXPORT PluginManager: public QObject{
@@ -103,3 +104,5 @@ private:
     bool load_DrawAreaPlugin(QObject* _plugin);
     bool load_RenderPlugin(QObject* _plugin);
 };
+
+} // namespace
