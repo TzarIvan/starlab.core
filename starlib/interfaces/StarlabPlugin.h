@@ -59,7 +59,7 @@ protected:
 private:
     Document*           document();
     Application* application();
-    StarlabSettings*    settings();
+    Settings*    settings();
     PluginManager*      pluginManager();
     MainWindow*  mainWindow();
     DrawArea*    drawArea();

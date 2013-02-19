@@ -29,7 +29,7 @@ Document* StarlabPlugin::document(){
 	return _application->document(); 
 }
 
-StarlabSettings* StarlabPlugin::settings(){ 
+Settings* StarlabPlugin::settings(){ 
 	Q_ASSERT(_application);
 	return _application->settings(); 
 }

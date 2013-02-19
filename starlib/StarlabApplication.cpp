@@ -6,7 +6,7 @@ using namespace Starlab;
 
 Application::Application(){
     /// Instantiate resources
-    _settings      = new StarlabSettings(this);
+    _settings      = new Settings(this);
     _pluginManager = new PluginManager(_settings);
     _document      = new Document();
     

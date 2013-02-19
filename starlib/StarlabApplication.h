@@ -13,11 +13,11 @@ class STARLIB_EXPORT Application{
     public:
         PluginManager* pluginManager(){ return _pluginManager; }
         Document* document(){ return _document; }
-        StarlabSettings* settings(){ return _settings; }
+        Settings* settings(){ return _settings; }
     private:
         PluginManager*   _pluginManager; /// The plugins system
         Document*        _document;      /// The set of loaded models
-        StarlabSettings* _settings;      /// The application settings
+        Settings* _settings;      /// The application settings
     /// @}
         
 public:

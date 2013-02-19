@@ -56,7 +56,7 @@ QString failurecauses_starlabplugin(
 "  2) Release / debug build mismatch.\n"
 "  *) any other reason?");
 
-PluginManager::PluginManager(StarlabSettings* settings) : 
+PluginManager::PluginManager(Settings* settings) : 
     _settings(settings)
 {
     //pluginsDir=QDir(getPluginDirPath()); 

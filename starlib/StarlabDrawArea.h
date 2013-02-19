@@ -50,7 +50,7 @@ private:
 public:
     MainWindow* mainWindow(){ return _mainWindow; }
     Document* document(){ return _mainWindow->document(); }
-    StarlabSettings* settings(){ return _mainWindow->settings(); }
+    Settings* settings(){ return _mainWindow->settings(); }
     PluginManager* pluginManager(){ return _mainWindow->pluginManager(); }
 /// @}
  

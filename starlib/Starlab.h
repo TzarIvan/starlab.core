@@ -5,7 +5,7 @@ namespace Starlab{
     class DrawArea;
     class Application;
     class MainWindow;
-    class StarlabSettings;
+    class Settings;
     class PluginManager;    
 } /// namespace
 

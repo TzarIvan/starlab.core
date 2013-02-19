@@ -28,7 +28,7 @@ public:
 public: 
     Application* application(){ return _application; }
     /// The global settings of the application
-    StarlabSettings* settings(){ return application()->settings(); }
+    Settings* settings(){ return application()->settings(); }
     /// Contains the document (extracted from application)
     Document* document(){ return application()->document(); }
     /// Contains the loaded plugins (extracted from application)

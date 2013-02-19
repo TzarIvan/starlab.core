@@ -8,7 +8,7 @@
 
 namespace Starlab{
 
-class STARLIB_EXPORT StarlabSettings{
+class STARLIB_EXPORT Settings{
     
 private: 
     QSettings* qsettings;
@@ -19,7 +19,7 @@ public:
       * then attempts to override their values with the ones
       * specified by the xml options file 
       */
-    StarlabSettings(Application *application);
+    Settings(Application *application);
     void sync(){ qsettings->sync(); }
     
     /// Sets hardcoded default setting value (writes only if value is not already defined)

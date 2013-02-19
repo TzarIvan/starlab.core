@@ -24,10 +24,10 @@ class STARLIB_EXPORT PluginManager: public QObject{
     
     /// @{ constructor
     public:
-        PluginManager(StarlabSettings *settings);
+        PluginManager(Settings *settings);
     private:
-        StarlabSettings* _settings;
-        StarlabSettings* settings(){ return _settings; }
+        Settings* _settings;
+        Settings* settings(){ return _settings; }
     /// @}
         
     /// @{ Stores all (loaded) plugins
