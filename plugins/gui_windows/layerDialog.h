@@ -18,11 +18,11 @@ class LayerDialog : public QDockWidget{
     Q_OBJECT
 private:
     Ui::layerDialog* ui;
-    MainWindow* mainWindow;
+    Starlab::MainWindow* mainWindow;
     
 public:
     ~LayerDialog();
-    LayerDialog(MainWindow* mainwindow = 0);
+    LayerDialog(Starlab::MainWindow* mainwindow = 0);
     void updateDecoratorParsView();
     
 public slots:

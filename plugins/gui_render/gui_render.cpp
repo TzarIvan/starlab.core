@@ -1,6 +1,8 @@
 #include "gui_render.h"
 #include "StarlabDrawArea.h"
 
+using namespace Starlab;
+
 /// Since we depend on the selected model, the load is minimal
 void gui_render::load(){
     // qDebug() << "gui_render::load()";

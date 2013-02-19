@@ -18,9 +18,9 @@ class ProjectInputOutputPlugin : public StarlabPlugin{
 public:
     /// Provide the path of the project to open. Resources (loadModel) to open 
     /// the content of the project are provided by StarlabApplication
-    virtual bool open(const QString& path, Application& application) = 0;
+    virtual bool open(const QString& path, Starlab::Application& application) = 0;
     /// @todo document
-    virtual void save(const QString& path, Document& document) = 0;
+    virtual void save(const QString& path, Starlab::Document& document) = 0;
 };
 
 Q_DECLARE_INTERFACE(ProjectInputOutputPlugin, "Starlab::ProjectInputOutputPlugin/2.0")

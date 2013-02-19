@@ -12,8 +12,6 @@
 
 class RichParameterSet;
 
-using namespace Starlab;
-
 /** 
  * @brief The superclass of any starlab plugin
  * @defgroup StarlabPluginInterfaces Starlab Plugin Interfaces
@@ -57,18 +55,18 @@ protected:
         
 /// @{ Quick access to the Starlab resources
 private:
-    Document*           document();
-    Application* application();
-    Settings*    settings();
-    PluginManager*      pluginManager();
-    MainWindow*  mainWindow();
-    DrawArea*    drawArea();
+    Starlab::Document*          document();
+    Starlab::Application*       application();
+    Starlab::Settings*          settings();
+    Starlab::PluginManager*     pluginManager();
+    Starlab::MainWindow*        mainWindow();
+    Starlab::DrawArea*          drawArea();
 private:
     friend class Starlab::Application;
     friend class Starlab::MainWindow;
     friend class Starlab::PluginManager;
-    Application* _application;
-    MainWindow* _mainWindow;
+    Starlab::Application* _application;
+    Starlab::MainWindow* _mainWindow;
 /// @}
         
 /// @{ friendship trick

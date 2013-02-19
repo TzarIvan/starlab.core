@@ -16,7 +16,7 @@ public:
     virtual void update(){}
 
 protected:
-    Model* selectedModel(){ return document()->selectedModel(); }
+    Starlab::Model* selectedModel(){ return document()->selectedModel(); }
     using StarlabPlugin::application;
     using StarlabPlugin::mainWindow;
     using StarlabPlugin::settings;

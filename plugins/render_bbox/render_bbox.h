@@ -8,6 +8,6 @@ public:
     RenderPlugin* factory(){return new render_bbox(); }
     QString name() { return "Bounding Box"; }
     QIcon icon(){ return QIcon(":/icons/bbox.png"); }
-    bool isApplicable(Model* model);
+    bool isApplicable(Starlab::Model* model);
     void render();
 };

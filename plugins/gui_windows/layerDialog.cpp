@@ -6,6 +6,7 @@
 #include "ui_layerDialog.h"
 
 using namespace std;
+using namespace Starlab;
 
 /// Basic widget item of the layers interface for models
 class LayersWidgetModelItem : public QTreeWidgetItem{

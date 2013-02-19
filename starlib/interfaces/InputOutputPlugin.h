@@ -24,14 +24,14 @@ public:
     virtual QString name() = 0;
 
     /// can this plugin Save/Load the model?
-    virtual bool isApplicable(Model*) = 0;
+    virtual bool isApplicable(Starlab::Model*) = 0;
     
     /// Opens a model at the specified path
     /// @note existance and readability of the file at path is pre-checked
-    virtual Model* open(QString path) = 0;
+    virtual Starlab::Model* open(QString path) = 0;
     
     /// Saves a model to the specified path
-    virtual void save(Model*, QString path) = 0;    
+    virtual void save(Starlab::Model*, QString path) = 0;    
 /// @}
     
 /// @{ utility functions

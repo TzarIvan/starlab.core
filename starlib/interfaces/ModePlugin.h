@@ -69,7 +69,7 @@ public:
         using StarlabPlugin::mainWindow;
         using StarlabPlugin::application;
         using StarlabPlugin::pluginManager;
-        Model* selection(){ return document()->selectedModel(); }    
+        Starlab::Model* selection(){ return document()->selectedModel(); }    
     /// @}
 };
 

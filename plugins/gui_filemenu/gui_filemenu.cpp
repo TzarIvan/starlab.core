@@ -3,6 +3,8 @@
 #include "OSQuery.h"
 const static QString all_files = "All Files (*.*)";
 
+using namespace Starlab;
+
 void gui_filemenu::open(){
     /// Restore browsing directory from the cache
     QDir lastUsedDirectory( settings()->getString("lastUsedDirectory") );
@@ -56,7 +58,7 @@ void gui_filemenu::save(){
         if(document()->models().size()==0) return;        
         
         if(true){
-            Model* model = document()->selectedModel();
+            Starlab::Model* model = document()->selectedModel();
             bool pathAlreadySpecified = (model->path != "");
             bool success = false;
             

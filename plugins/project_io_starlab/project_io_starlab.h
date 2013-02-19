@@ -7,6 +7,6 @@ class project_io_starlab : public ProjectInputOutputPlugin{
 
 public:
     QString name() { return "Starlab Project (*.starlab)"; }
-    virtual bool open(const QString& path, Application& app);
-    virtual void save(const QString& path, Document& m);
+    virtual bool open(const QString& path, Starlab::Application& app);
+    virtual void save(const QString& path, Starlab::Document& m);
 };

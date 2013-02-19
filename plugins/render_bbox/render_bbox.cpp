@@ -51,7 +51,7 @@ void render_bbox::render(){
     glPopAttrib();        
 }
 
-bool render_bbox::isApplicable(Model *model){
+bool render_bbox::isApplicable(Starlab::Model *model){
     return !(model->bbox().isNull());
 }
 

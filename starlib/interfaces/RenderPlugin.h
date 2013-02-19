@@ -8,7 +8,7 @@ class RenderPlugin : public StarlabPlugin{
 /// @{ RenderPlugin interface
 public:
     /// @brief Can this plugin render the given model?
-    virtual bool isApplicable(Model* model)=0;
+    virtual bool isApplicable(Starlab::Model* model)=0;
 
     /// @brief Render the model, default implementation only sets glColor
     virtual void render() = 0;    

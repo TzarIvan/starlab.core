@@ -12,7 +12,7 @@ public:
     virtual DecoratePlugin* factory()=0;  
     
     /// Given the current Model, can the plugin be executed? 
-    virtual bool isApplicable(Model*) = 0;
+    virtual bool isApplicable(Starlab::Model*) = 0;
     
     /// This is similar to a render loop, thus it's called repeteadly
     virtual void decorate() = 0;
@@ -24,7 +24,7 @@ public:
     virtual void destroy() {}
     
     /// returns the model that this plugin should be decorating
-    Model* model(){ Q_ASSERT(_model!=NULL); return _model; }
+    Starlab::Model* model(){ Q_ASSERT(_model!=NULL); return _model; }
     
     /// Allows access to this->drawArea()
     using StarlabPlugin::drawArea;
@@ -43,7 +43,7 @@ private:
     /// @internal Allow it to set _model
     friend class Starlab::Model;
     /// @internal The model that this plugin is decorating
-    Model* _model;
+    Starlab::Model* _model;
 /// @}
 };
 
