@@ -12,14 +12,14 @@ class STARLIB_EXPORT StarlabSettings{
     
 private: 
     QSettings* qsettings;
-    StarlabApplication* const _application;
+    Application* const _application;
 public:
     /**
       * The constructor first set some hardcoded parameters, 
       * then attempts to override their values with the ones
       * specified by the xml options file 
       */
-    StarlabSettings(StarlabApplication *application);
+    StarlabSettings(Application *application);
     void sync(){ qsettings->sync(); }
     
     /// Sets hardcoded default setting value (writes only if value is not already defined)

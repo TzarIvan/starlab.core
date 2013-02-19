@@ -24,9 +24,9 @@ class STARLIB_EXPORT MainWindow : public QMainWindow{
     
     /// @{ Core
 public:
-    MainWindow(StarlabApplication *_application);
+    MainWindow(Application *_application);
 public: 
-    StarlabApplication* application(){ return _application; }
+    Application* application(){ return _application; }
     /// The global settings of the application
     StarlabSettings* settings(){ return application()->settings(); }
     /// Contains the document (extracted from application)
@@ -35,7 +35,7 @@ public:
     PluginManager* pluginManager(){ return application()->pluginManager(); }   
 private:
     /// Contains common (non-gui) functionalities
-    StarlabApplication* const _application;
+    Application* const _application;
 /// @}
 
     

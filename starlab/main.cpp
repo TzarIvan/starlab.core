@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 	StarlabApplicationGUI app(argc,argv);
 
 	/// Create a starlab application
-	StarlabApplication application;    
+	Application application;    
 
 	/// Create a new window (@internal *new* is important)
 	MainWindow* mainWindow = new MainWindow(&application);

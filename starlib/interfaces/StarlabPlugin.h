@@ -58,16 +58,16 @@ protected:
 /// @{ Quick access to the Starlab resources
 private:
     Document*           document();
-    StarlabApplication* application();
+    Application* application();
     StarlabSettings*    settings();
     PluginManager*      pluginManager();
     MainWindow*  mainWindow();
     DrawArea*    drawArea();
 private:
-    friend class Starlab::StarlabApplication;
+    friend class Starlab::Application;
     friend class Starlab::MainWindow;
     friend class Starlab::PluginManager;
-    StarlabApplication* _application;
+    Application* _application;
     MainWindow* _mainWindow;
 /// @}
         

@@ -20,7 +20,7 @@ MainWindow* StarlabPlugin::mainWindow(){
 	return _mainWindow; 
 }
  
-StarlabApplication* StarlabPlugin::application(){ 
+Application* StarlabPlugin::application(){ 
 	return _application; 
 }
 

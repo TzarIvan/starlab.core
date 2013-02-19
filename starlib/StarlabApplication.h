@@ -7,7 +7,7 @@
 namespace Starlab{
 
 /// @note QApplication is for GUI, QCoreApplication is for command line stuff
-class STARLIB_EXPORT StarlabApplication{
+class STARLIB_EXPORT Application{
     
     /// @{ core resources and accessors
     public:
@@ -21,8 +21,8 @@ class STARLIB_EXPORT StarlabApplication{
     /// @}
         
 public:
-    StarlabApplication();   
-    ~StarlabApplication();
+    Application();   
+    ~Application();
     
 public:
     /// @{ I/O: return false if don't know how to load

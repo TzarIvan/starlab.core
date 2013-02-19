@@ -3,7 +3,7 @@ namespace Starlab{
     class Model;
     class Document;
     class DrawArea;
-    class StarlabApplication;
+    class Application;
     class MainWindow;
     class StarlabSettings;
     class PluginManager;    

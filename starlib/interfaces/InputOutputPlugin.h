@@ -42,7 +42,7 @@ protected:
         return fi.completeBaseName();
     }
 private:
-    friend class Starlab::StarlabApplication;
+    friend class Starlab::Application;
     /// This is called before InputOutputPlugin::open(...), no need to do check existance yourself
     void checkReadable(QString path){
         QFileInfo fi(path);

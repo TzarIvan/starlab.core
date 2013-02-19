@@ -7,7 +7,7 @@
 
 using namespace Starlab;
 
-StarlabSettings::StarlabSettings(StarlabApplication* application) :
+StarlabSettings::StarlabSettings(Application* application) :
     _application(application)
 {
     /// Open and reads the settings

@@ -13,7 +13,7 @@
 
 using namespace Starlab;
 
-MainWindow::MainWindow(StarlabApplication* _application) :
+MainWindow::MainWindow(Application* _application) :
     _application(_application)
 {   
     /// Init

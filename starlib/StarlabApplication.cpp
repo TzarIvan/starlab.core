@@ -4,7 +4,7 @@
 
 using namespace Starlab;
 
-StarlabApplication::StarlabApplication(){
+Application::Application(){
     /// Instantiate resources
     _settings      = new StarlabSettings(this);
     _pluginManager = new PluginManager(_settings);
@@ -15,13 +15,13 @@ StarlabApplication::StarlabApplication(){
         plugin->_application = this;
 }
 
-StarlabApplication::~StarlabApplication(){
+Application::~Application(){
     delete _pluginManager;
     delete _document;
     delete _settings;
 }
 
-bool StarlabApplication::saveModel(Model* model, QString path){
+bool Application::saveModel(Model* model, QString path){
     if(path.isEmpty()) path=model->path;
     // qDebug() << "Saving model: " << model->name << " to file: " << path;
     QFileInfo fileInfo(path);
@@ -39,7 +39,7 @@ bool StarlabApplication::saveModel(Model* model, QString path){
     return true;
 }
 
-bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
+bool Application::loadModel(QString path, InputOutputPlugin* plugin){
     // qDebug("StarlabApplication::loadModel(\"%s\")", qPrintable(path));    
     QFileInfo fileInfo(path);
     QString extension = fileInfo.suffix().toLower();
@@ -71,7 +71,7 @@ bool StarlabApplication::loadModel(QString path, InputOutputPlugin* plugin){
     
     return true;
 }
-bool StarlabApplication::loadProject(QString path, ProjectInputOutputPlugin* plugin){   
+bool Application::loadProject(QString path, ProjectInputOutputPlugin* plugin){   
     // qDebug("StarlabApplication::loadProject(\"%s\")", qPrintable(path));
     QFileInfo fileInfo(path);
     QString extension = fileInfo.suffix().toLower();
@@ -104,11 +104,11 @@ bool StarlabApplication::loadProject(QString path, ProjectInputOutputPlugin* plu
     return true;
 }
 
-QList<FilterPlugin*> StarlabApplication::applicableFilters(){
+QList<FilterPlugin*> Application::applicableFilters(){
     return pluginManager()->filterPlugins.values();
 }
 
-QList<FilterPlugin *> StarlabApplication::applicableFilters(Model *model){
+QList<FilterPlugin *> Application::applicableFilters(Model *model){
     QList<FilterPlugin*> retval;    
     foreach(FilterPlugin* plugin, pluginManager()->filterPlugins)
         if(plugin->isApplicable(model))
@@ -116,7 +116,7 @@ QList<FilterPlugin *> StarlabApplication::applicableFilters(Model *model){
     return retval;
 }
 
-void StarlabApplication::load(QString path){
+void Application::load(QString path){
     // qDebug("StarlabApplication::load(\"%s\")", qPrintable(path));
     bool retstatus = false;
     if(!retstatus) retstatus = loadModel(path,NULL);
@@ -127,7 +127,7 @@ void StarlabApplication::load(QString path){
         throw StarlabException("Starlab does not know how to open file: " + path);
 }
 
-void StarlabApplication::executeFilter(Model* model, QString filterName){
+void Application::executeFilter(Model* model, QString filterName){
     // qDebug() << "StarlabApplication::executeFilter()";
     FilterPlugin* filter = pluginManager()->filterPlugins.value(filterName,NULL);
     if(filter==NULL) throw StarlabException("Filter '%s' does not exist", qPrintable(filterName));
@@ -141,7 +141,7 @@ void StarlabApplication::executeFilter(Model* model, QString filterName){
     pars->destructor();
 }
 
-QDir StarlabApplication::starlabDirectory(){
+QDir Application::starlabDirectory(){
     QDir baseDir(QApplication::applicationDirPath());
     if( OSQuery::isMac() ){            
         baseDir.cdUp();
@@ -158,7 +158,7 @@ QDir StarlabApplication::starlabDirectory(){
     return QDir("");
 }
 
-QDir StarlabApplication::executionDirectory(){
+QDir Application::executionDirectory(){
     return QFileInfo("./").absoluteDir();
 }
 

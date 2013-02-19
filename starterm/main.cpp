@@ -31,9 +31,9 @@ int main(int argc, char *argv[]){
         QCoreApplication* app = new QCoreApplication(argc, argv);
         QCoreApplication::setOrganizationName("Free Software Foundation");
         QCoreApplication::setApplicationName("starterm");
-        QCoreApplication::setApplicationVersion(StarlabApplication::version());
+        QCoreApplication::setApplicationVersion(Application::version());
         CmdLineParser* parser = new CmdLineParser(argc,argv,app);
-        StarlabApplication* starlab = new StarlabApplication();
+        Application* starlab = new Application();
         Document* document = starlab->document();
         
         /// Print a bunch of examples to command line

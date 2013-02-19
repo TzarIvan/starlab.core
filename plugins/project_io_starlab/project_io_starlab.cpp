@@ -3,7 +3,7 @@
 #include <QDir>
 #include "StarlabApplication.h"
 
-bool project_io_starlab::open(const QString& path, StarlabApplication& application){
+bool project_io_starlab::open(const QString& path, Application& application){
     /// Attempt open file resources
     QFile qf(path);
     QFileInfo qfInfo(path);
