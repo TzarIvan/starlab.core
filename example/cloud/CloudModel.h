@@ -5,7 +5,7 @@
 #include "global.h"
 #include "Model.h"
 
-class EXPORT CloudModel : public Model{
+class EXPORT CloudModel : public Starlab::Model{
     Q_OBJECT   
 
 public:
@@ -30,6 +30,6 @@ public:
     QVector<QVariant> & getProperty(QString name);
     
 public:
-    CloudModel(QString path, QString name=QString()) : Model(path,name){}
+    CloudModel(QString path, QString name=QString()) : Starlab::Model(path,name){}
     void updateBoundingBox();
 };

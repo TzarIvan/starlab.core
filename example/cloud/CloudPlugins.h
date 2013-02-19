@@ -10,6 +10,8 @@
 #include "interfaces/RenderPlugin.h"
 #include "interfaces/DecoratePlugin.h"
 
+using namespace Starlab;
+
 /// This namescape limits the visibility of these functions to this file
 namespace{
     bool isA(Model* model){
