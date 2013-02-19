@@ -9,12 +9,12 @@ class ModePluginDockWidget : public QDockWidget{
 
 /// @{ constructors: similar to QDockWidget but parent forced to be starlab main window
 public:
-    explicit ModePluginDockWidget(const QString &title, MainWindow* parent = 0, Qt::WindowFlags flags = 0):
+    explicit ModePluginDockWidget(const QString &title, Starlab::MainWindow* parent = 0, Qt::WindowFlags flags = 0):
         QDockWidget(title, (QWidget*) parent, flags), _mainWindow(parent) { setup(); }
-    explicit ModePluginDockWidget(MainWindow *parent = 0, Qt::WindowFlags flags = 0):
+    explicit ModePluginDockWidget(Starlab::MainWindow *parent = 0, Qt::WindowFlags flags = 0):
         QDockWidget((QWidget*) parent,flags), _mainWindow(parent){ setup(); }
 private:
-    MainWindow * const _mainWindow;
+    Starlab::MainWindow * const _mainWindow;
 private:
     void setup(){
         // this->setAllowedAreas(Qt::RightDockWidgetArea);
@@ -32,8 +32,8 @@ private:
        
 /// @{ easy access properties
 public:
-    Document* document(){ return _mainWindow->document(); }
-    Model* selection(){ return document()->selectedModel(); }    
+    Starlab::Document* document(){ return _mainWindow->document(); }
+    Starlab::Model* selection(){ return document()->selectedModel(); }    
 /// @}
     
 public:
