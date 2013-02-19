@@ -13,9 +13,9 @@ using namespace Starlab;
 using namespace qglviewer;
 
 /// By default the static instance is NULL
-StarlabDrawArea* StarlabDrawArea::_staticInstance = NULL;
+DrawArea* DrawArea::_staticInstance = NULL;
 
-void StarlabDrawArea::update(){
+void DrawArea::update(){
     // qDebug() << "StarlabDrawArea::update()";
     
     /// @internal Initialization can act on busy document
@@ -41,7 +41,7 @@ void StarlabDrawArea::update(){
     updateGL();
 }
 
-StarlabDrawArea::StarlabDrawArea(MainWindow* mainWindow) 
+DrawArea::DrawArea(MainWindow* mainWindow) 
     : _mainWindow(mainWindow){
 
     /// When document changes, refresh the rendering
@@ -74,11 +74,11 @@ StarlabDrawArea::StarlabDrawArea(MainWindow* mainWindow)
     this->captureDepthBuffer = false;
     
     /// Saves a static instance
-    Q_ASSERT(StarlabDrawArea::_staticInstance==NULL);
-    StarlabDrawArea::_staticInstance = this;
+    Q_ASSERT(DrawArea::_staticInstance==NULL);
+    DrawArea::_staticInstance = this;
 }
 
-void StarlabDrawArea::resetViewport(){
+void DrawArea::resetViewport(){
 
     QBox3D sceneBBox = document()->bbox();
     QVector3D minbound = sceneBBox.minimum();
@@ -93,15 +93,15 @@ void StarlabDrawArea::resetViewport(){
     camera()->showEntireScene();
 }
 
-void StarlabDrawArea::setPerspectiveProjection(){
+void DrawArea::setPerspectiveProjection(){
     camera()->setType(Camera::PERSPECTIVE); updateGL();
 }
 
-void StarlabDrawArea::setOrthoProjection(){
+void DrawArea::setOrthoProjection(){
     camera()->setType(Camera::ORTHOGRAPHIC); updateGL();
 }
 
-void StarlabDrawArea::setIsoProjection(){
+void DrawArea::setIsoProjection(){
     setOrthoProjection();
 
     // Move camera such that entire scene is visisble
@@ -112,7 +112,7 @@ void StarlabDrawArea::setIsoProjection(){
     camera()->interpolateTo(f,0.25);
 }
 
-void StarlabDrawArea::viewFrom(QAction * a){
+void DrawArea::viewFrom(QAction * a){
 
     if(!document()->selectedModel()) return;
 
@@ -157,7 +157,7 @@ void StarlabDrawArea::viewFrom(QAction * a){
     camera()->setSceneCenter(c);
 }
 
-void StarlabDrawArea::setBackgroundSolidColor(){
+void DrawArea::setBackgroundSolidColor(){
     QColorDialog cd;
 
     // Predefind background colors
@@ -176,7 +176,7 @@ void StarlabDrawArea::setBackgroundSolidColor(){
     updateGL();
 }
 
-void StarlabDrawArea::init(){
+void DrawArea::init(){
     /// Background color from settings file
     QString key = "DefaultBackgroundColor";
     // settings()->setDefault( key, QVariant(QColor(50,50,60)) );
@@ -188,7 +188,7 @@ void StarlabDrawArea::init(){
     resetViewport();
 }
 
-void StarlabDrawArea::draw(){
+void DrawArea::draw(){
     glEnable(GL_MULTISAMPLE); ///< Enables anti-aliasing
 
     /// Render each Model
@@ -232,12 +232,12 @@ void StarlabDrawArea::draw(){
     drawAllRenderObjects();
 }
 
-void StarlabDrawArea::drawWithNames(){
+void DrawArea::drawWithNames(){
     if(mainWindow()->hasModePlugin())
         mainWindow()->getModePlugin()->drawWithNames();
 }
 
-std::vector< std::vector<float> > StarlabDrawArea::depthBuffer()
+std::vector< std::vector<float> > DrawArea::depthBuffer()
 {
     int h = height(), w = width();
     std::vector< std::vector<float> > dbuffer(h, std::vector<float>(w,0));
@@ -261,7 +261,7 @@ std::vector< std::vector<float> > StarlabDrawArea::depthBuffer()
     return dbuffer;
 }
 
-void StarlabDrawArea::endSelection(const QPoint & p)
+void DrawArea::endSelection(const QPoint & p)
 {
     if(mainWindow()->hasModePlugin())
         mainWindow()->getModePlugin()->endSelection(p);
@@ -269,13 +269,13 @@ void StarlabDrawArea::endSelection(const QPoint & p)
 		QGLViewer::endSelection(p);
 }
 
-void StarlabDrawArea::postSelection(const QPoint & p)
+void DrawArea::postSelection(const QPoint & p)
 {
     if(mainWindow()->hasModePlugin())
         mainWindow()->getModePlugin()->postSelection(p);
 }
 
-void* StarlabDrawArea::readBuffer(GLenum format, GLenum type)
+void* DrawArea::readBuffer(GLenum format, GLenum type)
 {
     void * data = NULL;
     int w = this->width(), h = this->height();
@@ -293,12 +293,12 @@ void* StarlabDrawArea::readBuffer(GLenum format, GLenum type)
     return data;
 }
 
-StarlabDrawArea::~StarlabDrawArea(){
+DrawArea::~DrawArea(){
     // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
     deleteAllRenderObjects();
 }
 
-void StarlabDrawArea::setRenderer(Model *model, QString pluginName){
+void DrawArea::setRenderer(Model *model, QString pluginName){
     // qDebug("StarlabDrawArea::setRenderer(%s,%s)",qPrintable(model->name), qPrintable(pluginName));
     document()->pushBusy();
         RenderPlugin* plugin = pluginManager()->newRenderPlugin(pluginName);
@@ -306,7 +306,7 @@ void StarlabDrawArea::setRenderer(Model *model, QString pluginName){
     document()->popBusy();
 }
 
-void StarlabDrawArea::deleteAllRenderObjects(){
+void DrawArea::deleteAllRenderObjects(){
     // Render objects are not part of the document
     // document()->pushBusy();
         qDeleteAll(renderObjectList.begin(), renderObjectList.end());
@@ -314,12 +314,12 @@ void StarlabDrawArea::deleteAllRenderObjects(){
     // document()->popBusy();
 }
 
-void StarlabDrawArea::drawAllRenderObjects(){
+void DrawArea::drawAllRenderObjects(){
     foreach(RenderObject::Base* obj, renderObjectList)
         obj->draw();
 }
 
-void StarlabDrawArea::addRenderObject(RenderObject::Base * obj)
+void DrawArea::addRenderObject(RenderObject::Base * obj)
 {
     renderObjectList.append(obj);
 }
@@ -335,32 +335,32 @@ for(uint i=0; i<poly.size()-2; i++){
 }
 #endif
 
-RenderObject::Triangle& StarlabDrawArea::drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color){
+RenderObject::Triangle& DrawArea::drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color){
     RenderObject::Triangle* triangle = new RenderObject::Triangle(p1,p2,p3,color);
     addRenderObject(triangle);
     return *triangle;
 }
 
-RenderObject::Point& StarlabDrawArea::drawPoint(QVector3D p1, float size, QColor color){
+RenderObject::Point& DrawArea::drawPoint(QVector3D p1, float size, QColor color){
     RenderObject::Point* point = new RenderObject::Point(p1,size,color);
     addRenderObject(point);
     return *point;
 }
 
-RenderObject::Segment& StarlabDrawArea::drawSegment(QVector3D p1, QVector3D p2, float size, QColor color){
+RenderObject::Segment& DrawArea::drawSegment(QVector3D p1, QVector3D p2, float size, QColor color){
     RenderObject::Segment* segment = new RenderObject::Segment(p1,p2,size,color);
     addRenderObject(segment);
     return *segment;
 }
 
-RenderObject::Ray& StarlabDrawArea::drawRay(QVector3D orig, QVector3D dir, float size, QColor color, float scale){
+RenderObject::Ray& DrawArea::drawRay(QVector3D orig, QVector3D dir, float size, QColor color, float scale){
     RenderObject::Ray* ray = new RenderObject::Ray(orig,dir,size,color,scale);
     addRenderObject(ray);
     return *ray;
 }
 
 /// @internal returning true will prevent the drawArea plugin from intercepting the events!!!
-bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
+bool DrawArea::eventFilter(QObject*, QEvent* event){
     /// If a mode is not open, pass *everything* to the drawArea plugin
     if(!mainWindow()->hasModePlugin()) return false;
     /// Same if the mode plugin is suspended
@@ -379,7 +379,7 @@ bool StarlabDrawArea::eventFilter(QObject*, QEvent* event){
     }
 }
 
-void StarlabDrawArea::mouseDoubleClickEvent(QMouseEvent *e)
+void DrawArea::mouseDoubleClickEvent(QMouseEvent *e)
 {
     bool found = false;
     qglviewer::Vec p = camera()->pointUnderPixel(e->pos(), found);
@@ -404,7 +404,7 @@ void StarlabDrawArea::mouseDoubleClickEvent(QMouseEvent *e)
     mainWindow()->setStatusBarMessage(QString("Center at x = %1 | y = %2 | z = %3").arg(p.x).arg(p.y).arg(p.z));
 }
 
-void StarlabDrawArea::deleteRenderObject(RenderObject* /*object*/){
+void DrawArea::deleteRenderObject(RenderObject* /*object*/){
     /// @todo 
     throw StarlabException("TODO: StarlabDrawArea::deleteRenderObject");
 }

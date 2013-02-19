@@ -27,24 +27,24 @@ namespace Starlab{
 /// On aftertought this makes sense, as for example we are not allowed to modify 
 /// GLArea from meshlab, but nothing stops us from having a wrapper around it!!!
 /// Doing a wrapper also gives us the chance of using it as a Q_OBJECT
-class STARLIB_EXPORT StarlabDrawArea : public QGLViewer{
+class STARLIB_EXPORT DrawArea : public QGLViewer{
     Q_OBJECT
     
 /// @{ static instancing
 private:
-    static StarlabDrawArea* _staticInstance;
+    static DrawArea* _staticInstance;
 public:
     /// @return Returns a pointer to the application's DrawArea instance.
     ///         if no instance has been allocated, NULL is returned
-    static StarlabDrawArea* instance(){ return _staticInstance; }
+    static DrawArea* instance(){ return _staticInstance; }
 /// @}    
     
 /// @{ core
 public:
     /// Constructor
-    StarlabDrawArea(MainWindow* mainWindow);
+    DrawArea(MainWindow* mainWindow);
     /// Polymorphic destructor
-    ~StarlabDrawArea();
+    ~DrawArea();
 private:
     MainWindow* const _mainWindow;
 public:

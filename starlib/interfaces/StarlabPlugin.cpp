@@ -11,7 +11,7 @@ StarlabPlugin::StarlabPlugin(){
     _action = NULL; 
 }
 
-StarlabDrawArea* StarlabPlugin::drawArea(){ 
+DrawArea* StarlabPlugin::drawArea(){ 
     if(_mainWindow==NULL) return NULL;
     return mainWindow()->drawArea(); 
 }

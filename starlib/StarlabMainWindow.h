@@ -58,10 +58,10 @@ private slots:
 /// @{ DrawArea Management (Center of Starlab window) 
 private:
     /// Manager of main drawing area (MeshLab: GLArea)
-    StarlabDrawArea* _drawArea; /// NULL
+    DrawArea* _drawArea; /// NULL
 public:
     /// Returns pointer to the active draw area
-    StarlabDrawArea* drawArea(){ return _drawArea; }
+    DrawArea* drawArea(){ return _drawArea; }
 /// @}
            
     

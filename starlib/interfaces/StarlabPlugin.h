@@ -62,7 +62,7 @@ private:
     StarlabSettings*    settings();
     PluginManager*      pluginManager();
     MainWindow*  mainWindow();
-    StarlabDrawArea*    drawArea();
+    DrawArea*    drawArea();
 private:
     friend class Starlab::StarlabApplication;
     friend class Starlab::MainWindow;

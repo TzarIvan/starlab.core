@@ -27,7 +27,7 @@ MainWindow::MainWindow(StarlabApplication* _application) :
         glf.setSamples(8);
         QGLFormat::setDefaultFormat(glf);
 
-        _drawArea = new StarlabDrawArea(this);
+        _drawArea = new DrawArea(this);
         this->setCentralWidget(_drawArea);
         _drawArea->setAcceptDrops(true);
     }

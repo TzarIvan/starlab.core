@@ -2,7 +2,7 @@
 namespace Starlab{
     class Model;
     class Document;
-    class StarlabDrawArea;
+    class DrawArea;
     class StarlabApplication;
     class MainWindow;
     class StarlabSettings;
