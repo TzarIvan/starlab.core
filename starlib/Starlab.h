@@ -4,7 +4,7 @@ namespace Starlab{
     class Document;
     class StarlabDrawArea;
     class StarlabApplication;
-    class StarlabMainWindow;
+    class MainWindow;
     class StarlabSettings;
     class PluginManager;    
 } /// namespace

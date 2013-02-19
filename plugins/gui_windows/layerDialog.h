@@ -1,12 +1,12 @@
 #pragma once
 
 #include <QtGui>
+#include "Starlab.h"
 #include "Model.h"
-#include "parameters/RichParameterSet.h"
+#include "RichParameterSet.h"
 #include "StarlabMainWindow.h"
 
 class GLArea;
-class MainWindow;
 class QTreeWidget;
 class GLLogStream;
 
@@ -18,11 +18,11 @@ class LayerDialog : public QDockWidget{
     Q_OBJECT
 private:
     Ui::layerDialog* ui;
-    StarlabMainWindow* mainWindow;
+    MainWindow* mainWindow;
     
 public:
     ~LayerDialog();
-    LayerDialog(StarlabMainWindow* mainwindow = 0);
+    LayerDialog(MainWindow* mainwindow = 0);
     void updateDecoratorParsView();
     
 public slots:

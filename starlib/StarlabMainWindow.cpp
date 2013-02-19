@@ -13,7 +13,7 @@
 
 using namespace Starlab;
 
-StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
+MainWindow::MainWindow(StarlabApplication* _application) :
     _application(_application)
 {   
     /// Init
@@ -135,11 +135,11 @@ StarlabMainWindow::StarlabMainWindow(StarlabApplication* _application) :
     }
 }
 
-void StarlabMainWindow::closeEvent(QCloseEvent*){
+void MainWindow::closeEvent(QCloseEvent*){
     QApplication::exit(0);
 }
 
-void StarlabMainWindow::dropEvent(QDropEvent* event) {
+void MainWindow::dropEvent(QDropEvent* event) {
     // qDebug() << "StarlabMainWindow::dropEvent()";
     const QMimeData* data = event->mimeData();
     if(data->hasUrls())
@@ -157,14 +157,14 @@ void StarlabMainWindow::showActionTooltip(QAction* action){
 }
 #endif
 
-QSize StarlabMainWindow::sizeHint() const{
+QSize MainWindow::sizeHint() const{
     QRect geom = QApplication::desktop()->screenGeometry();
     int scrw = geom.width();
     int scrh = geom.height();   
     return QSize(scrw/2,scrh/2);
 }
 
-void StarlabMainWindow::triggerFilterByName(QString name){
+void MainWindow::triggerFilterByName(QString name){
     name = name.toLower();
     setStatusBarMessage("Auto-triggering filter: '" + name + "'.");
     bool isFound=false;   
@@ -181,14 +181,14 @@ void StarlabMainWindow::triggerFilterByName(QString name){
     }
 }
 
-void StarlabMainWindow::setModePlugin(ModePlugin* mode){ 
+void MainWindow::setModePlugin(ModePlugin* mode){ 
     Q_ASSERT(_modePlugin==NULL); 
     _modePlugin=mode;
     emit modePluginSet(mode);
 }
 
 /// @todo Implement this function...
-void StarlabMainWindow::triggerMenuActionByName(QString name){
+void MainWindow::triggerMenuActionByName(QString name){
     QAction* trigger_me = NULL;
     foreach(QMenu* menu, menus)
         foreach(QAction* action, menu->actions())
@@ -203,7 +203,7 @@ void StarlabMainWindow::triggerMenuActionByName(QString name){
         setStatusBarMessage("[WARNING] Auto-Started failed: '"+ name + "'",10);
 }
 
-void StarlabMainWindow::update(){
+void MainWindow::update(){
     // qDebug() << "StarlabMainWindow::update()";
     
     /// Update all the menus/toolbars
@@ -230,7 +230,7 @@ void StarlabMainWindow::update(){
     }
 }
 
-void StarlabMainWindow::setStatusBarMessage(QString message, double timeout_seconds){
+void MainWindow::setStatusBarMessage(QString message, double timeout_seconds){
     /// Setup tooltip of old messages
     _oldMessages.prepend(message);
     QString tooltipMessage = "Message Log (first is recent):";
@@ -245,7 +245,7 @@ void StarlabMainWindow::setStatusBarMessage(QString message, double timeout_seco
     QApplication::processEvents();
 }
 
-void StarlabMainWindow::setProgressBarValue(double completion){
+void MainWindow::setProgressBarValue(double completion){
     completion = qBound(completion, 0.0, 1.0);
     // _statusBar->showMessage(actor); ///< @todo is 0 timeout appropriate?    
     _progressBar->setEnabled(true);
@@ -256,17 +256,17 @@ void StarlabMainWindow::setProgressBarValue(double completion){
     QApplication::processEvents();
 }
 
-void StarlabMainWindow::closeProgressBar(){
+void MainWindow::closeProgressBar(){
     _progressBar->hide();
     _progressBar->reset();
 }
 
-void StarlabMainWindow::hideToolbarOnEmptyMessage(QString /*message*/){
+void MainWindow::hideToolbarOnEmptyMessage(QString /*message*/){
     // qDebug() << "NEW MESSAGE: " << message;
     /// @todo disabled as it's annoying to see it popping in/out
     // if(message.isEmpty())  _statusBar->hide();
 }
 
-void StarlabMainWindow::selectionChanged(Model *selected){
+void MainWindow::selectionChanged(Model *selected){
     this->setStatusBarMessage("Selected model has been changed to '" + selected->name + "'", 3);
 }

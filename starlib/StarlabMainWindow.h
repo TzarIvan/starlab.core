@@ -7,26 +7,24 @@
 #include <QDragEnterEvent>
 #include <QToolBar>
 
+#include "Starlab.h"
+#include "Document.h"
 #include "StarlabException.h"
 #include "StarlabSettings.h"
 #include "StarlabApplication.h"
-#include "Document.h"
 #include "starlib_global.h"
 
 namespace Starlab{
 
-class PluginManager;
-//class DrawAreaPlugin;
-
 /// The basic structure of the stalab window to which plugins (i.e. GUI plugins) interface
-class STARLIB_EXPORT StarlabMainWindow : public QMainWindow{
+class STARLIB_EXPORT MainWindow : public QMainWindow{
     Q_OBJECT
     
+
     
-    
-/// @{ Core
+    /// @{ Core
 public:
-    StarlabMainWindow(StarlabApplication *_application);
+    MainWindow(StarlabApplication *_application);
 public: 
     StarlabApplication* application(){ return _application; }
     /// The global settings of the application
@@ -188,4 +186,4 @@ public:
  
 } // namespace
 
-Q_DECLARE_INTERFACE(Starlab::StarlabMainWindow, "starlab.StarlabMainWindow/1.2")
+Q_DECLARE_INTERFACE(Starlab::MainWindow, "Starlab::MainWindow/2.0")

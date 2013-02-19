@@ -9,12 +9,12 @@ class ModePluginDockWidget : public QDockWidget{
 
 /// @{ constructors: similar to QDockWidget but parent forced to be starlab main window
 public:
-    explicit ModePluginDockWidget(const QString &title, StarlabMainWindow* parent = 0, Qt::WindowFlags flags = 0):
+    explicit ModePluginDockWidget(const QString &title, MainWindow* parent = 0, Qt::WindowFlags flags = 0):
         QDockWidget(title, (QWidget*) parent, flags), _mainWindow(parent) { setup(); }
-    explicit ModePluginDockWidget(StarlabMainWindow *parent = 0, Qt::WindowFlags flags = 0):
+    explicit ModePluginDockWidget(MainWindow *parent = 0, Qt::WindowFlags flags = 0):
         QDockWidget((QWidget*) parent,flags), _mainWindow(parent){ setup(); }
 private:
-    StarlabMainWindow * const _mainWindow;
+    MainWindow * const _mainWindow;
 private:
     void setup(){
         // this->setAllowedAreas(Qt::RightDockWidgetArea);

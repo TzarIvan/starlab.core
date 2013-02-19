@@ -25,7 +25,7 @@ public:
 
 LayerDialog::~LayerDialog(){ delete ui; }
 
-LayerDialog::LayerDialog(StarlabMainWindow* mainWindow) : 
+LayerDialog::LayerDialog(MainWindow* mainWindow) : 
     QDockWidget(mainWindow)
 {
     this->setWindowTitle("Document Layers");

@@ -61,14 +61,14 @@ private:
     StarlabApplication* application();
     StarlabSettings*    settings();
     PluginManager*      pluginManager();
-    StarlabMainWindow*  mainWindow();
+    MainWindow*  mainWindow();
     StarlabDrawArea*    drawArea();
 private:
     friend class Starlab::StarlabApplication;
-    friend class Starlab::StarlabMainWindow;
+    friend class Starlab::MainWindow;
     friend class Starlab::PluginManager;
     StarlabApplication* _application;
-    StarlabMainWindow* _mainWindow;
+    MainWindow* _mainWindow;
 /// @}
         
 /// @{ friendship trick

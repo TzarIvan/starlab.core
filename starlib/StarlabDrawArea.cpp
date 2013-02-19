@@ -41,7 +41,7 @@ void StarlabDrawArea::update(){
     updateGL();
 }
 
-StarlabDrawArea::StarlabDrawArea(StarlabMainWindow* mainWindow) 
+StarlabDrawArea::StarlabDrawArea(MainWindow* mainWindow) 
     : _mainWindow(mainWindow){
 
     /// When document changes, refresh the rendering

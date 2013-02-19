@@ -16,7 +16,7 @@ StarlabDrawArea* StarlabPlugin::drawArea(){
     return mainWindow()->drawArea(); 
 }
 
-StarlabMainWindow* StarlabPlugin::mainWindow(){ 
+MainWindow* StarlabPlugin::mainWindow(){ 
 	return _mainWindow; 
 }
  

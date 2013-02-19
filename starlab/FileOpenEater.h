@@ -3,9 +3,9 @@
 class FileOpenEater : public QObject{
     Q_OBJECT
 private:
-    Starlab::StarlabMainWindow* const mainWindow;
+    Starlab::MainWindow* const mainWindow;
 public:
-    FileOpenEater(Starlab::StarlabMainWindow* mainWindow) : mainWindow(mainWindow){
+    FileOpenEater(Starlab::MainWindow* mainWindow) : mainWindow(mainWindow){
         setParent(mainWindow);
     }       
 protected:
