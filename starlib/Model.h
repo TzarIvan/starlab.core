@@ -87,4 +87,6 @@ protected:
 
 } /// namespace 
 
+typedef Starlab::Model StarlabModel;
+
 Q_DECLARE_INTERFACE(Starlab::Model, "Starlab::Model/2.0")

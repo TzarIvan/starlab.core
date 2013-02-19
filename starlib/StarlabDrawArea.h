@@ -122,3 +122,6 @@ protected:
 };
 
 } // namespace
+
+/// Concatenated Namespace
+typedef Starlab::DrawArea StarlabDrawArea;
