@@ -1,11 +1,12 @@
 #pragma once
 
-#include "SurfaceMeshTypes.h"
 #include <nanoflann.hpp>
 
 using namespace std;
 using namespace nanoflann;
-using namespace SurfaceMeshTypes;
+
+#include "SurfaceMeshModel.h"
+using namespace SurfaceMesh;
 
 template <typename T>
 struct PointCloud{
