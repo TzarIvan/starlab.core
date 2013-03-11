@@ -106,6 +106,8 @@ defineTest(StarlabTemplate){
     DEPENDPATH  *= $$_PRO_FILE_PWD_
     INCLUDEPATH *= $$_PRO_FILE_PWD_
 
+    QT*=xml opengl
+
     equals(STARLAB_TEMPLATE,"sharedlib"){
         DESTDIR = $$LIBRARIESPATH
         LIBNAME = $$basename(_PRO_FILE_PWD_)
