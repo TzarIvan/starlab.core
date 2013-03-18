@@ -1,5 +1,6 @@
 #include "gui_render.h"
 #include "StarlabDrawArea.h"
+#include <QDockWidget>
 
 using namespace Starlab;
 
@@ -8,7 +9,8 @@ void gui_render::load(){
     // qDebug() << "gui_render::load()";
     this->renderModeGroup = new QActionGroup(this);
     this->renderModeGroup->setExclusive(true);
-    this->currentAsDefault = new QAction("Set current as default...",NULL);
+    this->currentAsDefault = new QAction("Set current as default...",this);
+    this->editRenderSettings = new QAction("Edit renderer settings...",this);
 }
 
 void gui_render::update(){
@@ -19,7 +21,7 @@ void gui_render::update(){
     /// Fetch current renderer
     Model* selectedModel = document()->selectedModel();
     if(selectedModel==NULL) return;
-    RenderPlugin* currentRenderer = selectedModel->renderer();
+    Renderer* currentRenderer = selectedModel->renderer();
     
     /// Add render modes menu/toolbar entries
     foreach(RenderPlugin* plugin, pluginManager()->getApplicableRenderPlugins(selectedModel)){
@@ -28,7 +30,7 @@ void gui_render::update(){
         
         /// "Check" an icon
         if(currentRenderer!=NULL)
-            if(currentRenderer->name() == plugin->name())
+            if(currentRenderer->plugin() == plugin)
                 action->setChecked("true");
         
         renderModeGroup->addAction(action);
@@ -38,19 +40,24 @@ void gui_render::update(){
     }
         
     /// @internal menu can be added only after it has been filled :(
+    menu()->addAction(editRenderSettings);
     menu()->addAction(currentAsDefault);
     menu()->addSeparator();
     menu()->addActions(renderModeGroup->actions());
-    menu()->addSeparator();
+    
+    /// Disable settings link when no parameters are given
+    editRenderSettings->setDisabled(currentRenderer->parameters()->isEmpty());
+
     
     /// Connect click events to change in renderer system
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
-    connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()));
+    connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()), Qt::UniqueConnection);
+    connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()), Qt::UniqueConnection);
 }
 
 void gui_render::triggerSetDefaultRenderer(){
     // qDebug() << "gui_render::triggerSetDefaultRenderer()";
-    RenderPlugin* renderer = document()->selectedModel()->renderer();
+    RenderPlugin* renderer = document()->selectedModel()->renderer()->plugin();
     pluginManager()->setPreferredRenderer(document()->selectedModel(),renderer);
     QString message = QString("Preferred renderer for \"%1\" set to \"2\"")
                               .arg(document()->selectedModel()->metaObject()->className())
@@ -58,11 +65,39 @@ void gui_render::triggerSetDefaultRenderer(){
     mainWindow()->setStatusBarMessage(message);
 }
 
+void gui_render::trigger_editSettings(){
+    Renderer* renderer = document()->selectedModel()->renderer();
+    /// No renderer set (btw... weird) skip
+    if(renderer==NULL) return;
+    /// No parameters.. avoid useless empty widget
+    if(renderer->parameters()->isEmpty()) return;
+    
+    /// Create 
+    ParametersWidget* widget = new ParametersWidget(renderer->parameters(), mainWindow());
+    
+    /// Add a simple title
+    widget->setWindowTitle(QString("Settings for '%1'").arg(renderer->plugin()->name()));
+    
+    /// Behave as independent window & stay on top
+    widget->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
+    
+    /// Delete frame when its associated renderer gets killed
+    connect(renderer, SIGNAL(destroyed()), widget, SLOT(deleteLater()));
+    
+    /// On a change in parameters, re-init, render and update
+    connect(widget, SIGNAL(parameterChanged()), renderer, SLOT(init()));
+    connect(widget, SIGNAL(parameterChanged()), renderer, SLOT(render()));
+    connect(widget, SIGNAL(parameterChanged()), drawArea(), SLOT(updateGL()));    
+    
+    /// Finally show
+    widget->show(); 
+}
+
 void gui_render::triggerRenderModeAction(QAction* action){
     // qDebug("gui_render::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));
     Model* model = document()->selectedModel();
     document()->pushBusy();
-        RenderPlugin* plugin = pluginManager()->newRenderPlugin(action->text());
+        RenderPlugin* plugin = pluginManager()->getRenderPlugin(action->text());
         model->setRenderer(plugin);
     document()->popBusy();
 }

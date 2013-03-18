@@ -10,6 +10,7 @@
 class QTreeWidgetItem;
 class DecoratePlugin;
 class RenderPlugin;
+class Renderer;
 /// @}
 
 namespace Starlab{
@@ -19,8 +20,8 @@ class STARLIB_EXPORT Model : public QObject{
 
 /// @{ Constructors
 public:
-    /// Basic constructor
     Model(QString path, QString name=QString());
+    ~Model();
 /// @}        
     
 /// @{ Overload these to customize appearance in the Layers dialog
@@ -49,10 +50,10 @@ public:
 
 /// @{ Rendering 
 public: 
-    RenderPlugin* renderer();
-    void setRenderer(RenderPlugin *plugin);
+    Renderer* renderer();
+    void setRenderer(RenderPlugin* plugin);
 private:
-    RenderPlugin* _renderer;
+    Renderer* _renderer;
 /// @}
 
 /// @{ Decorators

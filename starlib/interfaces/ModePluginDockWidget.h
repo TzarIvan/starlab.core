@@ -45,7 +45,6 @@ public:
     }
     /// Docks the widget on the right hand side of the main window
     void dockMe(){
-        QMainWindow* mainWindow = dynamic_cast<QMainWindow*>( this->parent() );
-        mainWindow->addDockWidget(Qt::RightDockWidgetArea,this);
+        _mainWindow->addDockWidget(Qt::RightDockWidgetArea,this);
     }
 };

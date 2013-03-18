@@ -105,12 +105,12 @@ bool Application::loadProject(QString path, ProjectInputOutputPlugin* plugin){
 }
 
 QList<FilterPlugin*> Application::applicableFilters(){
-    return pluginManager()->filterPlugins.values();
+    return pluginManager()->filterPlugins();
 }
 
 QList<FilterPlugin *> Application::applicableFilters(Model *model){
     QList<FilterPlugin*> retval;    
-    foreach(FilterPlugin* plugin, pluginManager()->filterPlugins)
+    foreach(FilterPlugin* plugin, pluginManager()->filterPlugins())
         if(plugin->isApplicable(model))
             retval.append(plugin);
     return retval;
@@ -129,16 +129,16 @@ void Application::load(QString path){
 
 void Application::executeFilter(Model* model, QString filterName){
     // qDebug() << "StarlabApplication::executeFilter()";
-    FilterPlugin* filter = pluginManager()->filterPlugins.value(filterName,NULL);
-    if(filter==NULL) throw StarlabException("Filter '%s' does not exist", qPrintable(filterName));
-    if(!filter->isApplicable(model)) throw StarlabException("Filter not applicable");
+    FilterPlugin* filter = pluginManager()->getFilter(filterName);
+    if(!filter->isApplicable(model)) 
+        throw StarlabException("Filter not applicable");
     
     /// Filter is applied on the *selected* model
     document()->setSelectedModel(model);
     RichParameterSet* pars = new RichParameterSet();
     filter->initParameters(pars);
     filter->applyFilter(pars);
-    pars->destructor();
+    pars->deleteLater();
 }
 
 QDir Application::starlabDirectory(){

@@ -18,8 +18,7 @@ private:
     
 public:
     ~ParametersFrame(){}
-    ParametersFrame(QWidget* parent=NULL, QWidget* /*gla*/=NULL){
-        this->setParent(parent);
+    ParametersFrame(QWidget* parent=NULL, Qt::WindowFlags f = 0) : QFrame(parent, f){
         parameters = NULL;
         if(layout()) delete layout();
         QGridLayout * vLayout = new QGridLayout(this);

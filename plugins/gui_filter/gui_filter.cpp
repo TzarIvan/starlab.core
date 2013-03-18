@@ -13,7 +13,7 @@
 
 void gui_filter::load(){
     /// Fill the menu with plugin names and make connections
-    foreach(FilterPlugin* plugin, pluginManager()->filterPlugins.values()){
+    foreach(FilterPlugin* plugin, pluginManager()->filterPlugins()){
         QAction* action = plugin->action();
         mainWindow()->filterMenu->addAction(action);
         

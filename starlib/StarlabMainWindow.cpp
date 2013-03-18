@@ -122,7 +122,7 @@ MainWindow::MainWindow(Application* _application) :
     
     /// Installs all the GUI plugins
     {
-        foreach(GuiPlugin* plugin, pluginManager()->guiPlugins){
+        foreach(GuiPlugin* plugin, pluginManager()->guiPlugins()){
             plugin->_mainWindow=this;
             plugin->load();
         }
@@ -207,7 +207,7 @@ void MainWindow::update(){
     // qDebug() << "StarlabMainWindow::update()";
     
     /// Update all the menus/toolbars
-    foreach(GuiPlugin* plugin, pluginManager()->guiPlugins)
+    foreach(GuiPlugin* plugin, pluginManager()->guiPlugins())
         plugin->update();
       
     /// Only display menus and toolbars if they contain something

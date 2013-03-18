@@ -1,6 +1,10 @@
 load($$PWD/../../starlab.prf)
 StarlabTemplate(plugin)
 
-HEADERS = render_bbox.h
-SOURCES = render_bbox.cpp
-RESOURCES = resources.qrc
+HEADERS = \
+    plugin.h
+
+SOURCES = plugin.cpp
+RESOURCES = plugin.qrc
+OTHER_FILES += \
+    bbox.png
