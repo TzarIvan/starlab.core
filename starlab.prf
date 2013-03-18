@@ -65,6 +65,12 @@ mac:       PLUGINSPATH    = $$STARLABPREFIX/Starlab.app/plugins
 win32:     PLUGINSPATH    = $$STARLABPREFIX/StarlabPackage/plugins
 unix:!mac: PLUGINSPATH    = $$STARLABPREFIX/StarlabPackage/plugins
 
+win32:CONFIG(release, debug|release) {
+    LIBRARIESPATH  = $$STARLABPREFIX/StarlabPackageRelease
+    EXECUTABLEPATH = $$STARLABPREFIX/StarlabPackageRelease
+    PLUGINSPATH    = $$STARLABPREFIX/StarlabPackageRelease/plugins
+} 
+
 #------------------------------- SETUP STARLIB ---------------------------------
 #
 # Starlib is the core of starlab. It's a dynamic/shared library that contains all 
@@ -105,6 +111,8 @@ defineTest(StarlabTemplate){
     # always depend from current stuff    
     DEPENDPATH  *= $$_PRO_FILE_PWD_
     INCLUDEPATH *= $$_PRO_FILE_PWD_
+
+    QT*=xml opengl
 
     equals(STARLAB_TEMPLATE,"sharedlib"){
         DESTDIR = $$LIBRARIESPATH
