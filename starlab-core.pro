@@ -15,6 +15,7 @@ system(qmake -set EIGEN         $$PWD/external/eigen-3.1.0-rc1/config.prf)
 system(qmake -set NANOFLANN     $$PWD/external/nanoflann-113/config.prf)
 system(qmake -set MATLAB        $$PWD/external/matlab.prf)
 system(qmake -set KDTREEMATLAB  $$PWD/external/kdtree-matlab/config.prf)
+system(qmake -set OCTREE        $$PWD/external/octree/config.prf)
 
 #--- AND LIST THESE FOR REFERENCE
 OTHER_FILES += starlab.prf      #< starlab core features

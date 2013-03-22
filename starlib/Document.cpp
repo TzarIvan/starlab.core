@@ -50,6 +50,37 @@ void Document::addModel(Model* m){
     popBusy();
 }
 
+Model *Document::getModel(QString name)
+{
+    Model * found = NULL;
+
+    pushBusy();
+        foreach(Model* m, _models){
+            if(m->name == name){
+                found = m;
+                break;
+            }
+        }
+    popBusy();
+
+    return found;
+}
+
+void Document::removeModel(Model *m)
+{
+    int midx = _models.indexOf(m);
+    if(midx < 0){
+        qDebug() << "[removeModel] model not found!";
+        return;
+    }
+
+    pushBusy();
+    emit deleteScheduled(_models[midx]);
+    _models[midx]->deleteLater();
+    _models.removeAt(midx);
+    popBusy();
+}
+
 void Document::clear(){
     pushBusy();
         /// Delete models individually

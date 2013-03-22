@@ -52,6 +52,10 @@ public:
     QBox3D bbox();
     /// Add a model (if it's only one becomes selection)
     void addModel(Model* m);
+    /// Return a model by name
+    Model * getModel(QString name);
+    /// Remove a model
+    void removeModel(Model* m);
     /// Clean slate, remove all models
     void clear();
     /// Replace Model, also deleting the memory of the old
