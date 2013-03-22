@@ -43,11 +43,16 @@ protected:
     CloudModel* cloud(){ return safeCast(document()->selectedModel()); }
 };
 
+class CloudRenderer : public Renderer{
+public:
+    CloudModel* cloud(){ return safeCast(model()); }
+};
+
 class CloudRenderPlugin : public RenderPlugin{
 private:
     bool isApplicable(Model* model){ return isA(model); }
-protected:
-    CloudModel* cloud(){ return safeCast(model()); }
+//protected:
+//    CloudModel* cloud(){ return safeCast(model()); }
 };
 
 class CloudDecoratePlugin : public DecoratePlugin{

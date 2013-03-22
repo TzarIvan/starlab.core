@@ -39,7 +39,7 @@ void gui_mode::update(){
     modeActionGroup->addAction(defaultModeAction);
     
     /// Re-fill the menu with plugin names and make connections
-    foreach(ModePlugin* plugin, pluginManager()->editPlugins.values()){
+    foreach(ModePlugin* plugin, pluginManager()->modePlugins()){
         if(!plugin->isApplicable()) continue;
         QAction* action = plugin->action();
         action->setCheckable(true);

@@ -71,6 +71,12 @@ PluginManager::PluginManager(Settings* settings) :
     STARLAB_CATCH_BLOCK 
 }
 
+FilterPlugin *PluginManager::getFilter(QString name){
+    FilterPlugin* filter = _filterPlugins.value(name,NULL);
+    if(filter==NULL) throw StarlabException("Cannot find filter '%s'", qPrintable(filter->name()));
+    return filter;
+}
+
 void PluginManager::loadPlugins() {
     // qDebug() << "PluginManager::loadPlugins(..)";
     
@@ -176,34 +182,34 @@ bool PluginManager::load_InputOutputPlugin(QObject *plugin){
 bool PluginManager::load_FilterPlugin(QObject *plugin){
     FilterPlugin* iFilter = qobject_cast<FilterPlugin*>(plugin);
     if(!iFilter) return false;
-    filterPlugins.insert(iFilter->name(), iFilter);
+    _filterPlugins.insert(iFilter->name(), iFilter);
     return true;
 }
 
 bool PluginManager::load_DecoratePlugin(QObject *plugin){
     DecoratePlugin* iDecorate = qobject_cast<DecoratePlugin*>(plugin);
     if(!iDecorate) return false;
-    decoratePlugins.insert(iDecorate->name(), iDecorate);
+    _decoratePlugins.insert(iDecorate->name(), iDecorate);
     return true;
 }
 bool PluginManager::load_GuiPlugin(QObject* _plugin){
     GuiPlugin* plugin = qobject_cast<GuiPlugin*>(_plugin);
     if(!plugin) return false;
-    guiPlugins.insert(plugin->name(), plugin);
+    _guiPlugins.insert(plugin->name(), plugin);
     return true;
 }
 
 bool PluginManager::load_EditPlugin(QObject* _plugin){
     ModePlugin* plugin = qobject_cast<ModePlugin*>(_plugin);
     if(!plugin) return false;
-    editPlugins.insert(plugin->name(), plugin);    
+    _modePlugins.insert(plugin->name(), plugin);    
     return true;
 }
  
 bool PluginManager::load_RenderPlugin(QObject *_plugin){
     RenderPlugin* plugin = qobject_cast<RenderPlugin*>(_plugin);
     if(!plugin) return false;
-    renderPlugins.insert(plugin->name(), plugin);
+    _renderPlugins.insert(plugin->name(), plugin);
     return true;
 } 
 
@@ -224,23 +230,18 @@ QString PluginManager::getFilterStrings(){
     return filters.join(";;");
 }
 
-RenderPlugin *PluginManager::newRenderPlugin(QString pluginName){
-    RenderPlugin *plugin = renderPlugins.value(pluginName,NULL);
-    if(plugin==NULL) 
-        throw StarlabException("Renderer %s could not be found",qPrintable(pluginName));
-    RenderPlugin* newplugin = plugin->factory();
-    Q_ASSERT(newplugin!=NULL);
-    newplugin->_mainWindow = plugin->_mainWindow;
-    newplugin->_application = plugin->_application;
-    
-    /// Original action remains...
-    newplugin->_action = plugin->_action;
-    return newplugin;
+RenderPlugin *PluginManager::getRenderPlugin(QString pluginName){
+    RenderPlugin *plugin = _renderPlugins.value(pluginName,NULL);
+    if(plugin==NULL) throw StarlabException("Renderer %s could not be found",qPrintable(pluginName));
+    return plugin;
 }
 
-DecoratePlugin* PluginManager::newDecoratePlugin(QString pluginName, Model* model){
+/// @todo rename getDecoratePlugin(QString name)
+DecoratePlugin* PluginManager::newDecoratePlugin(QString /*pluginName*/, Model* /*model*/){
+    throw StarlabException("Decoration needs refactoring (See Render)");
+#if 0
     Q_ASSERT(model!=NULL);
-    DecoratePlugin *plugin = decoratePlugins.value(pluginName,NULL);
+    DecoratePlugin *plugin = _decoratePlugins.value(pluginName,NULL);
     if(plugin==NULL) 
         throw StarlabException("Could not find plugin '%s'.",qPrintable(pluginName));  
     DecoratePlugin* newplugin = plugin->factory();
@@ -249,6 +250,7 @@ DecoratePlugin* PluginManager::newDecoratePlugin(QString pluginName, Model* mode
     model->addDecoratePlugin(newplugin);
     newplugin->_action = plugin->action();
     return newplugin;
+#endif
 }
 
 QString PluginManager::getPreferredRenderer(Model *model){
@@ -258,8 +260,8 @@ QString PluginManager::getPreferredRenderer(Model *model){
         rendererName=settings()->getString(key);
 
     /// Preferred plugins could not be found
-    if(!renderPlugins.contains(rendererName)){
-        foreach(RenderPlugin* plugin, renderPlugins){
+    if(!_renderPlugins.contains(rendererName)){
+        foreach(RenderPlugin* plugin, _renderPlugins){
             if(plugin->isApplicable(model) && plugin->isDefault()){
                 rendererName = plugin->name();
                 break;
@@ -270,8 +272,8 @@ QString PluginManager::getPreferredRenderer(Model *model){
     /// Couldn't find one that was marked as isDefault()
     /// just take the first that is applicable. 
     /// BBOX renderer should be found here!
-    if(!renderPlugins.contains(rendererName)){
-        foreach(RenderPlugin* plugin, renderPlugins){
+    if(!_renderPlugins.contains(rendererName)){
+        foreach(RenderPlugin* plugin, _renderPlugins){
             if(plugin->isApplicable(model)){
                 rendererName = plugin->name();
                 break;
@@ -280,7 +282,7 @@ QString PluginManager::getPreferredRenderer(Model *model){
     }
 
     /// Everything failed..  let's give up
-    if(!renderPlugins.contains(rendererName))
+    if(!_renderPlugins.contains(rendererName))
         throw StarlabException("No suitable render plugin found\nIs it possible you didn't compile the BBOX renderer?");
 
     return rendererName;
@@ -297,7 +299,7 @@ void PluginManager::setPreferredRenderer(Model *model, RenderPlugin* plugin){
 QList<RenderPlugin *> PluginManager::getApplicableRenderPlugins(Model* model){
     QList<RenderPlugin*> retval;
     Q_ASSERT(model!=NULL);
-    foreach(RenderPlugin* plugin, renderPlugins.values())
+    foreach(RenderPlugin* plugin, _renderPlugins.values())
         if( plugin->isApplicable(model) )
             retval.append(plugin);
     return retval;

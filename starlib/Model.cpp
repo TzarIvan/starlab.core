@@ -23,6 +23,11 @@ Model::Model(QString path, QString name){
     this->name = name.isEmpty() ? QFileInfo(path).baseName() : name;    
 }
 
+Model::~Model(){
+    if(_renderer) 
+        delete _renderer;
+}
+
 void Model::decorateLayersWidgedItem(QTreeWidgetItem* parent){
     QTreeWidgetItem *fileItem = new QTreeWidgetItem();
     fileItem->setText(1, QString("Path"));    
@@ -31,7 +36,7 @@ void Model::decorateLayersWidgedItem(QTreeWidgetItem* parent){
     // updateColumnNumber(fileItem);
 }
 
-RenderPlugin *Model::renderer(){
+Renderer *Model::renderer(){
     return _renderer;
 }
 
@@ -40,11 +45,18 @@ void Model::setRenderer(RenderPlugin* plugin){
     if(_renderer != NULL){
         _renderer->finalize();
         _renderer->deleteLater();
+        _renderer = NULL;
     }
-    /// Link it to this model
-    plugin->_model = this;
-    plugin->setParent(this);
-    _renderer = plugin;
+    /// Get your own renderer instance
+    _renderer = plugin->instance();   
+    /// This deletes renderer upon model deletion
+    _renderer->setParent(this);
+    /// Record model and generating plugin inside renderer
+    _renderer->_model = this;
+    _renderer->_plugin = plugin;
+    /// Now we are ready to initialize its parameters
+    _renderer->initParameters();
+    _renderer->init();
 }
 
 bool Model::hasDecoratePlugin(DecoratePlugin *plugin){

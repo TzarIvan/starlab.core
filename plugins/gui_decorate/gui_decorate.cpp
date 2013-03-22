@@ -15,7 +15,7 @@ void gui_decorate::update(){
     menu()->clear();
    
     /// Fills the toolbar with applicable decorators
-    foreach(DecoratePlugin* plugin, pluginManager()->decoratePlugins){
+    foreach(DecoratePlugin* plugin, pluginManager()->decoratePlugins()){
         if(!plugin->isApplicable(document()->selectedModel())) 
             continue;
         QAction* action = plugin->action();

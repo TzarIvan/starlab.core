@@ -22,20 +22,35 @@ namespace Starlab{
 class STARLIB_EXPORT PluginManager: public QObject{
     Q_OBJECT
     
-    /// @{ constructor
-    public:
-        PluginManager(Settings *settings);
-    private:
-        Settings* _settings;
-        Settings* settings(){ return _settings; }
-    /// @}
-        
-    /// @{ Stores all (loaded) plugins
-    private:
-        QMap<QString,StarlabPlugin*> _plugins;
-    public:
-        QList<StarlabPlugin*> plugins(){ return _plugins.values(); }
-    /// @}
+/// @{ constructor
+public:
+    PluginManager(Settings *settings);
+private:
+    Settings* _settings;
+    Settings* settings(){ return _settings; }
+/// @}
+    
+/// @{ 
+private:
+    /// @brief Stores all (loaded) plugins
+    QMap<QString,StarlabPlugin*>    _plugins;
+    QMap<QString,GuiPlugin*>        _guiPlugins;
+    QMap<QString,FilterPlugin*>     _filterPlugins;
+    QMap<QString,ModePlugin*>       _modePlugins;
+    QMap<QString,DecoratePlugin*>   _decoratePlugins;
+    QMap<QString,RenderPlugin*>     _renderPlugins;    
+public:
+    /// @brief pointers to all the loaded plugins
+    QList<StarlabPlugin*> plugins(){ return _plugins.values(); }
+    /// @brief pointers to plugins subset
+    QList<FilterPlugin*> filterPlugins(){ return _filterPlugins.values(); }
+    QList<DecoratePlugin*> decoratePlugins(){ return _decoratePlugins.values(); }
+    QList<ModePlugin*> modePlugins(){ return _modePlugins.values(); }
+    QList<GuiPlugin*> guiPlugins(){ return _guiPlugins.values(); }
+public:
+    /// @brief pointer to specific plugin
+    FilterPlugin* getFilter(QString name);
+/// @}
         
 public:  
     /// Stores the loaded IO model plugins
@@ -50,31 +65,24 @@ public:
     /// Extension (lowercase) => IO project plugin
     QHash<QString,ProjectInputOutputPlugin*> projectExtensionToPlugin;
 
-    /// @{ Store the loaded plugins by name
-        QMap<QString,GuiPlugin*> guiPlugins;
-        QMap<QString,FilterPlugin*> filterPlugins;
-        QMap<QString,ModePlugin*> editPlugins;
-        QMap<QString,DecoratePlugin*> decoratePlugins;
-    /// @}
 
 
-    /// @{ Render Plugins Control
-    private:
-        QMap<QString,RenderPlugin*> renderPlugins;        
-    public:
-        /// Creates a new instance of a render plugin
-        /// @exception if plugin with that name cannot be found
-        RenderPlugin* newRenderPlugin(QString pluginName);
-        QString getPreferredRenderer(Model* model);
-        void setPreferredRenderer(Model* model, RenderPlugin* pluginName);
-        
-        /// Get the list of actions corresponding to render plugin that apply to this type of model
-        QList<RenderPlugin*> getApplicableRenderPlugins(Model *model);
-    /// @}
 
-    /// @{ Decorate plugin control
-        DecoratePlugin *newDecoratePlugin(QString pluginName, Model *model);
-    /// @}
+/// @{ Render Plugins Control
+public:
+    /// Creates a new instance of a render plugin
+    /// @exception if plugin with that name cannot be found
+    RenderPlugin* getRenderPlugin(QString pluginName);
+    QString getPreferredRenderer(Model* model);
+    void setPreferredRenderer(Model* model, RenderPlugin* pluginName);
+    
+    /// Get the list of actions corresponding to render plugin that apply to this type of model
+    QList<RenderPlugin*> getApplicableRenderPlugins(Model *model);
+/// @}
+
+/// @{ Decorate plugin control
+    DecoratePlugin *newDecoratePlugin(QString pluginName, Model *model);
+/// @}
         
 public:
     /// Directory where plugins are found

@@ -17,21 +17,14 @@ class STARLIB_EXPORT RichParameterSet : public QObject, public RichParameter{
 private:
     Q_DISABLE_COPY(RichParameterSet)
     
+/// @{ constructors/destructors
 public:
     RichParameterSet(QObject* parent=NULL) : QObject(parent){}
     RichParameterSet(QString _name, QObject* parent=NULL) : QObject(parent), RichParameter(_name){}
-    
+    ~RichParameterSet();
+/// @}
 
-    /// @{ memory management
-    private:    
-        ~RichParameterSet();
-    public:
-        void destructor(){    
-            if(parent()==NULL)
-                delete this;
-        }
-    /// @}
-    
+public:    
     QList<RichParameter*> paramList;
     bool isEmpty() const;
     RichParameter* findParameter(QString name) const;

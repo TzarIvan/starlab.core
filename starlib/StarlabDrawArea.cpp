@@ -25,12 +25,12 @@ void DrawArea::update(){
         /// Create instance if renderer missing
         if(model->renderer()==NULL){
             QString name = pluginManager()->getPreferredRenderer(model);
-            RenderPlugin* plugin = pluginManager()->newRenderPlugin(name);
-            model->setRenderer(plugin);
+            RenderPlugin* plugin = pluginManager()->getRenderPlugin(name);
+            model->setRenderer( plugin );
+        } else {
+            /// just re-initialize it
+            model->renderer()->init();
         }
-        
-        /// And then initialize it
-        model->renderer()->init();
     }
     
     /// Don't update on a busy document
@@ -298,11 +298,11 @@ DrawArea::~DrawArea(){
     deleteAllRenderObjects();
 }
 
-void DrawArea::setRenderer(Model *model, QString pluginName){
+void DrawArea::setRenderer(Model *model, QString name){
     // qDebug("StarlabDrawArea::setRenderer(%s,%s)",qPrintable(model->name), qPrintable(pluginName));
     document()->pushBusy();
-        RenderPlugin* plugin = pluginManager()->newRenderPlugin(pluginName);
-        model->setRenderer(plugin);
+        RenderPlugin* plugin = pluginManager()->getRenderPlugin(name);
+        model->setRenderer( plugin );
     document()->popBusy();
 }
 

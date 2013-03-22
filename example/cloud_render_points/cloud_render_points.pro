@@ -2,6 +2,8 @@ load($$[STARLAB])
 load($$[CLOUD])
 StarlabTemplate(plugin)
 
-HEADERS = cloud_render_points.h
-SOURCES = cloud_render_points.cpp
+HEADERS = \
+    plugin.h
+SOURCES = \
+    plugin.cpp
 RESOURCES = resources.qrc

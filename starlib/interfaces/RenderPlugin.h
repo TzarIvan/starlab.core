@@ -1,43 +1,55 @@
 #pragma once
 #include "StarlabPlugin.h"
+#include "RichParameterSet.h"
 #include "Model.h"
 
-/// This is a factory class that generates 
-class RenderPlugin : public StarlabPlugin{
-    
-/// @{ RenderPlugin interface
-public:
-    /// @brief Can this plugin render the given model?
-    virtual bool isApplicable(Starlab::Model* model)=0;
+class RenderPlugin;
 
-    /// @brief Render the model, default implementation only sets glColor
-    virtual void render() = 0;    
-    
+class Renderer : public QObject{
+    Q_OBJECT
+public slots:
     /// @brief Initialize render plugin (optional), for example
     /// - initialize GL memory buffer
     /// - read shader specification from file
     /// @todo rename into create
     virtual void init(){}
+
+    /// @brief Render the model, default implementation only sets glColor
+    virtual void render() = 0;
+    
+    /// @brief Initialize the parameters of your plugin here, see parameters()
+    virtual void initParameters(){}    
     
     /// @brief Clean up resources (the ones you allocated in init())
     /// @todo rename into destroy
     virtual void finalize(){}    
     
+public:
     /// @brief returns the model that this plugin should be rendering
-    Starlab::Model* model(){ return _model; }
-
-    /// @brief Overload it and return a new instance of your plugin    
-    virtual RenderPlugin* factory()=0;
-
-    /// @brief Overload and return true if you would like this plugin to be a default
-    virtual bool isDefault() { return false; }
-/// @}
+    StarlabModel* model(){ return _model; }
+    /// @brief returns the plugin that instantiated this renderer
+    RenderPlugin* plugin(){ return _plugin; }
+    /// @brief returns the parameter set you can edit
+    RichParameterSet* parameters(){ return &_parameters; }
     
-/// @{ Internal Usage
-friend class Starlab::Model;
 private:
-    Starlab::Model* _model;
-/// @}
+    friend class Starlab::Model;
+    /// the model to whom this plugin applies
+    StarlabModel* _model;
+    /// keeps track of who generated this renderer
+    RenderPlugin* _plugin; 
+    /// renderer parameters
+    RichParameterSet _parameters;
 };
 
-Q_DECLARE_INTERFACE(RenderPlugin, "Starlab::RenderPlugin/2.0")
+class RenderPlugin : public StarlabPlugin{
+public:
+    /// @brief Can this plugin generate a renderer for the the given model?
+    virtual bool isApplicable(StarlabModel* model) = 0;
+    /// @brief Generate an instance of the rendering class
+    virtual Renderer* instance() = 0;
+    /// @brief Overload and return true if you would like this plugin to be a default
+    virtual bool isDefault() { return false; }    
+};
+
+Q_DECLARE_INTERFACE(RenderPlugin, "Starlab::RenderPlugin/3.0")
