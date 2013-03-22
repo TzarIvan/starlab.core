@@ -5,7 +5,7 @@
 
 class RenderPlugin;
 
-class Renderer : public QObject{
+class STARLIB_EXPORT Renderer : public QObject{
     Q_OBJECT
 public slots:
     /// @brief Initialize render plugin (optional), for example
