@@ -110,12 +110,12 @@ public:
         return tris;
     }
 
-private:
 	BoundingBox boundingBox;
-	int trianglePerNode;
-
 	std::vector<Octree> children;
 	std::vector<Surface_mesh::Face> triangleData;
+
+private:
+	int trianglePerNode;
 	Surface_mesh * mesh;
 	Surface_mesh::Vertex_property<Vec3d> points;
 
@@ -253,6 +253,8 @@ private:
             }
         }
     }
+
+public:
     void DrawBox(const Vec3d& center, float width, float length, float height, float r, float g, float b, float lineWidth)
     {
         Vec3d  c1, c2, c3, c4;
