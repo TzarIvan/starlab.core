@@ -373,6 +373,7 @@ bool DrawArea::eventFilter(QObject*, QEvent* event){
         case QEvent::MouseButtonPress:   return mode->mousePressEvent((QMouseEvent*)event); break;
         case QEvent::MouseMove:          return mode->mouseMoveEvent((QMouseEvent*)event); break;
         case QEvent::KeyPress:           return mode->keyPressEvent((QKeyEvent*)event); break;
+        case QEvent::KeyRelease:         return mode->keyReleaseEvent((QKeyEvent*)event); break;
         case QEvent::Wheel:              return mode->wheelEvent((QWheelEvent*)event); break;
         case QEvent::MouseButtonDblClick:return mode->mouseDoubleClickEvent((QMouseEvent *)event); break;
         default: return false;
