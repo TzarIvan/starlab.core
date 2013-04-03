@@ -68,28 +68,22 @@ Model *Document::getModel(QString name)
 }
 
 
-void Document::deleteModel(Model *m)
-{
-    int midx = _models.indexOf(m);
+void Document::deleteModel(Model *model){
+    int midx = _models.indexOf(model);
     if(midx < 0){
         qDebug() << "[removeModel] model not found!";
         return;
     }
 
     pushBusy();
-        /// Update selection
-        if(selectedModel() == m){
-            /// After removal we want at least another available object
-            if(_models.size()>1)
-                _selectedModel = _models[0];
-            else
-                _selectedModel = NULL;
-        }
-    
         /// Delete object & remove from list
         emit deleteScheduled(_models[midx]);
         _models[midx]->deleteLater();
         _models.removeAt(midx);
+        
+        /// Update selection (if necessary)
+        if(_selectedModel == model)
+            _selectedModel = (_models.size()>0)?_models[0] : NULL;
     popBusy();
 }
 
