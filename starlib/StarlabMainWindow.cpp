@@ -46,10 +46,7 @@ MainWindow::MainWindow(Application* _application) :
         // setWindowIcon(icon);
         setWindowTitle("Starlab v1.0 (alpha)");        
     }
-    
-    /// On changes to the document, refresh the GUI
-    connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
-    
+       
     /// Instantiate Menus (plugins will fill them in)
     /// Do not use the silly "&" symbols for windows notation for alt navigation
     {
@@ -268,5 +265,6 @@ void MainWindow::hideToolbarOnEmptyMessage(QString /*message*/){
 }
 
 void MainWindow::selectionChanged(Model *selected){
-    this->setStatusBarMessage("Selected model has been changed to '" + selected->name + "'", 3);
+    QString name = (selected==NULL) ? "No Selection" : selected->name;
+    this->setStatusBarMessage("Selected model has been changed to '" + name + "'", 3);
 }

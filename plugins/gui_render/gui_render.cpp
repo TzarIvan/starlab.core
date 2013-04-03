@@ -11,6 +11,9 @@ void gui_render::load(){
     this->renderModeGroup->setExclusive(true);
     this->currentAsDefault = new QAction("Set current as default...",this);
     this->editRenderSettings = new QAction("Edit renderer settings...",this);
+
+    /// When document changes, we make sure render menu/toolbars are up to date    
+    connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
 }
 
 void gui_render::update(){
@@ -20,7 +23,11 @@ void gui_render::update(){
 
     /// Fetch current renderer
     Model* selectedModel = document()->selectedModel();
-    if(selectedModel==NULL) return;
+    if(selectedModel==NULL){
+        toolbar()->setVisible(false);
+        return;
+    }
+    
     Renderer* currentRenderer = selectedModel->renderer();
     
     /// Add render modes menu/toolbar entries
@@ -38,16 +45,18 @@ void gui_render::update(){
         if(!action->icon().isNull())
             toolbar()->addAction(action);
     }
-        
+
+    /// Make toolbar visible if there is something to show
+    toolbar()->setVisible(toolbar()->actions().size()>0);
+    
     /// @internal menu can be added only after it has been filled :(
     menu()->addAction(editRenderSettings);
     menu()->addAction(currentAsDefault);
     menu()->addSeparator();
     menu()->addActions(renderModeGroup->actions());
-    
+        
     /// Disable settings link when no parameters are given
     editRenderSettings->setDisabled(currentRenderer->parameters()->isEmpty());
-
     
     /// Connect click events to change in renderer system
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
