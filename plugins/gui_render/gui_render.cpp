@@ -108,13 +108,20 @@ void gui_render::trigger_editSettings(){
 }
 
 void gui_render::trigger_editColor(){
-    QColorDialog* cd = new QColorDialog(mainWindow());
-    cd->setWindowFlags(cd->windowFlags() | Qt::WindowStaysOnTopHint);
+    
+    QColorDialog* cd = new QColorDialog(NULL);
+    cd->setOption(QColorDialog::NoButtons,true);
+    /// @todo why is this not working???
+    // cd->setWindowFlags(cd->windowFlags() | Qt::WindowStaysOnTopHint);
+    /// Use this instead
+    cd->setModal(true);
+    /// on mac, native (pretty) dialog is buggy :(
+    cd->setOption(QColorDialog::DontUseNativeDialog,true);
     cd->setCustomColor(0, Qt::gray); ///< Predefind model 
     cd->setCurrentColor(document()->selectedModel()->color);
-    cd->show();
     connect(cd, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveColorUpdate(QColor)));
     connect(mainWindow(), SIGNAL(destroyed()), cd, SLOT(deleteLater()));
+    cd->show();
 }
 
 void gui_render::liveColorUpdate(QColor color){
