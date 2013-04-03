@@ -112,6 +112,7 @@ void gui_render::trigger_editColor(){
     cd->setWindowFlags(cd->windowFlags() | Qt::WindowStaysOnTopHint);
     cd->setCustomColor(0, Qt::gray); ///< Predefind model 
     cd->setCurrentColor(document()->selectedModel()->color);
+    cd->show();
     connect(cd, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveColorUpdate(QColor)));
     connect(mainWindow(), SIGNAL(destroyed()), cd, SLOT(deleteLater()));
 }
