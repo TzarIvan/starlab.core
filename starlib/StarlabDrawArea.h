@@ -66,7 +66,7 @@ public slots:
     void setIsoProjection();
     void setBackgroundSolidColor();
 private:
-    void init();              ///< Initializes the scene
+    void init();              ///< Initializes the scene (qGLViewer)
     void draw();              ///< Draws the whole scene
     void drawWithNames();     ///< Draws to the symbols buffer
 /// @}
