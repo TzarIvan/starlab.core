@@ -1,17 +1,19 @@
 #include "gui_render.h"
 #include "StarlabDrawArea.h"
 #include <QDockWidget>
+#include <QColorDialog>
 
 using namespace Starlab;
 
 /// Since we depend on the selected model, the load is minimal
 void gui_render::load(){
     // qDebug() << "gui_render::load()";
-    this->renderModeGroup = new QActionGroup(this);
-    this->renderModeGroup->setExclusive(true);
-    this->currentAsDefault = new QAction("Set current as default...",this);
-    this->editRenderSettings = new QAction("Edit renderer settings...",this);
-
+    renderModeGroup = new QActionGroup(this);
+    renderModeGroup->setExclusive(true);
+    currentAsDefault = new QAction("Set current as default...",this);
+    editRenderSettings = new QAction("Edit renderer settings...",this);
+    editModelColor = new QAction("Change model color...",this);
+    
     /// When document changes, we make sure render menu/toolbars are up to date    
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
 }
@@ -52,6 +54,7 @@ void gui_render::update(){
     /// @internal menu can be added only after it has been filled :(
     menu()->addAction(editRenderSettings);
     menu()->addAction(currentAsDefault);
+    menu()->addAction(editModelColor);
     menu()->addSeparator();
     menu()->addActions(renderModeGroup->actions());
         
@@ -62,6 +65,7 @@ void gui_render::update(){
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()), Qt::UniqueConnection);
     connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()), Qt::UniqueConnection);
+    connect(editModelColor, SIGNAL(triggered()), this, SLOT(trigger_editColor()), Qt::UniqueConnection);
 }
 
 void gui_render::triggerSetDefaultRenderer(){
@@ -102,6 +106,24 @@ void gui_render::trigger_editSettings(){
     /// Finally show
     widget->show(); 
 }
+
+void gui_render::trigger_editColor(){
+    QColorDialog* cd = new QColorDialog(mainWindow());
+    cd->setWindowFlags(cd->windowFlags() | Qt::WindowStaysOnTopHint);
+    cd->setCustomColor(0, Qt::gray); ///< Predefind model 
+    cd->setCurrentColor(document()->selectedModel()->color);
+    connect(cd, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveColorUpdate(QColor)));
+    connect(mainWindow(), SIGNAL(destroyed()), cd, SLOT(deleteLater()));
+}
+
+void gui_render::liveColorUpdate(QColor color){
+    // qDebug() << "color update";
+    Model* model = document()->selectedModel();
+    if(model==NULL) return;
+    model->color = color;
+    drawArea()->updateGL();        
+}
+
 
 void gui_render::triggerRenderModeAction(QAction* action){
     // qDebug("gui_render::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));

@@ -20,7 +20,15 @@ public slots:
     QToolBar* toolbar(){ return mainWindow()->renderToolbar; }
     QMenu* menu(){ return mainWindow()->renderMenu; }
 /// @}
-        
+
+/// @{ viewer color editing
+private slots:
+    void trigger_editColor();
+public slots:
+    /// Receives events from the color gui and changes the renderering color
+    void liveColorUpdate(QColor);
+/// @}    
+    
 /// @{ renderer module
 public slots:
     void triggerRenderModeAction(QAction* );
@@ -30,6 +38,7 @@ private:
     QActionGroup* renderModeGroup;
     QAction* currentAsDefault;
     QAction* editRenderSettings;
+    QAction* editModelColor;
 /// @}
 };
 
