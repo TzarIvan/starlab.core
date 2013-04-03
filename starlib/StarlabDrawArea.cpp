@@ -407,24 +407,21 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *e)
     bool found = false;
     qglviewer::Vec p = camera()->pointUnderPixel(e->pos(), found);
 
+    if(found){
+        camera()->setRevolveAroundPoint(p);
+        camera()->lookAt(p);
+        // Log the position
+        mainWindow()->setStatusBarMessage(QString("Arcball centered at x = %1 | y = %2 | z = %3").arg(p.x).arg(p.y).arg(p.z));
+    } 
+    
+#if 0 
     // Regaular behavior when clicking background
-    if(!found){
+    else {
         QGLViewer::mouseDoubleClickEvent(e);
         camera()->setRevolveAroundPoint(this->sceneCenter());
-        camera()->showEntireScene();
-        return;
+        camera()->showEntireScene();        
     }
-
-    camera()->setRevolveAroundPointFromPixel(e->pos());
-
-    // Animate to a zoomed position
-    Frame newFrame(*camera()->frame());
-    Vec newPos = p + (-camera()->viewDirection() * sceneRadius() * 0.25);
-    newFrame.setPosition(newPos.x, newPos.y, newPos.z);
-    camera()->interpolateTo( newFrame, 0.25);
-
-    // Log the position
-    mainWindow()->setStatusBarMessage(QString("Center at x = %1 | y = %2 | z = %3").arg(p.x).arg(p.y).arg(p.z));
+#endif
 }
 
 void DrawArea::deleteRenderObject(RenderObject* /*object*/){
