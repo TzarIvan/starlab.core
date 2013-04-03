@@ -54,13 +54,10 @@ MainWindow::MainWindow(Application* _application) :
     /// Do not use the silly "&" symbols for windows notation for alt navigation
     {
         menus << (fileMenu      = menuBar()->addMenu("File"));
-        if(pluginManager()->modePlugins().size()>0)
-            menus << (modeMenu      = menuBar()->addMenu("Mode"));
-        if(pluginManager()->filterPlugins().size()>0)
-            menus << (filterMenu    = menuBar()->addMenu("Filters"));
+        menus << (modeMenu      = menuBar()->addMenu("Mode"));
+        menus << (filterMenu    = menuBar()->addMenu("Filters"));
         menus << (renderMenu    = menuBar()->addMenu("Render"));
-        if(pluginManager()->decoratePlugins().size()>0)
-            menus << (decorateMenu  = menuBar()->addMenu("Decorate"));
+        menus << (decorateMenu  = menuBar()->addMenu("Decorate"));
         menus << (viewMenu      = menuBar()->addMenu("View"));
         menus << (windowsMenu   = menuBar()->addMenu("Windows"));
         menus << (helpMenu      = menuBar()->addMenu("Help"));
