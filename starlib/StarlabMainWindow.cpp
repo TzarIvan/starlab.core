@@ -54,7 +54,9 @@ MainWindow::MainWindow(Application* _application) :
         menus << (modeMenu      = menuBar()->addMenu("Mode"));
         menus << (filterMenu    = menuBar()->addMenu("Filters"));
         menus << (renderMenu    = menuBar()->addMenu("Render"));
+#ifdef ENABLE_DECORATION
         menus << (decorateMenu  = menuBar()->addMenu("Decorate"));
+#endif
         menus << (viewMenu      = menuBar()->addMenu("View"));
         menus << (windowsMenu   = menuBar()->addMenu("Windows"));
         menus << (helpMenu      = menuBar()->addMenu("Help"));
@@ -69,21 +71,22 @@ MainWindow::MainWindow(Application* _application) :
     
     /// Instantiate Toolbars
     {
-        mainToolbar = addToolBar(tr("Main Toolbar"));
-        modeToolbar = addToolBar(tr("Edit Toolbar"));
-        renderToolbar = addToolBar(tr("Render Toolbar"));
-        decorateToolbar = addToolBar(tr("Decorate Toolbar"));
-        filterToolbar = addToolBar(tr("Filter Toolbar"));
-
+        toolbars << ( mainToolbar = addToolBar(tr("Main Toolbar")) );
+        toolbars << ( modeToolbar = addToolBar(tr("Mode Toolbar")) );
+#ifdef ENABLE_DECORATION
+        toolbars << (decorateToolbar = addToolBar(tr("Decorate Toolbar")) );
+#endif
+        toolbars << (filterToolbar = addToolBar(tr("Filter Toolbar")) );
+        toolbars << (renderToolbar = addToolBar(tr("Render Toolbar")) );
+                        
         /// Initially hide toolbars
         mainToolbar->setVisible(true);
         modeToolbar->setVisible(false);
         renderToolbar->setVisible(false);
+#ifdef ENABLE_DECORATION       
         decorateToolbar->setVisible(false);
+#endif
         filterToolbar->setVisible(false);
-                
-        /// @todo is there a better way to retrieve all sub-toolbars?
-        toolbars << mainToolbar << modeToolbar << renderToolbar << decorateToolbar << filterToolbar;        
     }
     
     /// Sets up progress/status bar    

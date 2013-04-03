@@ -97,7 +97,9 @@ public:
     QMenu *modeMenu;        ///< EditPlugin entries are stored here
     QMenu *filterMenu;      ///< FilterPlugin entries are stored here
     QMenu *renderMenu;      ///< RenderPlugin entries are stored here
+#ifdef ENABLE_DECORATION
     QMenu *decorateMenu;    ///< DecoratePlugin entries are stored here
+#endif
     QMenu *viewMenu;        ///< StarlabDrawArea component responsible for this menu
     QMenu *windowsMenu;
     QMenu *helpMenu;
@@ -115,8 +117,11 @@ public:
     QToolBar *modeToolbar;      ///< Edit-specific icons, only added by edits which....QMenu *fileMenu;           
     QToolBar *filterToolbar;    ///< Filter-specific icons, only added by filters which....
     QToolBar *renderToolbar;    ///< Toolbar icons for rendering
+#ifdef ENABLE_DECORATION
     QToolBar *decorateToolbar;  ///< Toolbar icons for decorations
+#endif
 private:
+    /// @todo is there a better way to retrieve all sub-toolbars?    
     QList<QToolBar*> toolbars; ///< List of all available toolbars
 /// @}
     
