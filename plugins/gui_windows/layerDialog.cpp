@@ -38,6 +38,9 @@ LayerDialog::LayerDialog(MainWindow* mainWindow) :
     setVisible(false);
     LayerDialog::ui->setupUi(this);
     
+    /// When document changes, update layer table
+    connect(mainWindow->document(), SIGNAL(hasChanged()), this, SLOT(updateTable()));
+    
     // The following connection is used to associate the click with the switch between raster and mesh view.
     connect(ui->modelTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem * , int  )) , this, SLOT(modelItemClicked(QTreeWidgetItem * , int ) ) );
     connect(ui->modelTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem * )) ,       this, SLOT(adaptLayout(QTreeWidgetItem *)));
@@ -141,6 +144,9 @@ void LayerDialog::on_moveModelDown_released(){
 }
 
 void LayerDialog::on_deleteModel_released(){
-    /// @todo delete model from document
-    qDebug() << "TODO: delete model from document";
+    Document* doc = mainWindow->document();
+    Model* model = doc->selectedModel();
+    doc->deleteModel(model);
+    updateTable();
+    // qDebug() << "model deleted";
 }

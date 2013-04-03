@@ -54,8 +54,8 @@ public:
     void addModel(Model* m);
     /// Return a model by name
     Model * getModel(QString name);
-    /// Remove a model
-    void removeModel(Model* m);
+    /// Remove a model, updates selection if necessary
+    void deleteModel(Model* m);
     /// Clean slate, remove all models
     void clear();
     /// Replace Model, also deleting the memory of the old

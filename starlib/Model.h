@@ -18,10 +18,16 @@ namespace Starlab{
 class STARLIB_EXPORT Model : public QObject{
     Q_OBJECT
 
+/// @{ Friends
+    friend class Document; ///< to allow model deletion
+/// @} 
+    
 /// @{ Constructors
 public:
     Model(QString path, QString name=QString());
-    ~Model();
+protected:
+    /// @note you should never delete a model explicitly, use document()->deleteModel(..)
+    virtual ~Model();
 /// @}        
     
 /// @{ Overload these to customize appearance in the Layers dialog

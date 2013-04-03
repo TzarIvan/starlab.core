@@ -11,7 +11,7 @@ class gui_render : public GuiPlugin{
     Q_INTERFACES(GuiPlugin)
     
 /// @{ updates GUI according to selection
-public:    
+public slots:
     void load();    
     void update();
 /// @}

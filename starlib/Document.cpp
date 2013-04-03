@@ -1,6 +1,7 @@
 #include "Document.h"
 #include <QFileInfo>
 #include <QDir>
+#include <cassert>
 
 using namespace Starlab;
 
@@ -66,7 +67,8 @@ Model *Document::getModel(QString name)
     return found;
 }
 
-void Document::removeModel(Model *m)
+
+void Document::deleteModel(Model *m)
 {
     int midx = _models.indexOf(m);
     if(midx < 0){
@@ -75,9 +77,19 @@ void Document::removeModel(Model *m)
     }
 
     pushBusy();
-    emit deleteScheduled(_models[midx]);
-    _models[midx]->deleteLater();
-    _models.removeAt(midx);
+        /// Update selection
+        if(selectedModel() == m){
+            /// After removal we want at least another available object
+            if(_models.size()>1)
+                _selectedModel = _models[0];
+            else
+                _selectedModel = NULL;
+        }
+    
+        /// Delete object & remove from list
+        emit deleteScheduled(_models[midx]);
+        _models[midx]->deleteLater();
+        _models.removeAt(midx);
     popBusy();
 }
 
@@ -111,11 +123,21 @@ Model* Document::selectedModel(){
 }
 
 void Document::setSelectedModel(Model* model){
-    if(model==NULL) throw StarlabException("Requested selection update with a 'NULL' model");
-    bool exists = _models.contains(model);
-    if(!exists) throw StarlabException("Requested selection update with a model which is not part of the document");
+    /// Avoid trivial updates
+    if(_selectedModel == model)
+        return;
+
+    if(_models.size()==0)
+        assert(model==NULL);
+
+    if(_models.size()>0){
+        assert(model!=NULL); // no null selection
+        assert(_models.contains(model)); // no meaningless selection
+    }
+
+    /// Perform update
     _selectedModel = model;
-    emit selectionChanged(model);
+    emit selectionChanged(_selectedModel);
 }
 
 void Document::emit_resetViewport(){ 
