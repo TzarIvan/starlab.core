@@ -1,0 +1,104 @@
+#include "mode_object.h"
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
+
+Q_EXPORT_PLUGIN(mode_object)
+
+#include <limits>
+#include <QKeyEvent>
+#include "StarlabDrawArea.h"
+#include "SurfaceMeshModel.h"
+
+using namespace Eigen;
+
+void mode_object::draw(){
+    drawArea()->displayMessage(command, INT_MAX);
+}
+
+/// Defaults to "x" when you give it something weird
+Vector3d char_to_vector3(char axisflag){
+    Vector3d axis;
+    switch(axisflag){
+        case 'x': axis = Vector3d::UnitX(); break;
+        case 'y': axis = Vector3d::UnitY(); break;
+        case 'z': axis = Vector3d::UnitZ(); break;
+        default: axis = Vector3d::UnitX(); break;
+    }
+    return axis;
+}
+
+void mode_object::execute(QString command){
+    SurfaceMesh::Model* mesh = qobject_cast<SurfaceMesh::Model*>( selection() );
+    Eigen::Map<Matrix3Xd> MESH((double *)(mesh->vertex_coordinates().data()), 3, mesh->n_vertices());
+
+    Matrix3d transformation = Matrix3d::Identity(3,3);
+
+    /// r x 120
+    if( command.startsWith("r") ){
+        char axisflag='x';
+        double angle=0;
+        int nread = sscanf(command.toStdString().c_str(), "r %c %lf", &axisflag, &angle);
+        if(nread != 2){ showMessage("Incorrect transformation :("); return; }
+        Vector3d axis = char_to_vector3(axisflag);
+        angle = angle * M_PI / 180;
+        transformation = AngleAxisd( angle, axis );
+        
+        /// Apply transformation
+        MESH = transformation.cast<double>()*MESH;  
+    }
+    
+    /// t x .1
+    if( command.startsWith("t") ){       
+        /// Parse
+        char axisflag='x';
+        double offset=0;
+        int nread = sscanf(command.toStdString().c_str(), "t %c %lf", &axisflag, &offset);
+        if(nread != 2){ showMessage("Incorrect transformation :("); return; }
+        Vector3d axis = offset*char_to_vector3(axisflag);
+        /// M(:,i) + vector, foreach i 
+        MESH.colwise() += axis;
+    }   
+    
+
+    showMessage("Transformation applied!");    
+}
+
+bool mode_object::keyReleaseEvent(QKeyEvent* ke){
+    //Qt::Key skip = Qt::Key_Backspace | Qt::Key_Escape;
+    //if(ke->key().)
+    //ke->key()
+    
+    if( ke->key() == Qt::Key_Escape ){
+        command.clear();
+        draw();
+        return true;
+    }
+    if( ke->key() == Qt::Key_Backspace ){
+        command.chop(1);
+        draw();
+        return true;
+    }
+    if( (ke->key() == Qt::Key_Return) || (ke->key() == Qt::Key_Enter) ){
+        execute(command);
+        command.clear();
+        draw();
+        return true;
+    }
+    
+    /// Append text to buffer
+    command.append(ke->text());       
+
+    /// Auto-add whitespace
+    if( ke->key() == Qt::Key_R || 
+        ke->key() == Qt::Key_T || 
+        ke->key() == Qt::Key_X || 
+        ke->key() == Qt::Key_Y || 
+        ke->key() == Qt::Key_Z )
+        command.append(" ");
+    
+    /// Update message
+    draw();
+    
+    /// Capture all events!!
+    return true;
+}
