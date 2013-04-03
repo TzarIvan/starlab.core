@@ -52,10 +52,10 @@ public:
     QBox3D bbox();
     /// Add a model (if it's only one becomes selection)
     void addModel(Model* m);
-    /// Return a model by name
-    Model * getModel(QString name);
     /// Remove a model, updates selection if necessary
     void deleteModel(Model* m);
+    /// Return a model by name
+    Model * getModel(QString name);
     /// Clean slate, remove all models
     void clear();
     /// Replace Model, also deleting the memory of the old
@@ -69,7 +69,6 @@ public:
 signals:
     void resetViewport();                ///< Document requesting a reset of the view matrixes
     void hasChanged();                   ///< Document has changed, emitted after "last" popBusy()
-    void deleteScheduled(Model*);        ///< This model is scheduled for deletion
     void selectionChanged(Model* model); ///< The selection has changed to the provided model
 public:
     void emit_resetViewport();
