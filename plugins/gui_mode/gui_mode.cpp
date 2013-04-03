@@ -72,7 +72,6 @@ void gui_mode::enterState(STATE state, QAction* action){
         defaultModeAction->setChecked(false);
         action->setEnabled(true);
         action->setChecked(true);
-        showMessage("Plugin '%s' enabled",qPrintable(lastActiveModeAction->text()));
         break;
     case SUSPENDED: 
         // qDebug() << "[SUSPENDED]";

@@ -57,10 +57,11 @@ void gui_render::update(){
 
 void gui_render::triggerSetDefaultRenderer(){
     // qDebug() << "gui_render::triggerSetDefaultRenderer()";
-    RenderPlugin* renderer = document()->selectedModel()->renderer()->plugin();
-    pluginManager()->setPreferredRenderer(document()->selectedModel(),renderer);
-    QString message = QString("Preferred renderer for \"%1\" set to \"2\"")
-                              .arg(document()->selectedModel()->metaObject()->className())
+    Model* model = document()->selectedModel();    
+    RenderPlugin* renderer = model->renderer()->plugin();
+    pluginManager()->setPreferredRenderer(model,renderer);
+    QString message = QString("Preferred renderer for \"%1\" set to \"%2\"")
+                              .arg(model->metaObject()->className())
                               .arg(renderer->name());
     mainWindow()->setStatusBarMessage(message);
 }
