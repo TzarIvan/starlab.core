@@ -49,10 +49,10 @@ void mode_object::execute(QString command){
         if(nread != 2){ showMessage("Incorrect transformation :("); return; }
         Vector3d axis = char_to_vector3(axisflag);
         angle = angle * M_PI / 180;
-        AngleAxisd transformation( angle, axis );
+        AngleAxisd rot( angle, axis );
         
         /// Apply transformation
-        MESH = transformation*MESH;  
+        MESH = rot.toRotationMatrix()*MESH;
     }
     
     /// t x .1
