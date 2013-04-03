@@ -51,17 +51,20 @@ MainWindow::MainWindow(Application* _application) :
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
     
     /// Instantiate Menus (plugins will fill them in)
-    /// Do not use the silly & windows notation for alt navigation
+    /// Do not use the silly "&" symbols for windows notation for alt navigation
     {
         menus << (fileMenu      = menuBar()->addMenu("File"));
-        menus << (modeMenu      = menuBar()->addMenu("Mode"));
-        menus << (filterMenu    = menuBar()->addMenu("Filters"));
+        if(pluginManager()->modePlugins().size()>0)
+            menus << (modeMenu      = menuBar()->addMenu("Mode"));
+        if(pluginManager()->filterPlugins().size()>0)
+            menus << (filterMenu    = menuBar()->addMenu("Filters"));
         menus << (renderMenu    = menuBar()->addMenu("Render"));
-        menus << (decorateMenu  = menuBar()->addMenu("Decorate"));
+        if(pluginManager()->decoratePlugins().size()>0)
+            menus << (decorateMenu  = menuBar()->addMenu("Decorate"));
         menus << (viewMenu      = menuBar()->addMenu("View"));
         menus << (windowsMenu   = menuBar()->addMenu("Windows"));
         menus << (helpMenu      = menuBar()->addMenu("Help"));
-
+       
 /// @todo this was annoying and caused bugs, temporarily disabled
 #ifdef TODO_SHOW_ACTION_TOOLTIP
         /// Setup tooltips (mouse hover) for menu entries
