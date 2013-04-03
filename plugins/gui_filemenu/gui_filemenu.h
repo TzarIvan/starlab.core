@@ -19,6 +19,12 @@ private slots:
     void save_selection_as(){ qWarning("not implemented"); }
     void reload_project(){ qWarning("not implemented"); }
     
+    void delete_selected_model(){
+        if(selectedModel()==NULL)
+            return;
+        document()->deleteModel( selectedModel() );
+    }
+    
 public:    
     void load(){
         // bool docNotEmpty = !mainWindow()->document()->isEmpty();
@@ -41,6 +47,14 @@ public:
             connect(action, SIGNAL(triggered()), this, SLOT(save()));
             mainWindow()->fileMenu->addAction(action);
             mainWindow()->mainToolbar->addAction(action);
+        }
+        
+        /// Delete selected model
+        {
+            QAction* action = new QAction("Delete selected model", this);
+            action->setShortcutContext(Qt::ApplicationShortcut);
+            connect(action, SIGNAL(triggered()), this, SLOT(delete_selected_model()));
+            mainWindow()->fileMenu->addAction(action);
         }
         
         /// @todo Saves a project (and recursively save all models under)

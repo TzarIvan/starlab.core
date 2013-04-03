@@ -1,5 +1,6 @@
-#include <QFileInfo>
 #include "gui_filemenu.h"
+
+#include <QFileInfo>
 #include "OSQuery.h"
 const static QString all_files = "All Files (*.*)";
 
