@@ -21,5 +21,6 @@
         <file>images/import_mesh.png</file>
         <file>images/new_project.png</file>
         <file>images/cursors/plain_pick.png</file>
+        <file>images/screenshot.png</file>
     </qresource>
 </RCC>

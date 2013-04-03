@@ -1,10 +1,19 @@
 #include "gui_filemenu.h"
+Q_EXPORT_PLUGIN(gui_filemenu)
 
 #include <QFileInfo>
+#include "StarlabDrawArea.h"
 #include "OSQuery.h"
+
 const static QString all_files = "All Files (*.*)";
 
 using namespace Starlab;
+
+void gui_filemenu::delete_selected_model(){
+    if(selectedModel()==NULL)
+        return;
+    document()->deleteModel( selectedModel() );
+}
 
 void gui_filemenu::open(){
     /// Restore browsing directory from the cache
@@ -123,6 +132,15 @@ void gui_filemenu::reload_selection(){
 
     /// Inform the user
     mainWindow()->setStatusBarMessage("Model '"+ newmodel->name +"' reloaded from path: " + newmodel->path,5000);
+}
+
+void gui_filemenu::take_screenshot(){
+    /// Screen Shot 2013-04-03 at 6.59.51 PM
+    QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd h.mm.ss AP");
+    QString filename = QDir::homePath() + "/Desktop/" + QString("Screen Shot ") + date + ".png";
+//    QDir::setCurrent(QDir::homePath());
+    drawArea()->saveSnapshot(filename, true);
+    showMessage("Screenshot saved at: %s",qPrintable(filename));
 }
 
 #if 0
@@ -469,5 +487,3 @@ bool MainWindow::exportMesh(QString /*fileName*/, Model* /*mod*/, bool /*saveAll
     return ret;
 }
 #endif
-
-Q_EXPORT_PLUGIN(gui_filemenu)

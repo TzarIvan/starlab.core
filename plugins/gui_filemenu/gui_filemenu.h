@@ -18,12 +18,8 @@ private slots:
     void save_selection(){ qWarning("not implemented"); }
     void save_selection_as(){ qWarning("not implemented"); }
     void reload_project(){ qWarning("not implemented"); }
-    
-    void delete_selected_model(){
-        if(selectedModel()==NULL)
-            return;
-        document()->deleteModel( selectedModel() );
-    }
+    void take_screenshot();
+    void delete_selected_model();
     
 public:    
     void load(){
@@ -55,6 +51,14 @@ public:
             action->setShortcutContext(Qt::ApplicationShortcut);
             connect(action, SIGNAL(triggered()), this, SLOT(delete_selected_model()));
             mainWindow()->fileMenu->addAction(action);
+        }
+        
+        /// Takes a qglViewer screenshot
+        { 
+            QAction* action = new QAction(QIcon(":/images/screenshot.png"),tr("Take Screenshot"), this);
+            connect(action, SIGNAL(triggered()), this, SLOT(take_screenshot()));
+            mainWindow()->fileMenu->addAction(action);
+            mainWindow()->mainToolbar->addAction(action);
         }
         
         /// @todo Saves a project (and recursively save all models under)
