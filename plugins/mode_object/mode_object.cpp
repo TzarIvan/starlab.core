@@ -28,10 +28,18 @@ Vector3d char_to_vector3(char axisflag){
 }
 
 void mode_object::execute(QString command){
+    /// @todo add a generic model.transform() to StarlabModel, then we won't depend on SurfaceMesh
     SurfaceMesh::Model* mesh = qobject_cast<SurfaceMesh::Model*>( selection() );
+    if(!mesh){ 
+        showMessage("Object mode only supports SurfaceMeshModel");    
+        return;
+    }
+    
+    /// Otherwise eigen::map fails
+    mesh->garbage_collection();
+    
+    /// Map mesh to an eigen set
     Eigen::Map<Matrix3Xd> MESH((double *)(mesh->vertex_coordinates().data()), 3, mesh->n_vertices());
-
-    Matrix3d transformation = Matrix3d::Identity(3,3);
 
     /// r x 120
     if( command.startsWith("r") ){
@@ -41,10 +49,10 @@ void mode_object::execute(QString command){
         if(nread != 2){ showMessage("Incorrect transformation :("); return; }
         Vector3d axis = char_to_vector3(axisflag);
         angle = angle * M_PI / 180;
-        transformation = AngleAxisd( angle, axis );
+        AngleAxisd transformation( angle, axis );
         
         /// Apply transformation
-        MESH = transformation.cast<double>()*MESH;  
+        MESH = transformation*MESH;  
     }
     
     /// t x .1
