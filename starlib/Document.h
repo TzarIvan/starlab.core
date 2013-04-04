@@ -62,8 +62,8 @@ public:
     void replaceModel(Model* old_model, Model* new_model);
     /// Is there any model?
     bool isEmpty(){ return _models.empty(); }
-    /// The models in this layer (cannot edit the set directly!)
-    const QList<Model*>& models(){ return _models; }
+    /// The models in this layer (the connection is a copy)
+    QList<Model*> models(){ return _models; }
     
 /// @{ Document status updates
 signals:
