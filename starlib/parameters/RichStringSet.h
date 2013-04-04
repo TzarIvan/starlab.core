@@ -19,10 +19,11 @@ public:
     }
     RichStringSet(QString name, QList<QString> entries, QString description="", QString tooltip="")
         :RichParameter(name, description, tooltip){
-        if(entries.size()==0) throw std::logic_error("empty combobox?");
-        this->entries = entries;
-        this->defaultValue = new RichString::Value(entries.first());
-        this->val = new RichString::Value(entries.first());
+        if(!entries.empty()) {
+            this->entries = entries;
+            this->defaultValue = new RichString::Value(entries.first());
+            this->val = new RichString::Value(entries.first());
+        }
     }
     
 public:
@@ -31,6 +32,7 @@ public:
         QLabel*    label;
         QComboBox* combo;
     public:
+        ~ComboBoxWidget(){ delete label; delete combo; }
         ComboBoxWidget(QWidget* p,RichStringSet* richStringSet) : RichParameterWidget(p,richStringSet) {
             /// Allocate
             label = new QLabel(richStringSet->description,this);
