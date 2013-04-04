@@ -19,7 +19,7 @@ class LayerDialog : public QDockWidget{
 private:
     Ui::layerDialog* ui;
     Starlab::MainWindow* mainWindow;
-    
+    StarlabDocument* document(){ return mainWindow->document(); }
 public:
     ~LayerDialog();
     LayerDialog(Starlab::MainWindow* mainwindow = 0);

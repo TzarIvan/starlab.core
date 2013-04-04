@@ -95,6 +95,8 @@ void LayerDialog::showContextMenu(const QPoint& /*pos*/){
 }
 
 void LayerDialog::updateTable(){
+    // qDebug() << __FUNCTION__ << __LINE__ << __FILE__;
+    
     //TODO:Check if the current viewer is a GLArea
     if(!isVisible()) return;
     Document* md = mainWindow->document();
@@ -134,13 +136,11 @@ void LayerDialog::adaptLayout(QTreeWidgetItem* /*item*/){
 }
 
 void LayerDialog::on_moveModelUp_released(){
-    /// @todo model up/down in layer
-    qDebug() << "TODO: move model up in layer";
+    document()->raise_layer( document()->selectedModel() );
 }
 
 void LayerDialog::on_moveModelDown_released(){
-    /// @todo model up/down in layer
-    qDebug() << "TODO: move model down in layer";    
+    document()->lower_layer( document()->selectedModel() );
 }
 
 void LayerDialog::on_deleteModel_released(){
@@ -148,5 +148,4 @@ void LayerDialog::on_deleteModel_released(){
     Model* model = doc->selectedModel();
     doc->deleteModel(model);
     updateTable();
-    // qDebug() << "model deleted";
 }

@@ -17,9 +17,14 @@ public:
     bool isBusy();   /// Is the document busy? (i.e. busy during I/O)   
 /// @}
 
+/// @{ access to models
 private:
     /// The list of all models in the document
     QList<Model*> _models;     
+public:
+    /// The models in this layer (the connection is a copy)
+    QList<Model*> models(){ return _models; }
+/// @} 
     
 public:
     /// The name of the document, used as label
@@ -45,6 +50,11 @@ public:
     // QList<Model*> selectedModels();
 /// @}
 
+/// @{ changes to model list
+    void raise_layer(Model* model);
+    void lower_layer(Model* model);
+/// @}
+    
 public:
     /// Basic document constructor
     Document();
@@ -62,8 +72,8 @@ public:
     void replaceModel(Model* old_model, Model* new_model);
     /// Is there any model?
     bool isEmpty(){ return _models.empty(); }
-    /// The models in this layer (the connection is a copy)
-    QList<Model*> models(){ return _models; }
+    
+    
     
 /// @{ Document status updates
 signals:
@@ -78,3 +88,5 @@ private:
 };
 
 } // namespace
+
+typedef Starlab::Document StarlabDocument;

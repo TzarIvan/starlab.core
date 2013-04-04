@@ -131,10 +131,32 @@ void Document::setSelectedModel(Model* model){
     emit selectionChanged(_selectedModel);
 }
 
+void Document::raise_layer(Model *model){
+    int idx = _models.indexOf(model);
+    if(idx==-1 || _models.size()<=1 ) return;
+    if(idx<=0) return; ///< cannot raise more
+    pushBusy();
+        _models[idx  ] = _models[idx-1];
+        _models[idx-1] = model;
+    popBusy();
+}
+
+void Document::lower_layer(Model *model){
+    int idx = _models.indexOf(model);
+    if(idx==-1 || _models.size()<=1 ) return;
+    if(idx>=(_models.size()-1)) return; ///< cannot lower more
+    pushBusy();
+        _models[idx] = _models[idx+1];
+        _models[idx+1] = model;
+    popBusy();
+}
+
 void Document::emit_resetViewport(){ 
     emit resetViewport(); 
 }
 void Document::emit_hasChanged(){ 
+    // qDebug() << Q_FUNC_INFO;
+    // qDebug() << __FUNCTION__ << __LINE__ << __FILE__;
     if(!isBusy()) 
         emit hasChanged(); 
     else
