@@ -110,19 +110,25 @@ void gui_render::trigger_editSettings(){
 void gui_render::trigger_editColor(){
     QColorDialog* dialog = new QColorDialog(document()->selectedModel()->color, mainWindow());
     dialog->setOption(QColorDialog::NoButtons,true);
-#if 0
+
+    /// Attempting to do "stay on top"
+#if 1
     /// @internal why is this not working???
     dialog->setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
 #elif 0
     /// @internal and this neither
     dialog->setWindowFlags(Qt::Tool);  
-#else
-    /// Fine... I will use modality instead.. but then I cannot change my selection..
+#elif 0
+    /// The only one working is modality.. but then I cannot change my selection..
     dialog->setModal(true);
 #endif
+    
+#if 0
+    /// https://bugreports.qt-project.org/browse/QTBUG-11188
     /// @internal on mac the (pretty) native dialog is buggy... randomly the native one opens
     dialog->setOption(QColorDialog::DontUseNativeDialog,true);
-    dialog->setCustomColor(0, Qt::gray); ///< Predefind model 
+#endif
+    
     connect(dialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveColorUpdate(QColor)));
     connect(mainWindow(), SIGNAL(destroyed()), dialog, SLOT(deleteLater()));
     dialog->show();
