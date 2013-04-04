@@ -113,13 +113,13 @@ void gui_render::trigger_editSettings(){
 }
 
 void gui_render::instantiate_color_dialog(){
-    /// Disconnect object from previous connections
-    qColorDialog->disconnect();
-    
     /// @internal on mac the (pretty) native dialog is buggy... randomly the native one opens
-    /// The trick below corrects this from happening: https://bugreports.qt-project.org/browse/QTBUG-11188  
-    if(qColorDialog != NULL) 
+    /// https://bugreports.qt-project.org/browse/QTBUG-11188  
+    /// Disconnect object from previous connections
+    if(qColorDialog != NULL){
+        qColorDialog->disconnect();
         return;
+    }
     
     qColorDialog = new QColorDialog(mainWindow());
     qColorDialog->hide();
