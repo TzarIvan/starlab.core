@@ -1,5 +1,6 @@
 #pragma once
 #include <QToolBar>
+#include <QColorDialog>
 
 #include "StarlabMainWindow.h"
 #include "interfaces/GuiPlugin.h"
@@ -10,26 +11,31 @@ class gui_render : public GuiPlugin{
     Q_OBJECT
     Q_INTERFACES(GuiPlugin)
     
-/// @{ updates GUI according to selection
+    /// @{ updates GUI according to selection
 public slots:
     void load();    
     void update();
-/// @}
-
-/// @{ access specific resources
+    /// @}
+    
+    /// @{ access specific resources
     QToolBar* toolbar(){ return mainWindow()->renderToolbar; }
     QMenu* menu(){ return mainWindow()->renderMenu; }
-/// @}
-
+    /// @}
+    
 /// @{ viewer color editing
+private:
+    QColorDialog* qColorDialog;  
+    void instantiate_color_dialog();
 private slots:
-    void trigger_editColor();
+    void trigger_editBackgroundColor();
+    void trigger_editSelectedModelColor();
 public slots:
     /// Receives events from the color gui and changes the renderering color
-    void liveColorUpdate(QColor);
+    void liveupdate_selectedModelColor(QColor);
+    void liveupdate_backgroundColor(QColor);
 /// @}    
     
-/// @{ renderer module
+    /// @{ renderer module
 public slots:
     void triggerRenderModeAction(QAction* );
     void triggerSetDefaultRenderer();
@@ -39,6 +45,7 @@ private:
     QAction* currentAsDefault;
     QAction* editRenderSettings;
     QAction* editModelColor;
+    QAction* editBackgroundColor;
 /// @}
 };
 

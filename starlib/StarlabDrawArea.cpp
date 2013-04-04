@@ -179,30 +179,13 @@ void DrawArea::viewFrom(QAction * a){
     camera()->setSceneCenter(c);
 }
 
-void DrawArea::setBackgroundSolidColor(){
-    QColorDialog cd;
-
-    // Predefind background colors
-    cd.setCustomColor(0, QColor(255,255,255).rgb());
-    cd.setCustomColor(1, QColor(208,212,240).rgb());
-    cd.setCustomColor(2, QColor(50,50,60).rgb());
-    cd.setCustomColor(3, QColor(0,0,0).rgb());
-
-    QColor newBGcolor = cd.getColor(backgroundColor());
-
-    QString key = "DefaultBackgroundColor";
-    settings()->set( key, QVariant( newBGcolor ) );
-    settings()->sync();
-    setBackgroundColor( settings()->getQColor(key) );
-
-    updateGL();
-}
-
 void DrawArea::init(){
     /// Background color from settings file
     QString key = "DefaultBackgroundColor";
-    // settings()->setDefault( key, QVariant(QColor(50,50,60)) );
-    settings()->setDefault( key, QVariant(QColor(255,255,255)) );
+    
+    /// For snapshots, default color must transparent!!
+    QColor white_transp(255,255,255,0);
+    settings()->setDefault( key, QVariant(white_transp) );
     setBackgroundColor( settings()->getQColor(key) );
 
     camera()->setUpVector(Vec(0,1,0));

@@ -64,7 +64,6 @@ public slots:
     void setPerspectiveProjection();
     void setOrthoProjection();
     void setIsoProjection();
-    void setBackgroundSolidColor();
 private:
     void init();              ///< Initializes the scene (qGLViewer)
     void draw();              ///< Draws the whole scene

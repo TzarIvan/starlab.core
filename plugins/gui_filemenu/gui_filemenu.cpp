@@ -139,7 +139,17 @@ void gui_filemenu::take_screenshot(){
     QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd h.mm.ss AP");
     QString filename = QDir::homePath() + "/Desktop/" + QString("Screen Shot ") + date + ".png";
 //    QDir::setCurrent(QDir::homePath());
-    drawArea()->saveSnapshot(filename, true);
+    
+#if 0
+    // this uses qglviewer stuff (but no alpha!!)
+    // drawArea()->saveSnapshot(filename, true);
+#else
+    // this uses qt stuff
+    drawArea()->setAttribute(Qt::WA_TranslucentBackground,true);    
+    QImage image = drawArea()->grabFrameBuffer(true);
+    image.save(filename, "png");
+#endif
+        
     showMessage("Screenshot saved at: %s",qPrintable(filename));
 }
 

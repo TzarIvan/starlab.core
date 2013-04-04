@@ -17,6 +17,5 @@ private:
     void load_fullscreen();
     void load_copypasteviewmatrix();
     void load_toggleCameraProjection();
-    void load_backgroundColor();
 /// @}    
 };

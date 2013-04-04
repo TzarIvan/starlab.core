@@ -12,8 +12,11 @@ void gui_render::load(){
     renderModeGroup->setExclusive(true);
     currentAsDefault = new QAction("Set current as default...",this);
     editRenderSettings = new QAction("Edit renderer settings...",this);
+
+    qColorDialog = NULL;    
     editModelColor = new QAction("Change model color...",this);
-    
+    editBackgroundColor = new QAction("Change background color...",this);
+
     /// When document changes, we make sure render menu/toolbars are up to date    
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
 }
@@ -55,6 +58,7 @@ void gui_render::update(){
     menu()->addAction(editRenderSettings);
     menu()->addAction(currentAsDefault);
     menu()->addAction(editModelColor);
+    menu()->addAction(editBackgroundColor);
     menu()->addSeparator();
     menu()->addActions(renderModeGroup->actions());
         
@@ -65,7 +69,8 @@ void gui_render::update(){
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()), Qt::UniqueConnection);
     connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()), Qt::UniqueConnection);
-    connect(editModelColor, SIGNAL(triggered()), this, SLOT(trigger_editColor()), Qt::UniqueConnection);
+    connect(editModelColor, SIGNAL(triggered()), this, SLOT(trigger_editSelectedModelColor()));
+    connect(editBackgroundColor, SIGNAL(triggered()), this, SLOT(trigger_editBackgroundColor()));
 }
 
 void gui_render::triggerSetDefaultRenderer(){
@@ -107,28 +112,56 @@ void gui_render::trigger_editSettings(){
     widget->show(); 
 }
 
-void gui_render::trigger_editColor(){
-    /// @internal on mac the (pretty) native dialog is buggy... randomly the native one opens
-    /// The trick below corrects this from happening: https://bugreports.qt-project.org/browse/QTBUG-11188
-
-    /// Only instantiate if one doesn't exist already
-    static QColorDialog* dialog = NULL;
-    if(dialog==NULL){
-        dialog = new QColorDialog(document()->selectedModel()->color, mainWindow());
-        dialog->setOption(QColorDialog::DontUseNativeDialog,false);
-        dialog->setOption(QColorDialog::NoButtons,true);
-        dialog->setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
-        connect(dialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveColorUpdate(QColor)));
-        connect(mainWindow(), SIGNAL(destroyed()), dialog, SLOT(deleteLater()));
-        dialog->hide();
-    } 
+void gui_render::instantiate_color_dialog(){
+    /// Disconnect object from previous connections
+    qColorDialog->disconnect();
     
-    /// In any case, just show it
-    dialog->show();
+    /// @internal on mac the (pretty) native dialog is buggy... randomly the native one opens
+    /// The trick below corrects this from happening: https://bugreports.qt-project.org/browse/QTBUG-11188  
+    if(qColorDialog != NULL) 
+        return;
+    
+    qColorDialog = new QColorDialog(mainWindow());
+    qColorDialog->hide();
+    qColorDialog->setOption(QColorDialog::DontUseNativeDialog,false);
+    qColorDialog->setOption(QColorDialog::NoButtons,true);
+    qColorDialog->setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
+    connect(mainWindow(), SIGNAL(destroyed()), qColorDialog, SLOT(deleteLater()));    
 }
 
-void gui_render::liveColorUpdate(QColor color){
-    // qDebug() << "color update";
+void gui_render::trigger_editBackgroundColor(){
+    instantiate_color_dialog();
+    qColorDialog->setCurrentColor( drawArea()->backgroundColor() );
+    connect(qColorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveupdate_backgroundColor(QColor)));
+    // Predefind background colors
+    qColorDialog->setCustomColor(0, QColor(255,255,255).rgb());
+    qColorDialog->setCustomColor(1, QColor(208,212,240).rgb());
+    qColorDialog->setCustomColor(2, QColor(50,50,60).rgb());
+    qColorDialog->setCustomColor(3, QColor(0,0,0).rgb());
+    qColorDialog->show();
+}
+
+void gui_render::trigger_editSelectedModelColor(){
+    instantiate_color_dialog();
+    connect(qColorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(liveupdate_selectedModelColor(QColor)));
+    qColorDialog->setCurrentColor(document()->selectedModel()->color);
+    qColorDialog->show();
+}
+
+void gui_render::liveupdate_backgroundColor(QColor color){
+    /// Remove background color from snapshots
+    color.setAlpha(0.0);
+    drawArea()->setBackgroundColor(color);
+    drawArea()->updateGL();   
+    
+    /// @todo save it in the settings
+//    QString key = "DefaultBackgroundColor";
+//    settings()->set( key, QVariant( newBGcolor ) );
+//    settings()->sync();
+//    setBackgroundColor( settings()->getQColor(key) );
+}
+
+void gui_render::liveupdate_selectedModelColor(QColor color){
     Model* model = document()->selectedModel();
     if(model==NULL) return;
     model->color = color;
