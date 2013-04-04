@@ -32,6 +32,7 @@ public:
         QLabel*    label;
         QComboBox* combo;
     public:
+        ~ComboBoxWidget(){ delete label; delete combo; }
         ComboBoxWidget(QWidget* p,RichStringSet* richStringSet) : RichParameterWidget(p,richStringSet) {
             /// Allocate
             label = new QLabel(richStringSet->description,this);
