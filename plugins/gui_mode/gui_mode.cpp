@@ -23,6 +23,8 @@ void gui_mode::load(){
     
     /// Reacts to changes made on the selection
     connect(document(),SIGNAL(hasChanged()),this,SLOT(documentChanged()));
+    /// When document changes, we make sure render menu/toolbars are up to date    
+    connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
     
     /// Start state machine in default mode
     enterState(DEFAULT,defaultModeAction);
@@ -50,6 +52,10 @@ void gui_mode::update(){
         if(!action->icon().isNull())
             mainWindow()->modeToolbar->addAction(action);
     }
+    
+    /// Remember trackball is always there, thus>1
+    bool showtoolbar = (mainWindow()->modeToolbar->children().size() > 1);
+    mainWindow()->modeToolbar->setVisible(showtoolbar);
 }
 
 void gui_mode::enterState(STATE state, QAction* action){
@@ -143,7 +149,7 @@ void gui_mode::actionClicked(QAction *action){
     }
 }
 
-void gui_mode::documentChanged(){
+void gui_mode::documentChanged(){  
     // qDebug("gui_mode::documentChanged()");
     if(!mainWindow()->hasModePlugin()) return;
     ModePlugin* iMode = mainWindow()->getModePlugin();

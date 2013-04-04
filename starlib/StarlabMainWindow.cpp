@@ -123,6 +123,7 @@ MainWindow::MainWindow(Application* _application) :
     /// Installs all the GUI plugins
     {
         foreach(GuiPlugin* plugin, pluginManager()->guiPlugins()){
+            // qDebug() << "GuiPlugin::load " << plugin->name();
             plugin->_mainWindow=this;
             plugin->load();
         }

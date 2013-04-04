@@ -18,7 +18,8 @@ public:
         
 /// plugin constructor
 void load();
-void update();
+public slots:
+    void update();
 
 /// @{ State machine to manage suspension
 private:
