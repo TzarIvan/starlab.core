@@ -31,11 +31,12 @@ SUBDIRS += plugins/gui_filemenu #< gui/logic of "menu=>file"
 SUBDIRS += plugins/gui_filter   #< gui/logic of "menu=>filter"
 SUBDIRS += plugins/gui_mode     #< gui/logic of "menu=>mode"
 SUBDIRS += plugins/gui_render
-SUBDIRS += plugins/gui_decorate
+#SUBDIRS += plugins/gui_decorate
 SUBDIRS += plugins/gui_windows  #< gui/logic of "menu=>windows"
 SUBDIRS += plugins/gui_view
 
 #--- MORE ADVANCED PLUGINS
 #SUBDIRS += plugins/gui_python
 SUBDIRS += plugins/project_io_starlab
+SUBDIRS += plugins/mode_object
 
