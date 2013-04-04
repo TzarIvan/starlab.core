@@ -121,7 +121,7 @@ void gui_render::instantiate_color_dialog(){
         return;
     }
     
-    qColorDialog = new QColorDialog(mainWindow());
+    qColorDialog = new QColorDialog();
     qColorDialog->hide();
     qColorDialog->setOption(QColorDialog::DontUseNativeDialog,false);
     qColorDialog->setOption(QColorDialog::NoButtons,true);
