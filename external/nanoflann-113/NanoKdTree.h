@@ -19,7 +19,7 @@ struct PointCloud{
 		const T d1=p1[1]-pts[idx_p2].y();
 		const T d2=p1[2]-pts[idx_p2].z();
         size = size;
-		return sqrt(d0*d0 + d1*d1 + d2*d2);
+		return (d0*d0 + d1*d1 + d2*d2);
 	}
 
 	inline T kdtree_get_pt(const size_t idx, int dim) const{
@@ -83,20 +83,22 @@ public:
 		return k;
 	}
 
+	/* Returns only number of points for a ball search query */
     size_t ball_search(Vector3 p, double search_radius)
     {
         KDResults ret_matches;
         return ball_search(p, search_radius, ret_matches);
     }
 
+	/* Return points inside sphere with center at 'p' and radius 'search_radius' */
     size_t ball_search(Vector3 p, double search_radius, KDResults & ret_matches)
 	{
 		ret_matches.clear();
 
 		nanoflann::SearchParams params;
-		//params.sorted = false;
+		//params.sorted = false; // by default, the results are sorted from closest to furthest
 
-		return tree->radiusSearch(&p[0], search_radius, ret_matches, params);
+		return tree->radiusSearch(&p[0], pow(search_radius,2), ret_matches, params);
 	}
 
     int closest(Vector3 & p)
