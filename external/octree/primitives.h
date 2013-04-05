@@ -325,7 +325,7 @@ public:
 		if (fADdU[2] > zExtent && fDdU[2] * fWdU[2] >= 0.0)		return false;
 
 		fAWxDdU[0] = fabs(dot(wCrossD , UNIT_X));
-		rhs = yExtent , fAWdU[2] + zExtent * fAWdU[1];
+		rhs = yExtent * fAWdU[2] + zExtent * fAWdU[1];
 		if (fAWxDdU[0] > rhs)		return false;
 
 		fAWxDdU[1] = fabs(dot(wCrossD , UNIT_Y));
