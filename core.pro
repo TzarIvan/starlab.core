@@ -35,7 +35,3 @@ SUBDIRS += plugins/gui_render    #< gui/logic of "menu=>render"
 SUBDIRS += plugins/gui_windows   #< gui/logic of "menu=>windows"
 SUBDIRS += plugins/gui_view
 
-#--- MORE ADVANCED PLUGINS
-#SUBDIRS += plugins/gui_python
-SUBDIRS += plugins/project_io_starlab
-
