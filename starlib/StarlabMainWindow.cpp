@@ -25,6 +25,11 @@ MainWindow::MainWindow(Application* _application) :
         // Anti-aliasing when using QGLWidget or subclasses
         QGLFormat glf = QGLFormat::defaultFormat();
         glf.setSamples(8);
+#if 0
+        /// Set a 32 bits depth buffer
+        glf.setDepth(true);
+        glf.setDepthBufferSize(32);
+#endif
         QGLFormat::setDefaultFormat(glf);
 
         _drawArea = new DrawArea(this);
