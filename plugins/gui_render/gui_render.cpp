@@ -154,11 +154,10 @@ void gui_render::liveupdate_backgroundColor(QColor color){
     drawArea()->setBackgroundColor(color);
     drawArea()->updateGL();   
     
-    /// @todo save it in the settings
-//    QString key = "DefaultBackgroundColor";
-//    settings()->set( key, QVariant( newBGcolor ) );
-//    settings()->sync();
-//    setBackgroundColor( settings()->getQColor(key) );
+    /// Save it in the settings
+    QString key = "DefaultBackgroundColor";
+    settings()->set( key, QVariant( color ) );
+    settings()->sync();
 }
 
 void gui_render::liveupdate_selectedModelColor(QColor color){
