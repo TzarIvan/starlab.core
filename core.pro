@@ -35,9 +35,6 @@ SUBDIRS += plugins/gui_render    #< gui/logic of "menu=>render"
 SUBDIRS += plugins/gui_windows   #< gui/logic of "menu=>windows"
 SUBDIRS += plugins/gui_view
 
-#--- ESSENTIAL "OBJECT MODE" (from BLENDER)
-SUBDIRS += plugins/mode_object
-
 #--- MORE ADVANCED PLUGINS
 #SUBDIRS += plugins/gui_python
 SUBDIRS += plugins/project_io_starlab
