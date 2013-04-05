@@ -67,16 +67,8 @@ public slots:
 private:
     void init();              ///< Initializes the scene (qGLViewer)
     void draw();              ///< Draws the whole scene
+    void draw_models();       ///< Draws the models in the scene; draw() subroutine
     void drawWithNames();     ///< Draws to the symbols buffer
-/// @}
-
-/// @{ OpenGL buffers
-public slots:
-    std::vector< std::vector<float> > depthBuffer();
-private:
-    void *readBuffer(GLenum format, GLenum type);
-    GLfloat *depth_buffer;
-    bool captureDepthBuffer;
 /// @}
 
 /// @{ Selection functions
