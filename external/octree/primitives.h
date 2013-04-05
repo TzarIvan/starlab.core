@@ -180,9 +180,9 @@ public:
 
 		this->center = (vmin + vmax) / 2.0;
 
-		this->xExtent = abs(vmax.x() - center.x());
-		this->yExtent = abs(vmax.y() - center.y());
-		this->zExtent = abs(vmax.z() - center.z());
+		this->xExtent = fabs(vmax.x() - center.x());
+		this->yExtent = fabs(vmax.y() - center.y());
+		this->zExtent = fabs(vmax.z() - center.z());
 	}
 
 	std::vector<Vec3d> getCorners()
@@ -307,32 +307,32 @@ public:
 		Vec3d wCrossD = cross(ray.direction , diff);
 
 		fWdU[0] = dot(ray.direction , UNIT_X);
-		fAWdU[0] = abs(fWdU[0]);
+		fAWdU[0] = fabs(fWdU[0]);
 		fDdU[0] = dot(diff , UNIT_X);
-		fADdU[0] = abs(fDdU[0]);
+		fADdU[0] = fabs(fDdU[0]);
 		if (fADdU[0] > xExtent && fDdU[0] * fWdU[0] >= 0.0)		return false;
 
 		fWdU[1] = dot(ray.direction , UNIT_Y);
-		fAWdU[1] = abs(fWdU[1]);
+		fAWdU[1] = fabs(fWdU[1]);
 		fDdU[1] = dot(diff , UNIT_Y);
-		fADdU[1] = abs(fDdU[1]);
+		fADdU[1] = fabs(fDdU[1]);
 		if (fADdU[1] > yExtent && fDdU[1] * fWdU[1] >= 0.0)		return false;
 
 		fWdU[2] = dot(ray.direction , UNIT_Z);
-		fAWdU[2] = abs(fWdU[2]);
+		fAWdU[2] = fabs(fWdU[2]);
 		fDdU[2] = dot(diff , UNIT_Z);
-		fADdU[2] = abs(fDdU[2]);
+		fADdU[2] = fabs(fDdU[2]);
 		if (fADdU[2] > zExtent && fDdU[2] * fWdU[2] >= 0.0)		return false;
 
-		fAWxDdU[0] = abs(dot(wCrossD , UNIT_X));
+		fAWxDdU[0] = fabs(dot(wCrossD , UNIT_X));
 		rhs = yExtent , fAWdU[2] + zExtent * fAWdU[1];
 		if (fAWxDdU[0] > rhs)		return false;
 
-		fAWxDdU[1] = abs(dot(wCrossD , UNIT_Y));
+		fAWxDdU[1] = fabs(dot(wCrossD , UNIT_Y));
 		rhs = xExtent * fAWdU[2] + zExtent * fAWdU[0];
 		if (fAWxDdU[1] > rhs)		return false;
 
-		fAWxDdU[2] = abs(dot(wCrossD , UNIT_Z));
+		fAWxDdU[2] = fabs(dot(wCrossD , UNIT_Z));
 		rhs = xExtent * fAWdU[1] + yExtent * fAWdU[0];
 		if (fAWxDdU[2] > rhs)		return false;
 
@@ -429,9 +429,9 @@ public:
 
 	bool intersectsSphere( const Vec3d& sphere_center, double radius )
 	{
-		if (abs(center.x() - sphere_center.x()) < radius + xExtent
-			&& abs(center.y() - sphere_center.y()) < radius + yExtent
-			&& abs(center.z() - sphere_center.z()) < radius + zExtent)
+		if (fabs(center.x() - sphere_center.x()) < radius + xExtent
+			&& fabs(center.y() - sphere_center.y()) < radius + yExtent
+			&& fabs(center.z() - sphere_center.z()) < radius + zExtent)
 			return true;
 
 		return false;
@@ -439,9 +439,9 @@ public:
 
 	bool contains( const Vec3d& point ) const
 	{
-		return abs(center.x() - point.x()) < xExtent
-			&& abs(center.y() - point.y()) < yExtent
-			&& abs(center.z() - point.z()) < zExtent;
+		return fabs(center.x() - point.x()) < xExtent
+			&& fabs(center.y() - point.y()) < yExtent
+			&& fabs(center.z() - point.z()) < zExtent;
 	}
 
 	Vec3d Center()
