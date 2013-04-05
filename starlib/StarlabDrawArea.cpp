@@ -234,6 +234,9 @@ void DrawArea::draw(){
     
     /// Render renderable objects
     drawAllRenderObjects();
+    
+    /// Restore foreground color (the one of showMessage)
+    setForegroundColor(Qt::black);
 }
 
 void DrawArea::drawWithNames(){
