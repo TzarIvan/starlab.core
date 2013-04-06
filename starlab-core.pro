@@ -11,7 +11,7 @@ CONFIG += ordered
 system(qmake -set STARLAB       $$PWD/starlab.prf)
 system(qmake -set QHULL         $$PWD/external/qhull-2012.1/config.prf)
 system(qmake -set CHOLMOD       $$PWD/external/cholmod-4.0.0/config.prf)
-system(qmake -set EIGEN         $$PWD/external/eigen-3.1.0-rc1/config.prf)
+system(qmake -set EIGEN         $$PWD/external/eigen-3.1.2/config.prf)
 system(qmake -set NANOFLANN     $$PWD/external/nanoflann-113/config.prf)
 system(qmake -set MATLAB        $$PWD/external/matlab.prf)
 system(qmake -set KDTREEMATLAB  $$PWD/external/kdtree-matlab/config.prf)
