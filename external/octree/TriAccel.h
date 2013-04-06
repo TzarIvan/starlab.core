@@ -32,7 +32,7 @@ struct TriAccel {
 		k = 0;
 		/* Determine the largest projection axis */
 		for (int j=0; j<3; j++) {
-			if (std::abs(N[j]) > std::abs(N[k]))
+			if (fabs(N[j]) > fabs(N[k]))
 				k = j;
 		}
 

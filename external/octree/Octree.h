@@ -502,7 +502,7 @@ public:
         double determinant = dot(edge1, directionCrossEdge2);
 
         // If the ray is parallel to the triangle plane, there is no collision.
-        if (abs(determinant) < EPS)
+        if (fabs(determinant) < EPS)
             return;
 
         double inverseDeterminant = 1.0 / determinant;

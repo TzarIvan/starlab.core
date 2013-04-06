@@ -71,9 +71,6 @@ DrawArea::DrawArea(MainWindow* mainWindow)
     // Keyboard + Mouse behavior
     // setShortcut(SAVE_SCREENSHOT, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
 
-    this->captureDepthBuffer = false;
-    
-    
     /// Disables all default qglviewer predefined keyboard shortcuts
     {
         setShortcut(DRAW_AXIS,0);
@@ -179,7 +176,7 @@ void DrawArea::viewFrom(QAction * a){
     camera()->setSceneCenter(c);
 }
 
-void DrawArea::init(){
+void DrawArea::init(){   
     /// Background color from settings file
     QString key = "DefaultBackgroundColor";
     
@@ -193,9 +190,7 @@ void DrawArea::init(){
     resetViewport();
 }
 
-void DrawArea::draw(){
-    glEnable(GL_MULTISAMPLE); ///< Enables anti-aliasing
-
+void DrawArea::draw_models(){
     /// Render each Model
     /// @todo use plugin rendering if one is specified
     glPushMatrix();
@@ -206,10 +201,14 @@ void DrawArea::draw(){
                 model->renderer()->render();
             }
     glPopMatrix();
+}
 
-    /// Buffers
-    if(captureDepthBuffer) depth_buffer = (GLfloat*)readBuffer(GL_DEPTH_COMPONENT, GL_FLOAT);
+void DrawArea::draw(){
+    glEnable(GL_MULTISAMPLE); ///< Enables anti-aliasing
 
+    /// Draw the models
+    draw_models();
+    
     /// @todo Render decoration plugins
     glPushMatrix();
         glMultMatrixd( document()->transform.data() );
@@ -235,35 +234,14 @@ void DrawArea::draw(){
     
     /// Render renderable objects
     drawAllRenderObjects();
+    
+    /// Restore foreground color (the one of showMessage)
+    setForegroundColor(Qt::black);
 }
 
 void DrawArea::drawWithNames(){
     if(mainWindow()->hasModePlugin())
         mainWindow()->getModePlugin()->drawWithNames();
-}
-
-std::vector< std::vector<float> > DrawArea::depthBuffer()
-{
-    int h = height(), w = width();
-    std::vector< std::vector<float> > dbuffer(h, std::vector<float>(w,0));
-
-    captureDepthBuffer = true;
-    updateGL();
-
-    if(!depth_buffer) return dbuffer;
-
-    for(int y = 0; y < h; y++){
-        for(int x = 0; x < w; x++){
-            uint idx = ((y*w)+x);
-            dbuffer[y][x] = ((GLfloat*)depth_buffer)[idx];
-        }
-    }
-
-    delete depth_buffer;
-
-    captureDepthBuffer = false;
-
-    return dbuffer;
 }
 
 void DrawArea::endSelection(const QPoint & p)
@@ -278,24 +256,6 @@ void DrawArea::postSelection(const QPoint & p)
 {
     if(mainWindow()->hasModePlugin())
         mainWindow()->getModePlugin()->postSelection(p);
-}
-
-void* DrawArea::readBuffer(GLenum format, GLenum type)
-{
-    void * data = NULL;
-    int w = this->width(), h = this->height();
-    switch(format)
-    {
-    case GL_DEPTH_COMPONENT:
-        data = new GLfloat[w*h];
-        break;
-
-    case GL_RGBA:
-        data = new GLubyte[w*h*4];
-        break;
-    }
-    glReadPixels(0, 0, w, h, format, type, data);
-    return data;
 }
 
 DrawArea::~DrawArea(){

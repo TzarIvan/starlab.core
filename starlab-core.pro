@@ -38,5 +38,3 @@ SUBDIRS += plugins/gui_view
 #--- MORE ADVANCED PLUGINS
 #SUBDIRS += plugins/gui_python
 SUBDIRS += plugins/project_io_starlab
-SUBDIRS += plugins/mode_object
-
