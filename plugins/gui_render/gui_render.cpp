@@ -73,10 +73,10 @@ void gui_render::update(){
     /// Connect click events to change in renderer system
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()), Qt::UniqueConnection);
-    connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()));
-    connect(editModelColor, SIGNAL(triggered()), this, SLOT(trigger_editSelectedModelColor()));
-    connect(editBackgroundColor, SIGNAL(triggered()), this, SLOT(trigger_editBackgroundColor()));
-    connect(clearRenderObjects, SIGNAL(triggered()), drawArea(), SLOT(clear()));    
+    connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()),Qt::UniqueConnection);
+    connect(editModelColor, SIGNAL(triggered()), this, SLOT(trigger_editSelectedModelColor()), Qt::UniqueConnection);
+    connect(editBackgroundColor, SIGNAL(triggered()), this, SLOT(trigger_editBackgroundColor()), Qt::UniqueConnection);
+    connect(clearRenderObjects, SIGNAL(triggered()), drawArea(), SLOT(clear()), Qt::UniqueConnection);    
 }
 
 void gui_render::triggerSetDefaultRenderer(){
