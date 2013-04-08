@@ -90,8 +90,10 @@ private:
         
 /// @{ Scene-wide rendering elements (i.e. used for debug)
 public slots:
-    /// Removes all render objects from the scene
-    void deleteAllRenderObjects();    
+    /// @obsolete see clear()
+    void deleteAllRenderObjects(){ qWarning("deleteAllRenderObject() obsolete!"); clear(); }
+    /// @brief Removes all debug render objects from the scene
+    void clear();
 public:
     void drawAllRenderObjects();
     void deleteRenderObject(RenderObject* );

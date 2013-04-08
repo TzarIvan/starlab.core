@@ -11,12 +11,16 @@ void gui_render::load(){
     renderModeGroup = new QActionGroup(this);
     renderModeGroup->setExclusive(true);
     currentAsDefault = new QAction("Set current as default...",this);
-    editRenderSettings = new QAction("Edit renderer settings...",this);
-
     qColorDialog = NULL;    
+
+    editRenderSettings = new QAction("Edit renderer settings...",this);
     editModelColor = new QAction("Change model color...",this);
     editBackgroundColor = new QAction("Change background color...",this);
-
+    clearRenderObjects = new QAction (tr("Clear render objects"), this);
+    clearRenderObjects->setToolTip("Removes all render objects from the scene. Render objects" \
+                       "are typically used to visually debug the algorithms. "\
+                       "This function allows you to clear them from the scene.");
+    
     /// When document changes, we make sure render menu/toolbars are up to date    
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
 }
@@ -55,6 +59,7 @@ void gui_render::update(){
     toolbar()->setVisible(toolbar()->actions().size()>0);
     
     /// @internal menu can be added only after it has been filled :(
+    menu()->addAction(clearRenderObjects);
     menu()->addAction(editRenderSettings);
     menu()->addAction(currentAsDefault);
     menu()->addAction(editModelColor);
@@ -68,9 +73,10 @@ void gui_render::update(){
     /// Connect click events to change in renderer system
     connect(renderModeGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerRenderModeAction(QAction*)), Qt::UniqueConnection);
     connect(currentAsDefault, SIGNAL(triggered()), this, SLOT(triggerSetDefaultRenderer()), Qt::UniqueConnection);
-    connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()), Qt::UniqueConnection);
+    connect(editRenderSettings, SIGNAL(triggered()), this, SLOT(trigger_editSettings()));
     connect(editModelColor, SIGNAL(triggered()), this, SLOT(trigger_editSelectedModelColor()));
     connect(editBackgroundColor, SIGNAL(triggered()), this, SLOT(trigger_editBackgroundColor()));
+    connect(clearRenderObjects, SIGNAL(triggered()), drawArea(), SLOT(clear()));    
 }
 
 void gui_render::triggerSetDefaultRenderer(){

@@ -11,19 +11,21 @@ class gui_render : public GuiPlugin{
     Q_OBJECT
     Q_INTERFACES(GuiPlugin)
     
-    /// @{ updates GUI according to selection
+/// @{ updates GUI according to selection
 public slots:
-    void load();    
     void update();
-    /// @}
+    void load();    
+/// @}
     
-    /// @{ access specific resources
+/// @{ access specific resources
     QToolBar* toolbar(){ return mainWindow()->renderToolbar; }
     QMenu* menu(){ return mainWindow()->renderMenu; }
-    /// @}
+/// @}
     
 /// @{ viewer color editing
 private:
+    QAction* editModelColor;
+    QAction* editBackgroundColor;
     QColorDialog* qColorDialog;  
     void instantiate_color_dialog();
 private slots:
@@ -35,7 +37,7 @@ public slots:
     void liveupdate_backgroundColor(QColor);
 /// @}    
     
-    /// @{ renderer module
+/// @{ renderer module
 public slots:
     void triggerRenderModeAction(QAction* );
     void triggerSetDefaultRenderer();
@@ -44,8 +46,7 @@ private:
     QActionGroup* renderModeGroup;
     QAction* currentAsDefault;
     QAction* editRenderSettings;
-    QAction* editModelColor;
-    QAction* editBackgroundColor;
+    QAction* clearRenderObjects;
 /// @}
 };
 

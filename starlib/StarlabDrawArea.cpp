@@ -260,7 +260,7 @@ void DrawArea::postSelection(const QPoint & p)
 
 DrawArea::~DrawArea(){
     // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
-    deleteAllRenderObjects();
+    clear();
 }
 
 void DrawArea::setRenderer(Model *model, QString name){
@@ -271,12 +271,9 @@ void DrawArea::setRenderer(Model *model, QString name){
     document()->popBusy();
 }
 
-void DrawArea::deleteAllRenderObjects(){
-    // Render objects are not part of the document
-    // document()->pushBusy();
-        qDeleteAll(renderObjectList.begin(), renderObjectList.end());
-        renderObjectList.clear();
-    // document()->popBusy();
+void DrawArea::clear(){
+    qDeleteAll(renderObjectList.begin(), renderObjectList.end());
+    renderObjectList.clear();
 }
 
 void DrawArea::drawAllRenderObjects(){
