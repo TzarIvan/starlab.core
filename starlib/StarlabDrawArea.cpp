@@ -274,6 +274,7 @@ void DrawArea::setRenderer(Model *model, QString name){
 void DrawArea::clear(){
     qDeleteAll(renderObjectList.begin(), renderObjectList.end());
     renderObjectList.clear();
+    updateGL();
 }
 
 void DrawArea::drawAllRenderObjects(){
