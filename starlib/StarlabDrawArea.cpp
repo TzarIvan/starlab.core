@@ -179,12 +179,10 @@ void DrawArea::viewFrom(QAction * a){
 void DrawArea::init(){   
     /// Background color from settings file
     QString key = "DefaultBackgroundColor";
-    
-    /// For snapshots, default color must transparent!!
-    QColor white_transp(255,255,255,0);
+
+    QColor white_transp(255,255,255,255);
     settings()->setDefault( key, QVariant(white_transp) );
     setBackgroundColor( settings()->getQColor(key) );
-
     camera()->setUpVector(Vec(0,1,0));
 
     resetViewport();

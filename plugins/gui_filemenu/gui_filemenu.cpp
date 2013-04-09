@@ -145,9 +145,12 @@ void gui_filemenu::take_screenshot(){
     // drawArea()->saveSnapshot(filename, true);
 #else
     // this uses qt stuff
-    drawArea()->setAttribute(Qt::WA_TranslucentBackground,true);    
+    // drawArea()->setAttribute(Qt::WA_TranslucentBackground,true);    
     QImage image = drawArea()->grabFrameBuffer(true);
-    image.save(filename, "png");
+    image.save(filename, "png",100);
+    if(drawArea()->backgroundColor().alpha()<255 && drawArea()->format().samples()>1)
+        qWarning() << "Antialiasing and transparent backgrounds do work well in snapshots" 
+                   << "Change background opacity to 100% in the render menu";
 #endif
         
     showMessage("Screenshot saved at: %s",qPrintable(filename));

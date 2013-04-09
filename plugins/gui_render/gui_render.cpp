@@ -129,6 +129,7 @@ void gui_render::instantiate_color_dialog(){
     
     qColorDialog = new QColorDialog();
     qColorDialog->hide();
+    qColorDialog->setOption(QColorDialog::ShowAlphaChannel, true);
     qColorDialog->setOption(QColorDialog::DontUseNativeDialog,false);
     qColorDialog->setOption(QColorDialog::NoButtons,true);
     qColorDialog->setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
@@ -155,8 +156,7 @@ void gui_render::trigger_editSelectedModelColor(){
 }
 
 void gui_render::liveupdate_backgroundColor(QColor color){
-    /// Remove background color from snapshots
-    color.setAlpha(0.0);
+    /// Force-remove background color from snapshots
     drawArea()->setBackgroundColor(color);
     drawArea()->updateGL();   
     
