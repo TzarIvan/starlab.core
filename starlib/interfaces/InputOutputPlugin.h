@@ -10,7 +10,7 @@ class RichParameterSet;
 
 
 /** 
- * @ingroup StarlabPluginInterfaces 
+ * @ingroup stariface 
  * 
  * These plugins are responsible for the I/O of a single model.
  */

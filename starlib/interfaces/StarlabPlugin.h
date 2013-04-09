@@ -13,17 +13,23 @@
 class RichParameterSet;
 
 /** 
- * @brief The superclass of any starlab plugin
- * @defgroup StarlabPluginInterfaces Starlab Plugin Interfaces
+ * @defgroup stariface Starlab Plugin Interfaces
+ * @brief These classes should be inherited to develop your own Starlab plugin
+ */
+
+/**
+ * @brief This is the super-class of any starlab plugin
+ * @ingroup stariface
  */
 class STARLIB_EXPORT StarlabPlugin : public QObject{
     Q_OBJECT
 
 /// @{ basic plugin definition
-public:
+protected:
     /// Default constructor
     StarlabPlugin();
 
+public:
     /// The longer string describing each filtering action.
     /// => Printed at the top of the parameter window
     /// => You can use html formatting tags (like <br> <b> and <i>) to improve readability.

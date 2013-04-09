@@ -19,14 +19,8 @@ namespace Starlab{
 #define GL_MULTISAMPLE  0x809D
 #endif
 
-/// @brief The default behavior that ANY DrawArea plugin should expose to the system
-///
-/// @internal The problem needs to be solved with encapsulation. Unfortunately
-/// we cannot have StarlabDrawArea inherit from QGLWidget as it would cause
-/// multiple inheritance issues to appear with QGLViewer or GLArea. 
-/// On aftertought this makes sense, as for example we are not allowed to modify 
-/// GLArea from meshlab, but nothing stops us from having a wrapper around it!!!
-/// Doing a wrapper also gives us the chance of using it as a Q_OBJECT
+/// @ingroup starcore
+/// @brief The QGLViewer based visualization window
 class STARLIB_EXPORT DrawArea : public QGLViewer{
     Q_OBJECT
     

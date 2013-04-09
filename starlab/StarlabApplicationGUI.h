@@ -4,6 +4,7 @@
 #include <QDebug>
 #include "StarlabException.h"
 
+
 class StarlabApplicationGUI : public QApplication{
 
 public:

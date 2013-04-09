@@ -3,7 +3,7 @@
 
 /**
  * @brief The interface of a plugin which gives you total control over the GUI.           
- * @ingroup StarlabPluginInterfaces 
+ * @ingroup stariface 
  *
  * @note If you plan to create a widget you should use a ModePluginDockWidget
  */

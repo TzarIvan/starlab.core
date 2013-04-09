@@ -1,4 +1,10 @@
 #pragma once
+
+/** 
+ * @defgroup starcore Starlab Core Classes
+ * @brief The classes around which starlab is constructed.
+ */ 
+
 namespace Starlab{
     class Model;
     class Document;
@@ -7,7 +13,7 @@ namespace Starlab{
     class MainWindow;
     class Settings;
     class PluginManager;    
-} /// namespace
+}
 
-/// @todo pull into namespace?
+/// @todo Should RichParameterSet be inserted into Starlab::?
 class RichParameterSet;

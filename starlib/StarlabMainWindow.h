@@ -16,6 +16,11 @@
 
 namespace Starlab{
 
+
+/** 
+ * @brief The definition of the main starlab GUI
+ * @ingroup starcore
+ */
 /// The basic structure of the stalab window to which plugins (i.e. GUI plugins) interface
 class STARLIB_EXPORT MainWindow : public QMainWindow{
     Q_OBJECT

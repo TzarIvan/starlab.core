@@ -8,6 +8,12 @@
 
 namespace Starlab{
 
+/** @brief Global settings management class. The settings saved within this system
+ * are automatically synced with a settings.ini file
+ *
+ * @todo precise location of the file
+ * @ingroup starcore
+ */
 class STARLIB_EXPORT Settings{
     
 private: 

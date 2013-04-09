@@ -5,6 +5,8 @@
 
 namespace Starlab{
 
+/// @brief The scene graph containing the models/layers
+/// @ingroup starcore
 class STARLIB_EXPORT Document : public QObject{
     Q_OBJECT 
     

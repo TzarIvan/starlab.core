@@ -3,7 +3,7 @@
 
 /**
  * Decorate your rendering with extra stuff (i.e. normals, selection, etc..)
- * @ingroup StarlabPluginInterfaces 
+ * @ingroup stariface 
  */
 class DecoratePlugin : public StarlabPlugin{
 /// @{ DecoratePlugin interface

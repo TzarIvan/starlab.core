@@ -8,7 +8,7 @@
 
 /** 
  * @brief Plugin interface to perform I/O of project files
- * @ingroup StarlabPluginInterfaces 
+ * @ingroup stariface 
  * 
  * These plugins are responsible for the I/O of a single model.
  * A plugin is associated with one and only one extension.

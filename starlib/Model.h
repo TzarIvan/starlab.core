@@ -6,11 +6,11 @@
 #include "qt3d/math3d/qbox3d.h"
 #include "starlib_global.h"
 
-/// @{ forward declarations
-class QTreeWidgetItem;
-class DecoratePlugin;
-class RenderPlugin;
-class Renderer;
+/// @{ forward
+    class QTreeWidgetItem;
+    class DecoratePlugin;
+    class RenderPlugin;
+    class Renderer;
 /// @}
 
 namespace Starlab{
@@ -57,7 +57,8 @@ public:
 /// @{ Rendering 
 public: 
     Renderer* renderer();
-    void setRenderer(RenderPlugin* plugin);
+    void setRenderer
+    (RenderPlugin* plugin);
 private:
     Renderer* _renderer;
 /// @}

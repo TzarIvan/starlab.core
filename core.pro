@@ -7,6 +7,9 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
+#--- ROOT OF STARLAB DOCUMENTATION
+OTHER_FILES += mainpage.h
+
 #--- SPECIFIES CORE CONFIGURATION
 system(qmake -set STARLAB       $$PWD/starlab.prf)
 system(qmake -set QHULL         $$PWD/external/qhull-2012.1/config.prf)

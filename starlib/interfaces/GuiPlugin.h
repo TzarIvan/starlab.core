@@ -2,8 +2,8 @@
 #include "StarlabPlugin.h"
 
 /** 
- * @brief The interface of a plugin which adds GUI functionality to the system
- * @ingroup StarlabPluginInterfaces 
+ * @brief The interface of a plugin which adds GUI functionality to the system.
+ * @ingroup stariface 
  * 
  * An example of this plugin is the one that fills the "file" menu and its Save/Load entries.
  * They are used to modularize the structure of the GUI system.
