@@ -28,7 +28,7 @@ public:
     /// @brief returns the model that this plugin should be rendering
     StarlabModel* model(){ return _model; }
     /// @brief returns the plugin that instantiated this renderer
-    RenderPlugin* plugin(){ return _plugin; }
+    RenderPlugin* plugin(){ Q_ASSERT(_plugin); return _plugin; }
     /// @brief returns the parameter set you can edit
     RichParameterSet* parameters(){ return &_parameters; }
     
@@ -49,7 +49,9 @@ public:
     /// @brief Generate an instance of the rendering class
     virtual Renderer* instance() = 0;
     /// @brief Overload and return true if you would like this plugin to be a default
-    virtual bool isDefault() { return false; }    
+    virtual bool isDefault() { return false; }   
+    /// @brief Gives access to the StarlabDrawArea
+    using StarlabPlugin::drawArea;
 };
 
 Q_DECLARE_INTERFACE(RenderPlugin, "Starlab::RenderPlugin/3.0")
