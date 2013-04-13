@@ -83,7 +83,7 @@ public:
         // Slower, more robust tests
         if(!best_res.hit){
             foreach( int i, intersectRay( ray, 0.01, false ) ){
-                rayTriangleIntersectionTest(SurfaceMesh::Model::Face(i), ray, res);
+                rayTriangleIntersectionTest(SurfaceMesh::Model::Face(i), ray, res, false);
                 if(res.hit){
                     if (res.distance < minDistance){
                         minDistance = res.distance;
