@@ -134,6 +134,11 @@ void gui_filemenu::reload_selection(){
     mainWindow()->setStatusBarMessage("Model '"+ newmodel->name +"' reloaded from path: " + newmodel->path,5000);
 }
 
+void gui_filemenu::save_selection_as(){
+    document()->selectedModel()->path = "";
+    this->save();
+}
+
 void gui_filemenu::take_screenshot(){
     /// Screen Shot 2013-04-03 at 6.59.51 PM
     QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd h.mm.ss AP");

@@ -16,7 +16,7 @@ private slots:
     void save_project(){ qWarning("not implemented"); }
     void save_project_as(){ qWarning("not implemented"); }
     void save_selection(){ qWarning("not implemented"); }
-    void save_selection_as(){ qWarning("not implemented"); }
+    void save_selection_as();
     void reload_project(){ qWarning("not implemented"); }
     void take_screenshot();
     void delete_selected_model();
@@ -43,6 +43,13 @@ public:
             connect(action, SIGNAL(triggered()), this, SLOT(save()));
             mainWindow()->fileMenu->addAction(action);
             mainWindow()->mainToolbar->addAction(action);
+        }
+        
+        /// @todo Save selection as...
+        { 
+            QAction* action = new QAction(QIcon(":/images/save.png"),tr("Save Selection as..."), this);
+            connect(action, SIGNAL(triggered()), this, SLOT(save_selection_as()));
+            mainWindow()->fileMenu->addAction(action);
         }
         
         /// Delete selected model
@@ -79,12 +86,6 @@ public:
         if(false){ 
             QAction* action = new QAction(QIcon(":/images/save.png"),tr("Save Selection"), this);
             connect(action, SIGNAL(triggered()), this, SLOT(save_selection()));
-            mainWindow()->fileMenu->addAction(action);
-        }
-        /// @todo Save selection as...
-        if(false){ 
-            QAction* action = new QAction(QIcon(":/images/save.png"),tr("Save Selection as..."), this);
-            connect(action, SIGNAL(triggered()), this, SLOT(save_selection_as()));
             mainWindow()->fileMenu->addAction(action);
         }
         
