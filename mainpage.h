@@ -14,5 +14,8 @@
  * @section licences Submodule Licences
  * @section requirements Build from Source
  * 
+ * Coding standards:
+ * Class names: java style, e.g. SurfaceMeshModel
+ * Methods: c++ style, e.g. object.method_of_name()
  */
 
