@@ -99,16 +99,6 @@ void Document::clear(){
     popBusy();
 }
 
-void Document::replaceModel(Model *old_model, Model *new_model){
-    // qDebug() << "Document::replaceModel(" << old_model->path << "," << new_model->path << ")";
-    /// Search old in list
-    int index = _models.indexOf(old_model);
-    Q_ASSERT(index!=-1);
-    _models[index] = new_model;
-    /// Tell others the model was deleted
-    delete old_model;
-}
-
 Model* Document::selectedModel(){
     return _selectedModel;
 }

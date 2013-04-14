@@ -70,8 +70,6 @@ public:
     Model * getModel(QString name);
     /// Clean slate, remove all models
     void clear();
-    /// Replace Model, also deleting the memory of the old
-    void replaceModel(Model* old_model, Model* new_model);
     /// Is there any model?
     bool isEmpty(){ return _models.empty(); }
     

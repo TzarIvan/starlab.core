@@ -126,8 +126,9 @@ void gui_filemenu::reload_selection(){
         newmodel->updateBoundingBox();
         
         /// Replace and set as selected model
-        mainWindow()->document()->replaceModel(selection,newmodel);
-        mainWindow()->document()->setSelectedModel(newmodel);        
+        mainWindow()->document()->addModel(newmodel);
+        mainWindow()->document()->deleteModel(selection);
+        mainWindow()->document()->setSelectedModel(newmodel);
     mainWindow()->document()->popBusy();
 
     /// Inform the user
