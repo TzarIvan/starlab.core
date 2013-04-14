@@ -277,7 +277,7 @@ void DrawArea::clear(){
 
 void DrawArea::drawAllRenderObjects(){
     foreach(RenderObject::Base* obj, renderObjectList)
-        obj->draw();
+        obj->draw(*this);
 }
 
 void DrawArea::addRenderObject(RenderObject::Base * obj)
@@ -318,6 +318,12 @@ RenderObject::Ray& DrawArea::drawRay(QVector3D orig, QVector3D dir, float size, 
     RenderObject::Ray* ray = new RenderObject::Ray(orig,dir,size,color,scale);
     addRenderObject(ray);
     return *ray;
+}
+
+RenderObject::Text& DrawArea::drawText(int x, int y, const QString& text, float size, QColor color){
+    RenderObject::Text* t = new RenderObject::Text(x, y, text, size, color);
+    addRenderObject(t);
+    return *t;
 }
 
 /// @internal returning true will prevent the drawArea plugin from intercepting the events!!!

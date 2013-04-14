@@ -2,7 +2,7 @@
 #include <QGLWidget>
 #include <QDebug>
 
-void RenderObject::Base::draw(){
+void RenderObject::Base::draw(QGLWidget& widget){
     glColor3f(_color.redF(), _color.greenF(), _color.blueF());   
 }
 
@@ -13,8 +13,8 @@ RenderObject::Triangle::Triangle(QVector3D p1, QVector3D p2, QVector3D p3, QColo
     this->_color = color;
 }
 
-void RenderObject::Triangle::draw(){
-    Base::draw();
+void RenderObject::Triangle::draw(QGLWidget& widget){
+    Base::draw(widget);
 
     glDisable(GL_LIGHTING);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -29,8 +29,8 @@ RenderObject::Point::Point(QVector3D p, float size, QColor color) : Base(size,co
     this->p = p;
 }
 
-void RenderObject::Point::draw(){
-    Base::draw();
+void RenderObject::Point::draw(QGLWidget& widget){
+    Base::draw(widget);
     
     // qDebug() << "RenderObject::Point::render()";
     glPointSize(_size);    
@@ -45,8 +45,8 @@ RenderObject::Segment::Segment(QVector3D p1, QVector3D p2, float size, QColor co
     this->p2 = p2;
 }
 
-void RenderObject::Segment::draw(){
-    Base::draw();
+void RenderObject::Segment::draw(QGLWidget& widget){
+    Base::draw(widget);
 
     glLineWidth(_size);
     glDisable(GL_LIGHTING);
@@ -62,8 +62,8 @@ RenderObject::Ray::Ray(QVector3D orig, QVector3D dir, float size, QColor color, 
     this->_scale=scale;
 }
 
-void RenderObject::Ray::draw(){
-    Base::draw();
+void RenderObject::Ray::draw(QGLWidget& widget){
+    Base::draw(widget);
     glLineWidth(_size);
     glDisable(GL_LIGHTING);
     QVector3D& p1=orig;
@@ -72,4 +72,17 @@ void RenderObject::Ray::draw(){
         glVertex3d(p1.x(),p1.y(),p1.z());
         glVertex3d(p2.x(),p2.y(),p2.z());
     glEnd();
+}
+
+
+RenderObject::Text::Text(int x, int y, const QString& text, float size, QColor color) :
+    _x(x),
+    _y(y),
+    _text(text),
+    Base(size,color){
+}
+
+void RenderObject::Text::draw(QGLWidget& widget){
+    Base::draw(widget);
+    widget.renderText(_x, _y, _text, QFont("Time New Roman", _size));
 }
