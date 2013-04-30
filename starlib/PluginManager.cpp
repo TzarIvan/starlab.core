@@ -73,7 +73,7 @@ PluginManager::PluginManager(Settings* settings) :
 
 FilterPlugin *PluginManager::getFilter(QString name){
     FilterPlugin* filter = _filterPlugins.value(name,NULL);
-    if(filter==NULL) throw StarlabException("Cannot find filter '%s'", qPrintable(filter->name()));
+    if(filter==NULL) throw StarlabException("Cannot find filter '%s'", qPrintable(name));
     return filter;
 }
 
