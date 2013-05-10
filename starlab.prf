@@ -2,13 +2,13 @@
 # This is the Starlab PRoject Feature (PRF) file. It allows you to use the library
 # and add plugins without having to worry too much about configuration. It is what
 # allows us to say "it just works".
-# 
-# Editing this file should be done VERY carefully. These are some resources you 
+#
+# Editing this file should be done VERY carefully. These are some resources you
 # should be aware of
 # @see http://doc.qt.digia.com/latest//qmake-advanced-usage.html
 # @see http://developer.qt.nokia.com/doc/qt-4.8/qmake-variable-reference.html
 #
-# @interal Meaning of $$PWD 
+# @interal Meaning of $$PWD
 #   - within a function call PWD is relative to the project file
 #   - within the body of this file it is the path of this file
 #-------------------------------------------------------------------------------
@@ -17,14 +17,14 @@
 #
 # Here we make sure your system compiler/configuration is compatible with Starlab
 # If this is not the case an error will be generated.
-# 
+#
 # @todo perfect all the rules
-# @todo add possibility to disable this check 
+# @todo add possibility to disable this check
 #-------------------------------------------------------------------------------
 defineTest( checkSupportedOsAndCompiler ){
     # @todo ibraheem
     win32: return(true)
-    # @todo return false if not 64 bits 
+    # @todo return false if not 64 bits
     mac: return(true)
     # @todo return false if not 32 bits see "contains(QMAKE_TARGET.arch, x86_64)"
     unix:!mac: return(true)
@@ -34,9 +34,9 @@ defineTest( checkSupportedOsAndCompiler ){
 
 #----------------------------- SETUP DEPLOY PATH -------------------------------
 #
-# Where will the application be deployed? The default deploy directory is the 
+# Where will the application be deployed? The default deploy directory is the
 # starlab sources folder.
-#  
+#
 # @todo fix a better deploy rule for win32. Use a system command?
 # http://stackoverflow.com/questions/9228950/what-is-the-alternative-for-users-home-directory-on-windows-command-prompt
 #-------------------------------------------------------------------------------
@@ -65,18 +65,19 @@ mac:       PLUGINSPATH    = $$STARLABPREFIX/Starlab.app/plugins
 win32:     PLUGINSPATH    = $$STARLABPREFIX/StarlabPackage/plugins
 unix:!mac: PLUGINSPATH    = $$STARLABPREFIX/StarlabPackage/plugins
 
+# Windows : release folder
 win32:CONFIG(release, debug|release) {
     LIBRARIESPATH  = $$STARLABPREFIX/StarlabPackageRelease
     EXECUTABLEPATH = $$STARLABPREFIX/StarlabPackageRelease
     PLUGINSPATH    = $$STARLABPREFIX/StarlabPackageRelease/plugins
-} 
+}
 
 #------------------------------- SETUP STARLIB ---------------------------------
 #
-# Starlib is the core of starlab. It's a dynamic/shared library that contains all 
-# the datatypes used by all the components of starlab. Here we forcefully load 
-# this component. 
-# 
+# Starlib is the core of starlab. It's a dynamic/shared library that contains all
+# the datatypes used by all the components of starlab. Here we forcefully load
+# this component.
+#
 # @internal equals skips self-dependency
 # @internal $$basename cannot be put inside the equals call
 #-------------------------------------------------------------------------------
@@ -95,9 +96,9 @@ PROJECTBASENAME=$$basename(_PRO_FILE_)
 }
 
 #---------------------- SPECIFIES TEMPLATE FOR A PROEJCT -----------------------
-# In your .pro file you call this function to specify what type of project you 
+# In your .pro file you call this function to specify what type of project you
 # are trying to build. This is done by calling one of:
-# 
+#
 # StarlabTemplate(plugin)
 # StarlabTemplate(sharedlib)
 # StarlabTemplate(console)
@@ -107,8 +108,8 @@ PROJECTBASENAME=$$basename(_PRO_FILE_)
 #-------------------------------------------------------------------------------
 defineTest(StarlabTemplate){
     STARLAB_TEMPLATE=$$1 #retrieve parameter
-    
-    # always depend from current stuff    
+
+    # always depend from current stuff
     DEPENDPATH  *= $$_PRO_FILE_PWD_
     INCLUDEPATH *= $$_PRO_FILE_PWD_
 
@@ -134,7 +135,7 @@ defineTest(StarlabTemplate){
         CONFIG += plugin
         DESTDIR = $$PLUGINSPATH
         DEPENDPATH *= $$PWD
-    }    
+    }
 
     equals(STARLAB_TEMPLATE,"appbundle"){
         TEMPLATE = app
@@ -158,30 +159,30 @@ defineTest(StarlabTemplate){
 
     equals(STARLAB_TEMPLATE,"console"){
         # QT += gui # gui has to be left as QColor and others are still used
-        QT += core  
+        QT += core
         CONFIG += console
         CONFIG -= app_bundle
         TEMPLATE = app
         DESTDIR = $$EXECUTABLEPATH
     }
 
+    # OpenMP
+    win32 {
+        QMAKE_CXXFLAGS += /openmp
+    }
+    unix {
+        QMAKE_CXXFLAGS += -fopenmp
+        LIBS += -lgomp
+    }
+
+    # Build with Multiple Processes
+    win32: QMAKE_CXXFLAGS += /MP
+
     # Windows warnings
     win32: DEFINES += _CRT_SECURE_NO_WARNINGS
-	
-	# Build with Multiple Processes
-	win32: QMAKE_CXXFLAGS += /MP
-	
-	# OpenMP
-	win32 {
-		QMAKE_CXXFLAGS += /openmp
-	}
-	unix {
-		QMAKE_CXXFLAGS += -fopenmp
-		LIBS += -lgomp
-	}
 
     # @internal because we are inside a function we need to "export" variables
-	export(QMAKE_CXXFLAGS)
+    export(QMAKE_CXXFLAGS)
     export(QMAKE_LFLAGS)
     export(DESTDIR)
     export(TEMPLATE)
