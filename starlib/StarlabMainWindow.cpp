@@ -139,6 +139,9 @@ MainWindow::MainWindow(Application* _application) :
         settings()->sync();
         setStatusBarMessage("Settings loaded from: "+settings()->settingsFilePath(),2);
     }
+
+    /// Update the UI for the first time (e.g. load mode plugins into UI)
+    update();
 }
 
 void MainWindow::closeEvent(QCloseEvent*){
@@ -213,8 +216,10 @@ void MainWindow::update(){
     // qDebug() << "StarlabMainWindow::update()";
     
     /// Update all the menus/toolbars
-    foreach(GuiPlugin* plugin, pluginManager()->guiPlugins())
+    foreach(GuiPlugin* plugin, pluginManager()->guiPlugins()){
+        // qDebug() << "updating: " << plugin->name();
         plugin->update();
+    }
       
     /// Only display menus and toolbars if they contain something
     {        
