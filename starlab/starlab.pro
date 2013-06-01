@@ -1,5 +1,5 @@
 # this project generates the application bundle Starlab.app
-load($$PWD/../starlab.prf)
+include($$PWD/../starlab.prf)
 StarlabTemplate(appbundle)
 
 TARGET = starlab

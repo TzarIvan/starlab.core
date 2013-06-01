@@ -3,14 +3,14 @@
 #include <QString>
 #include <QObject>
 #include <QColor>
-#include "qt3d/math3d/qbox3d.h"
+#include "Eigen/Geometry"
 #include "starlib_global.h"
 
 /// @{ forward
     class QTreeWidgetItem;
     class DecoratePlugin;
     class RenderPlugin;
-    class Renderer;
+    class Renderer;    
 /// @}
 
 namespace Starlab{
@@ -77,7 +77,7 @@ private:
 /// @{ Basic geometry, needed for rendering
 public:
     /// Retrieves a reference to the model bounding box
-    const QBox3D& bbox(){ return _bbox; }
+    const Eigen::AlignedBox3d& bbox(){ return _bbox; }
     
     /// @brief Overload to compute the bounding box for the current model: this->_bbox
     /// @note this necessary because we have to have a plausible BBOX for the scene, 
@@ -85,11 +85,11 @@ public:
     virtual void updateBoundingBox() = 0;
     
     /// @brief Forces the bounding box to be set to a particular value
-    void force_set_bbox(const QBox3D& newbbox){ _bbox = newbbox; }
+    void force_set_bbox(const Eigen::AlignedBox3d& newbbox){ _bbox = newbbox; }
     
 protected:
     /// Per-model bounding box (before transform is applied)
-    QBox3D _bbox;
+    Eigen::AlignedBox3d _bbox;
 /// @}        
 };
 

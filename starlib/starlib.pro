@@ -1,11 +1,10 @@
-load($$PWD/../starlab.prf)
+include($$PWD/../starlab.prf)
 StarlabTemplate(sharedlib)
 
 # ---------------------------------------------
 # --               EXERNALS                  --
 # ---------------------------------------------
-include(qt3d/qt3d.pri)
-include(qglviewer/qglviewer.pri)
+include(QGLViewer/qglviewer.pri)
 
 # ---------------------------------------------
 # --           PARAMETER LIBRARY             --

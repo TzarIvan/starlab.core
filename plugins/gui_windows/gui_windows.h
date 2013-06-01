@@ -9,7 +9,7 @@
     #define DEB if(false)
 #endif
 
-class gui_windowsmenu : public GuiPlugin{
+class gui_windows : public GuiPlugin{
     Q_OBJECT
     Q_INTERFACES(GuiPlugin)
     

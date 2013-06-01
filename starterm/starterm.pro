@@ -1,4 +1,4 @@
-load($$PWD/../starlab.prf)
+include($$PWD/../starlab.prf)
 StarlabTemplate(console)
 
 TARGET = starterm

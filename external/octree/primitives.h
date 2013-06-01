@@ -1,6 +1,13 @@
 #pragma once
 
 #include <float.h>
+#include "Eigen/Dense"
+
+namespace{
+    typedef Eigen::Vector3d Vec3d;
+    Vec3d cross(Vec3d a, Vec3d b){ return a.cross(b); }
+    double dot(Vec3d a, Vec3d b){ return a.dot(b); }
+}
 
 /* AABB-triangle overlap test code                      */
 /* by Tomas Akenine-Möller                              */
@@ -55,9 +62,9 @@
     rad = fa * boxhalfsize[X] + fb * boxhalfsize[Y];   \
     if(min>rad || max<-rad) return 0;
 
-static inline int planeBoxOverlap(const Vec3d& normal, const Vec3d& vert, const Vec3d& maxbox)
+static inline int planeBoxOverlap(const Eigen::Vector3d& normal, const Eigen::Vector3d& vert, const Eigen::Vector3d& maxbox)
 {
-	Vec3d vmin,vmax;
+    Eigen::Vector3d vmin,vmax;
 	for(int q=X; q<=Z; q++){
 		double v = vert[q];					
 		if(normal[q] > 0.0){
@@ -69,8 +76,8 @@ static inline int planeBoxOverlap(const Vec3d& normal, const Vec3d& vert, const 
 			vmax[q]=-maxbox[q] - v;
 		}
 	}
-	if(dot(normal , vmin) > 0.0) return 0;
-	if(dot(normal , vmax) >= 0.0) return 1;
+    if(normal.dot(vmin) > 0.0) return 0;
+    if(normal.dot(vmax) >= 0.0) return 1;
 
 	return 0;
 }
@@ -81,12 +88,12 @@ static inline int planeBoxOverlap(const Vec3d& normal, const Vec3d& vert, const 
 
 struct Ray
 {
-	Vec3d origin;
-	Vec3d direction;
+    Eigen::Vector3d origin;
+    Eigen::Vector3d direction;
 	int index;
 	double thickness;
 
-	Ray(const Vec3d & Origin = Vec3d(), const Vec3d & Direction = Vec3d(), double Thickness = 0.0, int Index = -1) : origin(Origin), index(Index){
+    Ray(const Eigen::Vector3d & Origin = Eigen::Vector3d(), const Vec3d & Direction = Eigen::Vector3d(), double Thickness = 0.0, int Index = -1) : origin(Origin), index(Index){
 		direction = Direction.normalized();
 		thickness = Thickness;
 	}
@@ -304,7 +311,7 @@ public:
 		Vec3d UNIT_Z(0.0, 0.0, 1.0);
 
 		Vec3d diff = ray.origin - center;
-		Vec3d wCrossD = cross(ray.direction , diff);
+        Vec3d wCrossD = cross(ray.direction , diff);
 
 		fWdU[0] = dot(ray.direction , UNIT_X);
 		fAWdU[0] = fabs(fWdU[0]);

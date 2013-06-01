@@ -115,6 +115,10 @@ defineTest(StarlabTemplate){
 
     QT*=xml opengl
 
+    # LOADS EIGEN (NOT ELEGANT... WHY NOT AS QGLVIEWER?)
+    INCLUDEPATH *= $$[EIGENPATH]
+    DEFINES *= EIGEN
+
     equals(STARLAB_TEMPLATE,"sharedlib"){
         DESTDIR = $$LIBRARIESPATH
         LIBNAME = $$basename(_PRO_FILE_PWD_)
@@ -169,14 +173,12 @@ defineTest(StarlabTemplate){
     # OpenMP
     win32 {
         QMAKE_CXXFLAGS += /openmp
+        QMAKE_CXXFLAGS += /MP
     }
-    unix {
+    unix:!mac{
         QMAKE_CXXFLAGS += -fopenmp
         LIBS += -lgomp
     }
-
-    # Build with Multiple Processes
-    win32: QMAKE_CXXFLAGS += /MP
 
     # Windows warnings
     win32: DEFINES += _CRT_SECURE_NO_WARNINGS
@@ -192,6 +194,7 @@ defineTest(StarlabTemplate){
     export(DEFINES)
     export(OTHER_FILES)
     export(LIBS)
+    export(DEFINES)
     export(VERSION)
     export(QT)
 }

@@ -99,9 +99,9 @@ DrawArea::DrawArea(MainWindow* mainWindow)
 
 void DrawArea::resetViewport(){
 
-    QBox3D sceneBBox = document()->bbox();
-    QVector3D minbound = sceneBBox.minimum();
-    QVector3D maxbound = sceneBBox.maximum();
+    Eigen::AlignedBox3d sceneBBox = document()->bbox();
+    Eigen::Vector3d minbound = sceneBBox.min();
+    Eigen::Vector3d maxbound = sceneBBox.max();
 
     Vec min_bound(minbound.x(),minbound.y(),minbound.z());
     Vec max_bound(maxbound.x(),maxbound.y(),maxbound.z());
@@ -141,9 +141,9 @@ void DrawArea::viewFrom(QAction * a){
     list << "Top" << "Bottom" << "Left" << "Right" << "Front" << "Back";
 
     document()->selectedModel()->updateBoundingBox();
-    QBox3D bbox = document()->selectedModel()->bbox();
+    Eigen::AlignedBox3d bbox = document()->selectedModel()->bbox();
 
-    double e = bbox.size().length() * 2;
+    double e = bbox.diagonal().norm()*2;
     Vec c(bbox.center().x(),bbox.center().y(),bbox.center().z());
 
     switch(list.indexOf(a->text()))
@@ -192,7 +192,7 @@ void DrawArea::draw_models(){
     /// Render each Model
     /// @todo use plugin rendering if one is specified
     glPushMatrix();
-        glMultMatrixd( document()->transform.data() );
+        // glMultMatrixd( document()->transform.data() );
         foreach(Model* model, document()->models())
             if(model->isVisible && model->renderer()!=NULL ){ 
                 qglColor(model->color);
@@ -209,7 +209,7 @@ void DrawArea::draw(){
     
     /// @todo Render decoration plugins
     glPushMatrix();
-        glMultMatrixd( document()->transform.data() );
+        // glMultMatrixd( document()->transform.data() );
 
         /// @todo use the plugin decorators
         if(mainWindow()->hasModePlugin() && !mainWindow()->isModePluginSuspended())
@@ -296,25 +296,25 @@ for(uint i=0; i<poly.size()-2; i++){
 }
 #endif
 
-RenderObject::Triangle& DrawArea::drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color){
+RenderObject::Triangle& DrawArea::drawTriangle(Vector3 p1, Vector3 p2, Vector3 p3, QColor color){
     RenderObject::Triangle* triangle = new RenderObject::Triangle(p1,p2,p3,color);
     addRenderObject(triangle);
     return *triangle;
 }
 
-RenderObject::Point& DrawArea::drawPoint(QVector3D p1, float size, QColor color){
+RenderObject::Point& DrawArea::drawPoint(Vector3 p1, float size, QColor color){
     RenderObject::Point* point = new RenderObject::Point(p1,size,color);
     addRenderObject(point);
     return *point;
 }
 
-RenderObject::Segment& DrawArea::drawSegment(QVector3D p1, QVector3D p2, float size, QColor color){
+RenderObject::Segment& DrawArea::drawSegment(Vector3 p1, Vector3 p2, float size, QColor color){
     RenderObject::Segment* segment = new RenderObject::Segment(p1,p2,size,color);
     addRenderObject(segment);
     return *segment;
 }
 
-RenderObject::Ray& DrawArea::drawRay(QVector3D orig, QVector3D dir, float size, QColor color, float scale){
+RenderObject::Ray& DrawArea::drawRay(Vector3 orig, Vector3 dir, float size, QColor color, float scale){
     RenderObject::Ray* ray = new RenderObject::Ray(orig,dir,size,color,scale);
     addRenderObject(ray);
     return *ray;

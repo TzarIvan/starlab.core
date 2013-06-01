@@ -7,7 +7,6 @@ using namespace Starlab;
 
 Document::Document(){
     /// @todo does EIGEN offer a way of doing this?
-    transform.setToIdentity();
     _selectedModel = NULL;
     name = "Unsaved Project";
 	_isBusy = 0;
@@ -30,13 +29,14 @@ bool Document::isBusy(){
 }
 
 
-QBox3D Document::bbox() {
-    QBox3D box(QVector3D (-1,-1,-1), QVector3D ( 1, 1, 1));
-    if(_models.size()) box = _models.first()->bbox();
+Eigen::AlignedBox3d Document::bbox() {
+    Eigen::AlignedBox3d box( Eigen::Vector3d(-1,-1,-1), Eigen::Vector3d(1,1,1) );
+    if(_models.size())
+        box = _models.first()->bbox();
 
     /// @todo rotate bbox of model by its custom transfrom like meshlab was doing in box.Add(m->transform,m->bbox)
     foreach(Model* m, _models)
-        box.unite(m->bbox());
+        box.extend( m->bbox() );
     return box;
 }
 

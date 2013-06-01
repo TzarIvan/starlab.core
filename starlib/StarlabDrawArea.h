@@ -1,7 +1,6 @@
 #pragma once
 #include <QObject>
 #include <QList>
-#include <QVector3D>
 #include <QColor>
 
 #include "qglviewer/qglviewer.h"
@@ -24,6 +23,8 @@ namespace Starlab{
 class STARLIB_EXPORT DrawArea : public QGLViewer{
     Q_OBJECT
     
+    typedef Eigen::Vector3d Vector3;
+
 /// @{ static instancing
 private:
     static DrawArea* _staticInstance;
@@ -92,10 +93,10 @@ public:
     void drawAllRenderObjects();
     void deleteRenderObject(RenderObject* );
     void addRenderObject(RenderObject::Base*);
-    RenderObject::Triangle& drawTriangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color=Qt::red);
-    RenderObject::Point&    drawPoint(QVector3D p1, float size=1, QColor color=Qt::red);
-    RenderObject::Segment&  drawSegment(QVector3D p1, QVector3D p2, float size=1, QColor color=Qt::red);
-    RenderObject::Ray&      drawRay(QVector3D orig, QVector3D dir, float size=1, QColor color=Qt::red, float scale=1);
+    RenderObject::Triangle& drawTriangle(Vector3 p1, Vector3 p2, Vector3 p3, QColor color=Qt::red);
+    RenderObject::Point&    drawPoint(Vector3 p1, float size=1, QColor color=Qt::red);
+    RenderObject::Segment&  drawSegment(Vector3 p1, Vector3 p2, float size=1, QColor color=Qt::red);
+    RenderObject::Ray&      drawRay(Vector3 orig, Vector3 dir, float size=1, QColor color=Qt::red, float scale=1);
     RenderObject::Text&     drawText(int x, int y, const QString& text, float size=12, QColor color=Qt::red);
 /// @}
 

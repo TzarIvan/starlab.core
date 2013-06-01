@@ -1,4 +1,5 @@
 #include "gui_filter.h"
+Q_EXPORT_PLUGIN(gui_filter)
 
 #include <QToolTip>
 #include <QToolBar>
@@ -95,4 +96,3 @@ void gui_filter::execute(FilterPlugin* iFilter, RichParameterSet* parameters) {
     mainWindow()->closeProgressBar();
 }
 
-Q_EXPORT_PLUGIN(gui_filter)

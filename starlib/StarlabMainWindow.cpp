@@ -7,6 +7,7 @@
 #include <QUrl> /// Drag&Drop
 #include <QApplication>
 #include <QToolTip>
+#include <QMimeData>
 
 #include "GuiPlugin.h"
 #include "StarlabDrawArea.h"

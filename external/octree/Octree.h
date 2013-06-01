@@ -55,7 +55,7 @@ public:
     Vec3d closestIntersectionPoint( const Ray & ray, int * faceIndex )
     {
         HitResult res, best_res;
-        Vec3d isetpoint(0);
+        Vec3d isetpoint(0.0);
         double minDistance = DBL_MAX;
         if(faceIndex) *faceIndex = -1;
 
@@ -276,18 +276,18 @@ public:
         glLineWidth(lineWidth);
 
         glBegin(GL_LINES);
-        glVertex3dv(c1);glVertex3dv(bc1);
-        glVertex3dv(c2);glVertex3dv(bc2);
-        glVertex3dv(c3);glVertex3dv(bc3);
-        glVertex3dv(c4);glVertex3dv(bc4);
-        glVertex3dv(c1);glVertex3dv(c2);
-        glVertex3dv(c3);glVertex3dv(c4);
-        glVertex3dv(c1);glVertex3dv(c4);
-        glVertex3dv(c2);glVertex3dv(c3);
-        glVertex3dv(bc1);glVertex3dv(bc2);
-        glVertex3dv(bc3);glVertex3dv(bc4);
-        glVertex3dv(bc1);glVertex3dv(bc4);
-        glVertex3dv(bc2);glVertex3dv(bc3);
+        glVertex3dv(c1.data());glVertex3dv(bc1.data());
+        glVertex3dv(c2.data());glVertex3dv(bc2.data());
+        glVertex3dv(c3.data());glVertex3dv(bc3.data());
+        glVertex3dv(c4.data());glVertex3dv(bc4.data());
+        glVertex3dv(c1.data());glVertex3dv(c2.data());
+        glVertex3dv(c3.data());glVertex3dv(c4.data());
+        glVertex3dv(c1.data());glVertex3dv(c4.data());
+        glVertex3dv(c2.data());glVertex3dv(c3.data());
+        glVertex3dv(bc1.data());glVertex3dv(bc2.data());
+        glVertex3dv(bc3.data());glVertex3dv(bc4.data());
+        glVertex3dv(bc1.data());glVertex3dv(bc4.data());
+        glVertex3dv(bc2.data());glVertex3dv(bc3.data());
         glEnd();
         glEnable(GL_LIGHTING);
     }

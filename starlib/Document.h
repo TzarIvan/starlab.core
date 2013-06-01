@@ -37,7 +37,7 @@ public:
     bool isModified;
     /// Viewpoint transformation (identifies trackball)
     /// @todo use the QGLViewer transformation datatype
-    QMatrix4x4 transform;
+    // QMatrix4x4 transform;
 
 /// @{ Selection management
 private:
@@ -61,7 +61,7 @@ public:
     /// Basic document constructor
     Document();
     /// Compute bounding box of all the elements in the scene
-    QBox3D bbox();
+    Eigen::AlignedBox3d bbox();
     /// Add a model (if it's only one becomes selection)
     void addModel(Model* m);
     /// Remove a model, updates selection if necessary

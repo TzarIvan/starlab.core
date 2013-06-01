@@ -1,4 +1,5 @@
 #include "gui_view.h"
+Q_EXPORT_PLUGIN(gui_view)
 
 void gui_view::load(){
     /// @todo re-enable them
@@ -79,8 +80,6 @@ void gui_view::load_toggleCameraProjection(){
         menu->addAction(action);
     }
 }
-
-Q_EXPORT_PLUGIN(gui_view)
 
 //void MainWindow::fullScreen() {
 //    if(!isFullScreen()) {

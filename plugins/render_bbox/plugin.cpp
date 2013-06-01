@@ -1,4 +1,6 @@
 #include "plugin.h"
+Q_EXPORT_PLUGIN(plugin);
+
 #include <QtOpenGL>
 
 class RenderBBOX : public Renderer{
@@ -9,19 +11,19 @@ public:
         glLineWidth(1.0f);
         
         /// Setup BBOX color
-        QBox3D bbox = model()->bbox();
+        Eigen::AlignedBox3d bbox = model()->bbox();
         QColor& c = model()->color;
         glColor3f(c.redF(),c.greenF(),c.blueF());
         
         float min[3]; 
-        min[0] = bbox.minimum().x();
-        min[1] = bbox.minimum().y();
-        min[2] = bbox.minimum().z();
+        min[0] = bbox.min().x();
+        min[1] = bbox.min().y();
+        min[2] = bbox.min().z();
     
         float max[3]; 
-        max[0] = bbox.maximum().x();
-        max[1] = bbox.maximum().y();
-        max[2] = bbox.maximum().z();
+        max[0] = bbox.max().x();
+        max[1] = bbox.max().y();
+        max[2] = bbox.max().z();
             
         /// --- Inherited from VCG ---
         glPushAttrib(GL_ENABLE_BIT);
@@ -55,5 +57,3 @@ public:
 };
 
 Renderer* plugin::instance(){ return new RenderBBOX(); }
-
-Q_EXPORT_PLUGIN(plugin)

@@ -2,11 +2,11 @@
 #include <QGLWidget>
 #include <QDebug>
 
-void RenderObject::Base::draw(QGLWidget& widget){
+void RenderObject::Base::draw(QGLWidget& /*widget*/){
     glColor3f(_color.redF(), _color.greenF(), _color.blueF());   
 }
 
-RenderObject::Triangle::Triangle(QVector3D p1, QVector3D p2, QVector3D p3, QColor color) : Base(0.0f,color){
+RenderObject::Triangle::Triangle(Vector3 p1, Vector3 p2, Vector3 p3, QColor color) : Base(0.0f,color){
     this->p1 = p1;
     this->p2 = p2;
     this->p3 = p3;
@@ -25,7 +25,7 @@ void RenderObject::Triangle::draw(QGLWidget& widget){
     glEnd();
 }
 
-RenderObject::Point::Point(QVector3D p, float size, QColor color) : Base(size,color){
+RenderObject::Point::Point(Vector3 p, float size, QColor color) : Base(size,color){
     this->p = p;
 }
 
@@ -40,7 +40,7 @@ void RenderObject::Point::draw(QGLWidget& widget){
     glEnd();
 }
 
-RenderObject::Segment::Segment(QVector3D p1, QVector3D p2, float size, QColor color):Base(size, color){
+RenderObject::Segment::Segment(Vector3 p1, Vector3 p2, float size, QColor color):Base(size, color){
     this->p1 = p1;
     this->p2 = p2;
 }
@@ -56,7 +56,7 @@ void RenderObject::Segment::draw(QGLWidget& widget){
     glEnd();
 }
 
-RenderObject::Ray::Ray(QVector3D orig, QVector3D dir, float size, QColor color, float scale):Base(size,color){
+RenderObject::Ray::Ray(Vector3 orig, Vector3 dir, float size, QColor color, float scale):Base(size,color){
     this->orig=orig;
     this->dir=dir;
     this->_scale=scale;
@@ -66,8 +66,8 @@ void RenderObject::Ray::draw(QGLWidget& widget){
     Base::draw(widget);
     glLineWidth(_size);
     glDisable(GL_LIGHTING);
-    QVector3D& p1=orig;
-    QVector3D p2=orig+_scale*dir;
+    Vector3& p1=orig;
+    Vector3 p2=orig+_scale*dir;
     glBegin(GL_LINES);
         glVertex3d(p1.x(),p1.y(),p1.z());
         glVertex3d(p2.x(),p2.y(),p2.z());
@@ -76,11 +76,10 @@ void RenderObject::Ray::draw(QGLWidget& widget){
 
 
 RenderObject::Text::Text(int x, int y, const QString& text, float size, QColor color) :
+    Base(size,color),
     _x(x),
     _y(y),
-    _text(text),
-    Base(size,color){
-}
+    _text(text){}
 
 void RenderObject::Text::draw(QGLWidget& widget){
     Base::draw(widget);

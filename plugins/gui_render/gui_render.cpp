@@ -1,4 +1,6 @@
 #include "gui_render.h"
+Q_EXPORT_PLUGIN(gui_render)
+
 #include "StarlabDrawArea.h"
 #include <QDockWidget>
 #include <QColorDialog>
@@ -183,4 +185,3 @@ void gui_render::triggerRenderModeAction(QAction* action){
     document()->popBusy();
 }
 
-Q_EXPORT_PLUGIN(gui_render)

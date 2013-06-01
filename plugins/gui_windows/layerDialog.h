@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtGui>
+#include <QDockWidget>
 #include "Starlab.h"
 #include "Model.h"
 #include "RichParameterSet.h"

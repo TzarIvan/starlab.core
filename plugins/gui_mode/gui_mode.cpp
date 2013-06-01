@@ -1,7 +1,8 @@
+#include "gui_mode.h"
+Q_EXPORT_PLUGIN(gui_mode)
+
 #include <QKeyEvent>
 #include <QApplication>
-#include "gui_mode.h"
-
 #include "interfaces/ModePlugin.h"
 #include "StarlabMainWindow.h"
 #include "StarlabDrawArea.h"
@@ -180,4 +181,3 @@ void gui_mode::documentChanged(){
 }
 
 
-Q_EXPORT_PLUGIN(gui_mode)

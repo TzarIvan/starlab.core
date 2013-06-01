@@ -1,4 +1,6 @@
 #include "gui_windows.h"
+Q_EXPORT_PLUGIN(gui_windows)
+
 // #include "saveSnapshotDialog.h"
 
 // layerDialog->setVisible( !layerDialog->isVisible() );
@@ -164,4 +166,3 @@ public:
 };
 #endif
 
-Q_EXPORT_PLUGIN(gui_windowsmenu)
