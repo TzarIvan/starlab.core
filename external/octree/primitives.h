@@ -93,7 +93,7 @@ struct Ray
 	int index;
 	double thickness;
 
-    Ray(const Eigen::Vector3d & Origin = Eigen::Vector3d(), const Vec3d & Direction = Eigen::Vector3d(), double Thickness = 0.0, int Index = -1) : origin(Origin), index(Index){
+    Ray(const Eigen::Vector3d & Origin = Eigen::Vector3d(), const Eigen::Vector3d & Direction = Eigen::Vector3d(), double Thickness = 0.0, int Index = -1) : origin(Origin), index(Index){
 		direction = Direction.normalized();
 		thickness = Thickness;
 	}
@@ -114,20 +114,20 @@ class BoundingBox
 {
 
 public:
-	Vec3d center;
-	Vec3d vmax, vmin;
+    Eigen::Vector3d center;
+    Eigen::Vector3d vmax, vmin;
 	double xExtent, yExtent, zExtent;
 
 	BoundingBox()
 	{
-		this->center = Vec3d(0,0,0);
+        this->center = Eigen::Vector3d(0,0,0);
 
 		this->xExtent = 0;
 		this->yExtent = 0;
 		this->zExtent = 0;
 	}
 
-	BoundingBox( const Vec3d& c, double x, double y, double z )
+    BoundingBox( const Eigen::Vector3d& c, double x, double y, double z )
 	{
 		this->center = c;
 
@@ -135,7 +135,7 @@ public:
 		this->yExtent = y;
 		this->zExtent = z;
 
-		Vec3d corner(x, y, z);
+        Eigen::Vector3d corner(x, y, z);
 
 		vmin = center - corner;
 		vmax = center + corner;
@@ -155,9 +155,9 @@ public:
 		return *this;
 	}
 
-	void computeFromTris( const std::vector< std::vector<Vec3d> > & tris )
+    void computeFromTris( const std::vector< std::vector<Eigen::Vector3d> > & tris )
 	{
-		vmin = Vec3d(DBL_MAX, DBL_MAX, DBL_MAX);
+        vmin = Eigen::Vector3d(DBL_MAX, DBL_MAX, DBL_MAX);
 		vmax = -vmin;
 
 		double minx = 0, miny = 0, minz = 0;
@@ -171,7 +171,7 @@ public:
 		{
 			for(int v = 0; v < 3; v++)
 			{
-				Vec3d vec = tris[i][v];
+                Eigen::Vector3d vec = tris[i][v];
 
 				if (vec.x() < minx) minx = vec.x();
 				if (vec.x() > maxx) maxx = vec.x();
@@ -182,8 +182,8 @@ public:
 			}
 		}
 
-		vmax = Vec3d(maxx, maxy, maxz);
-		vmin = Vec3d(minx, miny, minz);
+        vmax = Eigen::Vector3d(maxx, maxy, maxz);
+        vmin = Eigen::Vector3d(minx, miny, minz);
 
 		this->center = (vmin + vmax) / 2.0;
 
@@ -192,15 +192,15 @@ public:
 		this->zExtent = fabs(vmax.z() - center.z());
 	}
 
-	std::vector<Vec3d> getCorners()
+    std::vector<Eigen::Vector3d> getCorners()
 	{
-		std::vector<Vec3d> corners;
+        std::vector<Eigen::Vector3d> corners;
 
-		Vec3d x = (Vec3d(1,0,0) * xExtent);
-		Vec3d y = (Vec3d(0,1,0) * yExtent);
-		Vec3d z = (Vec3d(0,0,1) * zExtent);
+        Eigen::Vector3d x = (Eigen::Vector3d(1,0,0) * xExtent);
+        Eigen::Vector3d y = (Eigen::Vector3d(0,1,0) * yExtent);
+        Eigen::Vector3d z = (Eigen::Vector3d(0,0,1) * zExtent);
 
-		Vec3d c = center + x + y + z;
+        Eigen::Vector3d c = center + x + y + z;
 
 		corners.push_back(c);
 		corners.push_back(c - (x*2));
@@ -218,14 +218,14 @@ public:
 	bool intersects( const Ray& ray ) const
 	{
 		// r.dir is unit direction vector of ray
-		Vec3d dirfrac;
+        Eigen::Vector3d dirfrac;
 		dirfrac.x() = 1.0f / ray.direction.x();
 		dirfrac.y() = 1.0f / ray.direction.y();
 		dirfrac.z() = 1.0f / ray.direction.z();
 
 		double overlap = ray.thickness;
-		Vec3d minv = vmin + ((vmin - center).normalized() * overlap);
-		Vec3d maxv = vmax + ((vmax - center).normalized() * overlap);
+        Eigen::Vector3d minv = vmin + ((vmin - center).normalized() * overlap);
+        Eigen::Vector3d maxv = vmax + ((vmax - center).normalized() * overlap);
 
 		// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
 		// ray.origin is origin of ray
@@ -261,7 +261,7 @@ public:
 
 	bool intersectsWorking( const Ray& ray )
 	{
-		Vec3d T_1, T_2; // vectors to hold the T-values for every direction
+        Eigen::Vector3d T_1, T_2; // vectors to hold the T-values for every direction
 		double t_near = -DBL_MAX; // maximums defined in float.h
 		double t_far = DBL_MAX;
 
@@ -306,12 +306,12 @@ public:
 		double fADdU[3];
 		double fAWxDdU[3];
 
-		Vec3d UNIT_X(1.0, 0.0, 0.0);
-		Vec3d UNIT_Y(0.0, 1.0, 0.0);
-		Vec3d UNIT_Z(0.0, 0.0, 1.0);
+        Eigen::Vector3d UNIT_X(1.0, 0.0, 0.0);
+        Eigen::Vector3d UNIT_Y(0.0, 1.0, 0.0);
+        Eigen::Vector3d UNIT_Z(0.0, 0.0, 1.0);
 
-		Vec3d diff = ray.origin - center;
-        Vec3d wCrossD = cross(ray.direction , diff);
+        Eigen::Vector3d diff = ray.origin - center;
+        Eigen::Vector3d wCrossD = cross(ray.direction , diff);
 
 		fWdU[0] = dot(ray.direction , UNIT_X);
 		fAWdU[0] = fabs(fWdU[0]);
@@ -348,10 +348,10 @@ public:
 
 	/* AABB-triangle overlap test code                      */
 	/* by Tomas Akenine-Möller                              */
-	bool containsTriangle( const Vec3d& tv0, const Vec3d& tv1, const Vec3d& tv2 ) const
+    bool containsTriangle( const Eigen::Vector3d& tv0, const Eigen::Vector3d& tv1, const Eigen::Vector3d& tv2 ) const
 	{
-		Vec3d boxcenter(center);
-		Vec3d boxhalfsize(xExtent, yExtent, zExtent);
+        Eigen::Vector3d boxcenter(center);
+        Eigen::Vector3d boxhalfsize(xExtent, yExtent, zExtent);
 
 		int X = 0, Y = 1, Z = 2;
 
@@ -362,9 +362,9 @@ public:
 		/*    2) normal of the triangle */
 		/*    3) crossproduct(edge from tri, {x,y,z}-directin) */
 		/*       this gives 3x3=9 more tests */
-		Vec3d v0,v1,v2;
+        Eigen::Vector3d v0,v1,v2;
 		double min,max,p0,p1,p2,rad,fex,fey,fez;
-		Vec3d normal,e0,e1,e2;
+        Eigen::Vector3d normal,e0,e1,e2;
 
 		/* This is the fastest branch on Sun */
 		/* move everything so that the box center is in (0,0,0) */
@@ -434,7 +434,7 @@ public:
 			return true;
 	}
 
-	bool intersectsSphere( const Vec3d& sphere_center, double radius )
+    bool intersectsSphere( const Eigen::Vector3d& sphere_center, double radius )
 	{
 		if (fabs(center.x() - sphere_center.x()) < radius + xExtent
 			&& fabs(center.y() - sphere_center.y()) < radius + yExtent
@@ -444,14 +444,14 @@ public:
 		return false;
 	}
 
-	bool contains( const Vec3d& point ) const
+    bool contains( const Eigen::Vector3d& point ) const
 	{
 		return fabs(center.x() - point.x()) < xExtent
 			&& fabs(center.y() - point.y()) < yExtent
 			&& fabs(center.z() - point.z()) < zExtent;
 	}
 
-	Vec3d Center()
+    Eigen::Vector3d Center()
 	{
 		return center;
 	}
