@@ -4,9 +4,8 @@
 #include "Eigen/Dense"
 
 namespace{
-    typedef Eigen::Vector3d Vec3d;
-    Vec3d cross(Vec3d a, Vec3d b){ return a.cross(b); }
-    double dot(Vec3d a, Vec3d b){ return a.dot(b); }
+    Eigen::Vector3d cross(Eigen::Vector3d a, Eigen::Vector3d b){ return a.cross(b); }
+    double dot(Eigen::Vector3d a, Eigen::Vector3d b){ return a.dot(b); }
 }
 
 /* AABB-triangle overlap test code                      */
