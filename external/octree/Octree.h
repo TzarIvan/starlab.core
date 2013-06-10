@@ -52,6 +52,14 @@ public:
         this->triangleData = tris;
     }
 
+    
+    
+    /// Uses eigen ray type
+    Eigen::Vector3d closestIntersectionPoint( const Eigen::ParametrizedLine<double,3>& ray, int* faceIndex ){
+        Ray _ray(ray.origin(), ray.direction());
+        return closestIntersectionPoint(_ray, faceIndex);
+    }
+    
     Eigen::Vector3d closestIntersectionPoint( const Ray & ray, int * faceIndex )
     {
         HitResult res, best_res;
