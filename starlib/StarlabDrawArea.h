@@ -22,7 +22,7 @@ namespace Starlab{
 /// @brief The QGLViewer based visualization window
 class STARLIB_EXPORT DrawArea : public QGLViewer{
     Q_OBJECT
-    
+
 /// @{ static instancing
 private:
     static DrawArea* _staticInstance;
