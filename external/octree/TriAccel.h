@@ -110,4 +110,4 @@ struct TriAccel {
 	}
 };
 
-typedef TriAccel<double, Vec3d> TriAcceld;
+typedef TriAccel<double, Eigen::Vector3d> TriAcceld;

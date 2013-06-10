@@ -52,10 +52,14 @@ public:
         this->triangleData = tris;
     }
 
-    Vec3d closestIntersectionPoint( const Ray & ray, int * faceIndex )
+    Eigen::Vector3d closestIntersectionPoint( const Ray & ray, int * faceIndex )
     {
         HitResult res, best_res;
+<<<<<<< HEAD
         Vec3d isetpoint(0.0,0.0,0.0);
+=======
+        Eigen::Vector3d isetpoint(0.0);
+>>>>>>> 24cab5869a2877914118fa14ecc6ca828f9683a4
         double minDistance = DBL_MAX;
         if(faceIndex) *faceIndex = -1;
 
@@ -100,7 +104,7 @@ public:
         return isetpoint;
     }
 
-    IndexSet intersectSphere( const Vec3d& sphere_center, double radius )
+    IndexSet intersectSphere( const Eigen::Vector3d& sphere_center, double radius )
     {
         IndexSet tris;
 
@@ -117,7 +121,7 @@ public:
 private:
 	int trianglePerNode;
 	Surface_mesh * mesh;
-	Surface_mesh::Vertex_property<Vec3d> points;
+    Surface_mesh::Vertex_property<Eigen::Vector3d> points;
 
     void initBuild( std::vector<Surface_mesh::Face>& tris, int triPerNode )
     {
@@ -129,11 +133,11 @@ private:
         BoundingBox bb;
 
         // Collect faces geometry
-        points = mesh->vertex_property<Vec3d>("v:point");
-        std::vector< std::vector<Vec3d> > triangles ( mesh->n_faces() );
+        points = mesh->vertex_property<Eigen::Vector3d>("v:point");
+        std::vector< std::vector<Eigen::Vector3d> > triangles ( mesh->n_faces() );
         Surface_mesh::Face_iterator fit, fend = mesh->faces_end();
         for(fit = mesh->faces_begin(); fit != fend; ++fit){
-            std::vector<Vec3d> pnts;
+            std::vector<Eigen::Vector3d> pnts;
             Surface_mesh::Vertex_around_face_circulator vit = mesh->vertices(fit),vend=vit;
             do{ pnts.push_back(points[vit]); } while(++vit != vend);
             triangles[Surface_mesh::Face(fit).idx()] = pnts;
@@ -181,7 +185,7 @@ private:
     {
         double newExtent = boundingBox.xExtent / 2.0;
 
-        Vec3d center;
+        Eigen::Vector3d center;
 
         center.x() = boundingBox.center.x() + (newExtent * x);
         center.y() = boundingBox.center.y() + (newExtent * y);
@@ -203,7 +207,7 @@ private:
         {
             Surface_mesh::Face face = *it;
 
-            std::vector<Vec3d> v = triPoints(face);
+            std::vector<Eigen::Vector3d> v = triPoints(face);
 
             if( bb.containsTriangle(v[0], v[1], v[2]) )
             {
@@ -214,7 +218,7 @@ private:
         child->build(depth + 1); // build it
     }
 
-    std::vector<Surface_mesh::Face> getIntersectingTris(const Vec3d& v0, const Vec3d& v1, const Vec3d& v2, bool showIt)
+    std::vector<Surface_mesh::Face> getIntersectingTris(const Eigen::Vector3d& v0, const Eigen::Vector3d& v1, const Eigen::Vector3d& v2, bool showIt)
     {
         if(this->triangleData.size() == 0 || this->children.size() == 0)
             return this->triangleData;
@@ -255,20 +259,20 @@ private:
     }
 
 public:
-    void DrawBox(const Vec3d& center, float width, float length, float height, float r, float g, float b, float lineWidth)
+    void DrawBox(const Eigen::Vector3d& center, float width, float length, float height, float r, float g, float b, float lineWidth)
     {
-        Vec3d  c1, c2, c3, c4;
-        Vec3d  bc1, bc2, bc3, bc4;
+        Eigen::Vector3d  c1, c2, c3, c4;
+        Eigen::Vector3d  bc1, bc2, bc3, bc4;
 
-        c1 = Vec3d (width, length, height) + center;
-        c2 = Vec3d (-width, length, height) + center;
-        c3 = Vec3d (-width, -length, height) + center;
-        c4 = Vec3d (width, -length, height) + center;
+        c1 = Eigen::Vector3d (width, length, height) + center;
+        c2 = Eigen::Vector3d (-width, length, height) + center;
+        c3 = Eigen::Vector3d (-width, -length, height) + center;
+        c4 = Eigen::Vector3d (width, -length, height) + center;
 
-        bc1 = Vec3d (width, length, -height) + center;
-        bc2 = Vec3d (-width, length, -height) + center;
-        bc3 = Vec3d (-width, -length, -height) + center;
-        bc4 = Vec3d (width, -length, -height) + center;
+        bc1 = Eigen::Vector3d (width, length, -height) + center;
+        bc2 = Eigen::Vector3d (-width, length, -height) + center;
+        bc3 = Eigen::Vector3d (-width, -length, -height) + center;
+        bc4 = Eigen::Vector3d (width, -length, -height) + center;
 
         glDisable(GL_LIGHTING);
 
@@ -309,7 +313,7 @@ public:
             child->draw(r,g,b, lineWidth);
     }
 
-    IndexSet intersectPoint( const Vec3d& point )
+    IndexSet intersectPoint( const Eigen::Vector3d& point )
     {
         IndexSet tris;
 
@@ -319,7 +323,7 @@ public:
         return tris;
     }
 
-    void intersectRecursivePoint( const Vec3d& point, IndexSet& tris )
+    void intersectRecursivePoint( const Eigen::Vector3d& point, IndexSet& tris )
     {
         if (intersectHit(tris))
             return;
@@ -431,7 +435,7 @@ public:
         }
     }
 
-    void intersectRecursiveSphere( const Vec3d& sphere_center, double radius, IndexSet& tris )
+    void intersectRecursiveSphere( const Eigen::Vector3d& sphere_center, double radius, IndexSet& tris )
     {
         // Leaf node ?
         if (intersectHit(tris))
@@ -471,9 +475,9 @@ public:
             return parent->root();
     }
 
-    std::vector<Vec3d> triPoints(Surface_mesh::Face f) const
+    std::vector<Eigen::Vector3d> triPoints(Surface_mesh::Face f) const
     {
-        std::vector<Vec3d> pnts;
+        std::vector<Eigen::Vector3d> pnts;
         Surface_mesh::Vertex_around_face_circulator vit = mesh->vertices(f),vend=vit;
         do{ pnts.push_back(points[vit]); } while(++vit != vend);
         return pnts;
@@ -486,18 +490,18 @@ public:
 
         double EPS = 1e-7;
 
-        std::vector<Vec3d> v = triPoints(f);
+        std::vector<Eigen::Vector3d> v = triPoints(f);
 
-        Vec3d vertex1 = v[0];
-        Vec3d vertex2 = v[1];
-        Vec3d vertex3 = v[2];
+        Eigen::Vector3d vertex1 = v[0];
+        Eigen::Vector3d vertex2 = v[1];
+        Eigen::Vector3d vertex3 = v[2];
 
         // Compute vectors along two edges of the triangle.
-        Vec3d edge1 = vertex2 - vertex1;
-        Vec3d edge2 = vertex3 - vertex1;
+        Eigen::Vector3d edge1 = vertex2 - vertex1;
+        Eigen::Vector3d edge2 = vertex3 - vertex1;
 
         // Compute the determinant.
-        Vec3d directionCrossEdge2 = cross(ray.direction, edge2);
+        Eigen::Vector3d directionCrossEdge2 = cross(ray.direction, edge2);
 
         double determinant = dot(edge1, directionCrossEdge2);
 
@@ -508,8 +512,8 @@ public:
         double inverseDeterminant = 1.0 / determinant;
 
         // Calculate the U parameter of the intersection point.
-        Vec3d distanceVec3dtor = ray.origin - vertex1;
-        double triangleU = dot(distanceVec3dtor, directionCrossEdge2);
+        Eigen::Vector3d distVector = ray.origin - vertex1;
+        double triangleU = dot(distVector, directionCrossEdge2);
         triangleU *= inverseDeterminant;
 
         // Make sure it is inside the triangle.
@@ -517,7 +521,7 @@ public:
             return;
 
         // Calculate the V parameter of the intersection point.
-        Vec3d distanceCrossEdge1 = cross(distanceVec3dtor, edge1);
+        Eigen::Vector3d distanceCrossEdge1 = cross(distVector, edge1);
         double triangleV = dot(ray.direction, distanceCrossEdge1);
         triangleV *= inverseDeterminant;
 
