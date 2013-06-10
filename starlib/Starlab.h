@@ -13,12 +13,14 @@ namespace Starlab{
     class MainWindow;
     class Settings;
     class PluginManager;    
+    class Controller;
 }
 
 /// @todo Should RichParameterSet be inserted into Starlab::?
 class RichParameterSet;
 
 
+/// In Starlab, Math is managed by EIGEN
 #include "Eigen/Dense"
 namespace Starlab{
     typedef Eigen::Vector3d Vector3;

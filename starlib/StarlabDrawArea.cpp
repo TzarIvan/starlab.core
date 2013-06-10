@@ -239,8 +239,7 @@ void DrawArea::draw(){
 
 void DrawArea::drawWithNames(){
     if(mainWindow()->hasModePlugin())
-        mainWindow()->getModePlugin()->draw_with_names();
-    emit drawWithNamesNeeded();
+        mainWindow()->getModePlugin()->drawWithNames();
 }
 
 DrawArea::~DrawArea(){

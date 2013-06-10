@@ -59,9 +59,9 @@ public slots:
     void setIsoProjection();
 private:
     void init();              ///< Initializes the scene (qGLViewer)
-    void draw_models();       ///< Draws the models in the scene; draw() subroutine
 public:
     void draw();              ///< Draws the whole scene
+    void draw_models();       ///< Draws ONLY the models in the scene (no decorators, no plugins, etc...) 
 /// @}
 
 /// @{ picking
