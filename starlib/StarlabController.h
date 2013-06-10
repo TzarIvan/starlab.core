@@ -232,6 +232,8 @@ public:
         _scale = 1;
         no_y = false;
         no_z = false;
+        this->frame.setIdentity(3,3);
+        this->frame4.setIdentity(3,3);
         this->_drawArea = NULL;
     }
     
