@@ -239,21 +239,8 @@ void DrawArea::draw(){
 
 void DrawArea::drawWithNames(){
     if(mainWindow()->hasModePlugin())
-        mainWindow()->getModePlugin()->drawWithNames();
-}
-
-void DrawArea::endSelection(const QPoint & p)
-{
-    if(mainWindow()->hasModePlugin())
-        mainWindow()->getModePlugin()->endSelection(p);
-	else
-		QGLViewer::endSelection(p);
-}
-
-void DrawArea::postSelection(const QPoint & p)
-{
-    if(mainWindow()->hasModePlugin())
-        mainWindow()->getModePlugin()->postSelection(p);
+        mainWindow()->getModePlugin()->draw_with_names();
+    emit drawWithNamesNeeded();
 }
 
 DrawArea::~DrawArea(){
@@ -347,6 +334,7 @@ bool DrawArea::eventFilter(QObject*, QEvent* event){
     }
 }
 
+
 void DrawArea::mouseDoubleClickEvent(QMouseEvent *e)
 {
     bool found = false;
@@ -372,4 +360,13 @@ void DrawArea::mouseDoubleClickEvent(QMouseEvent *e)
 void DrawArea::deleteRenderObject(RenderObject* /*object*/){
     /// @todo 
     throw StarlabException("TODO: StarlabDrawArea::deleteRenderObject");
+}
+
+Ray3 DrawArea::convert_click_to_ray(const QPoint& pickpoint){
+    qglviewer::Vec _orig, _dir;
+    this->camera()->convertClickToLine(pickpoint,_orig,_dir);
+    Vector3 orig(_orig[0],_orig[1],_orig[2]);
+    Vector3 dir(_dir[0],_dir[1],_dir[2]);
+    dir.normalize(); ///< just to be sure?
+    return Ray3(orig, dir);
 }
