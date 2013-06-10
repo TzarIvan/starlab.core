@@ -216,6 +216,10 @@ private:
     inline Plane3 z_dir_space(Vector3 dir){ return Plane3(dir-(dir.dot(frame.col(2)))*frame.col(2),center_before ); } 
     
 public:   
+    static FrameController& New(const Vector3& center){
+        return New(center, Eigen::Matrix3d::Identity(3,3));
+    }
+
     static FrameController& New(const Vector3& center, const Eigen::Matrix3d& matrix){
         FrameController* THIS = new FrameController(center);
         THIS->frame = matrix; 
@@ -223,20 +227,18 @@ public:
         THIS->frame4.topLeftCorner(3,3) = THIS->frame;    
         return *THIS;
     }
-    
-public:
-    FrameController& scale(double val){ this->_scale = val; return *this; }
-    FrameController& no_Z(){ no_z = true; return *this; }
-    FrameController& no_Y(){ no_y = true; return *this; }
-        
-private:
+
     FrameController(const Vector3& center):Controller(center){
         _scale = 1;
         no_y = false;
         no_z = false;
         this->_drawArea = NULL;
     }
-
+    
+public:
+    FrameController& scale(double val){ this->_scale = val; return *this; }
+    FrameController& no_Z(){ no_z = true; return *this; }
+    FrameController& no_Y(){ no_y = true; return *this; }
     
 private:
     void draw_arrow(){
