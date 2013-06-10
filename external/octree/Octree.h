@@ -55,11 +55,7 @@ public:
     Eigen::Vector3d closestIntersectionPoint( const Ray & ray, int * faceIndex )
     {
         HitResult res, best_res;
-<<<<<<< HEAD
-        Vec3d isetpoint(0.0,0.0,0.0);
-=======
-        Eigen::Vector3d isetpoint(0.0);
->>>>>>> 24cab5869a2877914118fa14ecc6ca828f9683a4
+        Eigen::Vector3d isetpoint(0.0,0.0,0.0);
         double minDistance = DBL_MAX;
         if(faceIndex) *faceIndex = -1;
 
