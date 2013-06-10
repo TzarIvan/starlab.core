@@ -1,14 +1,14 @@
 #pragma once
+#include "starlib_global.h"
+
 #include <QObject>
 #include <QList>
 #include <QColor>
 
 #include "qglviewer/qglviewer.h"
-#include "interfaces/RenderPlugin.h"
-#include "starlib_global.h"
+#include "RenderPlugin.h"
 #include "RenderObject.h"
 #include "StarlabMainWindow.h"
-#include "starlib_global.h"
 
 class QGLWidget;
 
@@ -24,7 +24,6 @@ class STARLIB_EXPORT DrawArea : public QGLViewer{
     Q_OBJECT
     
     typedef Eigen::Vector3d Vector3;
-
 /// @{ static instancing
 private:
     static DrawArea* _staticInstance;
@@ -61,19 +60,23 @@ public slots:
     void setIsoProjection();
 private:
     void init();              ///< Initializes the scene (qGLViewer)
-    void draw();              ///< Draws the whole scene
     void draw_models();       ///< Draws the models in the scene; draw() subroutine
-    void drawWithNames();     ///< Draws to the symbols buffer
+public:
+    void draw();              ///< Draws the whole scene
 /// @}
 
-/// @{ Selection functions
+/// @{ picking
 private:
-    void endSelection(const QPoint&);
-    void postSelection(const QPoint&);
-public:
-	void defaultEndSelection(const QPoint&p){ QGLViewer::endSelection(p); } ///< Needed in Mode plugins
+    void drawWithNames();     ///< Draws to the symbols buffer
+signals:
+    void drawWithNamesNeeded();
 /// @}
     
+/// @{ Overloaded from QGLViewer to make them "EIGEN" compatible
+public:
+    void convert_click_to_line(const QPoint &pickpoint, Vector3 &orig, Vector3 &dir);
+/// @}
+
 /// @{ ModePlugin management
 private:
     bool eventFilter(QObject *object, QEvent *event);
@@ -99,7 +102,7 @@ public:
     RenderObject::Ray&      drawRay(Vector3 orig, Vector3 dir, float size=1, QColor color=Qt::red, float scale=1);
     RenderObject::Text&     drawText(int x, int y, const QString& text, float size=12, QColor color=Qt::red);
 /// @}
-
+    
 public slots:
     /// Updates the draw area, this is not the OpenGL update, this updates all
     /// the metadata needed by all models for correct rendering!! 
