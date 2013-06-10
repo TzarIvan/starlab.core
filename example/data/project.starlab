@@ -1,7 +1,0 @@
-<!DOCTYPE StarlabProject>
-<StarlabProject>
- <Layers>
-  <SurfaceMeshModel path="sphere.pts"/>
-  <SurfaceMeshModel path="torus.pts"/>
- </Layers>
-</StarlabProject>

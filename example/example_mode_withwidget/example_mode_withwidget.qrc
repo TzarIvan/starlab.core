@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>example_mode_withwidget.png</file>
-    </qresource>
-</RCC>
