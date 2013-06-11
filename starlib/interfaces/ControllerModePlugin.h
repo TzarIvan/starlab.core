@@ -18,8 +18,6 @@ protected:
 /// @}
     
 /// @{ internal
-    /// Example, in create(): "controllers() << new FrameController( Vector3(0,0,0) );"
-    Starlab::ControllerManager& operator<<(StarlabController* controller);
     /// Return a reference to allow for the syntax: "controllers() << new Controller(...)"
     Starlab::ControllerManager& controllers(){ return manager; }
 /// @}

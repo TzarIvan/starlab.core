@@ -149,6 +149,7 @@ defineTest(StarlabTemplate){
             BUNDLENAME = Starlab.app
             DESTDIR=$$STARLABPREFIX
         }
+        QMAKE_CLEAN += $$PLUGINSPATH/*
     }
 
     equals(STARLAB_TEMPLATE, "modelprf"){
@@ -189,6 +190,7 @@ defineTest(StarlabTemplate){
     # @internal because we are inside a function we need to "export" variables
     export(QMAKE_CXXFLAGS)
     export(QMAKE_LFLAGS)
+    export(QMAKE_CLEAN)
     export(DESTDIR)
     export(TEMPLATE)
     export(CONFIG)

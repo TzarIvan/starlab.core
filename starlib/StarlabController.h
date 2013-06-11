@@ -122,6 +122,11 @@ public:
         return *this;
     }
     
+    ControllerManager& operator<<(Controller& controller){
+        this->add( &controller );
+        return *this;
+    }
+    
     void add(Controller *controller){
         _list.push_back(controller);
         controller->_drawArea = drawArea();
@@ -187,12 +192,20 @@ class FrameController : public Controller{
     enum NAMES {SPHERE,XAXIS,YAXIS,ZAXIS};
     
     /// Reference frame 
-    Eigen::Matrix3d frame;
-
+    Eigen::Matrix3d frame; ///< @todo extract frame from frame4 and only keep one!!!
+    Eigen::Matrix4d frame4;
+    
     /// Metadata for controller
     Plane3  pan_hyperplane;
     Vector3 click_origin;
     Vector3 center_before;
+    
+    /// Sizing
+    double _scale;
+    
+    /// disable flags
+    bool no_y;
+    bool no_z;
     
 private:
     inline Ray3 x_ray(){ return Ray3(center_before,frame.col(0)); }
@@ -203,12 +216,31 @@ private:
     inline Plane3 z_dir_space(Vector3 dir){ return Plane3(dir-(dir.dot(frame.col(2)))*frame.col(2),center_before ); } 
     
 public:   
-    FrameController(Vector3 center):Controller(center){
-        /// Init reference frame
-        frame.setIdentity(3,3);   
-        /// This will be set when it's added to the master controller
+    static FrameController& New(const Vector3& center){
+        return New(center, Eigen::Matrix3d::Identity(3,3));
+    }
+
+    static FrameController& New(const Vector3& center, const Eigen::Matrix3d& matrix){
+        FrameController* THIS = new FrameController(center);
+        THIS->frame = matrix; 
+        THIS->frame4.setIdentity(3,3);
+        THIS->frame4.topLeftCorner(3,3) = THIS->frame;    
+        return *THIS;
+    }
+
+    FrameController(const Vector3& center):Controller(center){
+        _scale = 1;
+        no_y = false;
+        no_z = false;
+        this->frame.setIdentity(3,3);
+        this->frame4.setIdentity(3,3);
         this->_drawArea = NULL;
-    }   
+    }
+    
+public:
+    FrameController& scale(double val){ this->_scale = val; return *this; }
+    FrameController& no_Z(){ no_z = true; return *this; }
+    FrameController& no_Y(){ no_y = true; return *this; }
     
 private:
     void draw_arrow(){
@@ -235,18 +267,20 @@ private:
         if(withname) glPopName();
     }
     void draw_xaxis(bool withname=false){
+        glColor3f(1.0,.0,0.0);
         if(withname) glPushName(XAXIS);
             glPushMatrix();
-                glColor3f(1.0,.0,0.0);
-                glRotated(90,0,1,0); 
+                glMultMatrixd(frame4.data());               
+                glRotated(90,0,1,0);
                 draw_arrow();
             glPopMatrix();
         if(withname) glPopName();        
     }
     void draw_yaxis(bool withname=false){
+        glColor3f(0.0,1.0,0.0);
         if(withname) glPushName(YAXIS);
             glPushMatrix();
-                glColor3f(0.0,1.0,0.0);
+                glMultMatrixd(frame4.data()); 
                 glRotated(90,1,0,0); 
                 draw_arrow();
             glPopMatrix();
@@ -255,6 +289,7 @@ private:
     void draw_zaxis(bool withname=false){
         if(withname) glPushName(ZAXIS);
             glPushMatrix();
+                glMultMatrixd(frame4.data());               
                 glColor3f(0.0,0.0,1.0);
                 draw_arrow();
             glPopMatrix();
@@ -265,10 +300,11 @@ private:
         glColor3f(0.8f,0.8f,0.8f);
         glPushMatrix();
             glTranslated(center()[0], center()[1], center()[2]);
+            glScaled(_scale,_scale,_scale); 
             draw_sphere(withnames);
             draw_xaxis(withnames);
-            draw_yaxis(withnames);
-            draw_zaxis(withnames);
+            if(!no_y) draw_yaxis(withnames);
+            if(!no_z) draw_zaxis(withnames);
         glPopMatrix();
     }
     
