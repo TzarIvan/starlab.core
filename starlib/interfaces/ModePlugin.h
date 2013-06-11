@@ -45,6 +45,12 @@ public:
     virtual void drawWithNames(){}
 /// @} 
 
+/// @{ @name Selection events (optional)
+public:
+    virtual void endSelection(const QPoint&){}
+    virtual void postSelection(const QPoint&){}
+/// @}
+
 /// @{ @name User Input Callbacks (optional)
 public: 
     virtual bool mousePressEvent        (QMouseEvent* ) { return false; }

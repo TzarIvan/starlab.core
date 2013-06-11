@@ -3,7 +3,8 @@
 #include <QString>
 #include <QObject>
 #include <QColor>
-#include "Eigen/Geometry"
+#include <Eigen/Geometry>
+#include <Eigen/StdVector>
 #include "starlib_global.h"
 
 /// @{ forward

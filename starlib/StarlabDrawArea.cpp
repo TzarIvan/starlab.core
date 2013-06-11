@@ -242,6 +242,20 @@ void DrawArea::drawWithNames(){
         mainWindow()->getModePlugin()->drawWithNames();
 }
 
+void DrawArea::endSelection(const QPoint & p)
+{
+    if(mainWindow()->hasModePlugin())
+        mainWindow()->getModePlugin()->endSelection(p);
+    else
+        QGLViewer::endSelection(p);
+}
+
+void DrawArea::postSelection(const QPoint & p)
+{
+    if(mainWindow()->hasModePlugin())
+        mainWindow()->getModePlugin()->postSelection(p);
+}
+
 DrawArea::~DrawArea(){
     // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
     clear();

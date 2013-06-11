@@ -230,7 +230,7 @@ private:
     void draw_sphere(bool withname=false){
         static GLUquadric* quadric = gluNewQuadric();        
         if(withname) glPushName(SPHERE);
-            glColor3f(.9,.9,.9);
+            glColor3f(.9f,.9f,.9f);
             gluSphere(quadric, 0.08, 10, 10);
         if(withname) glPopName();
     }
@@ -262,7 +262,7 @@ private:
     }
     
     void _draw(bool withnames){
-        glColor3f(0.8,0.8,0.8);
+        glColor3f(0.8f,0.8f,0.8f);
         glPushMatrix();
             glTranslated(center()[0], center()[1], center()[2]);
             draw_sphere(withnames);

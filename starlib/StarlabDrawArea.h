@@ -70,6 +70,14 @@ private:
 signals:
     void drawWithNamesNeeded();
 /// @}
+
+////// @{ Selection functions
+private:
+    void endSelection(const QPoint&);
+    void postSelection(const QPoint&);
+public:
+    void defaultEndSelection(const QPoint&p){ QGLViewer::endSelection(p); } ///< Needed in Mode plugins
+/// @}
     
 public:
     /// @see qglviewer::convertClickToLine(...). This is "EIGEN" compatible
