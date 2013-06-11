@@ -221,11 +221,11 @@ public:
     }
 
     static FrameController& New(const Vector3& center, const Eigen::Matrix3d& matrix){
-        FrameController* THIS = new FrameController(center);
-        THIS->frame = matrix; 
-        THIS->frame4.setIdentity(3,3);
-        THIS->frame4.topLeftCorner(3,3) = THIS->frame;    
-        return *THIS;
+        FrameController* me = new FrameController(center);
+        me->frame = matrix;
+        me->frame4.setIdentity(3,3);
+        me->frame4.topLeftCorner(3,3) = me->frame;
+        return *me;
     }
 
     FrameController(const Vector3& center):Controller(center){
