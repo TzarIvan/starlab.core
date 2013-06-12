@@ -6,7 +6,7 @@
 
 namespace Starlab{
 
-class Controller : public QObject{
+class STARLIB_EXPORT Controller : public QObject{
     Q_OBJECT
     friend class ControllerManager;
     
@@ -57,11 +57,15 @@ public:
 public:
     virtual void mousePressEvent(QMouseEvent* event){ Q_UNUSED(event) }
     virtual void mouseReleaseEvent(QMouseEvent* event){ Q_UNUSED(event) }
-    virtual void mouseMoveEvent(QMouseEvent* event){ Q_UNUSED(event) }    
+    virtual void mouseMoveEvent(QMouseEvent* event){ Q_UNUSED(event) }
+
+    /// See http://eigen.tuxfamily.org/dox/TopicStructHavingEigenMembers.html
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 
-class ControllerManager{
+class STARLIB_EXPORT ControllerManager{
 protected:
     friend class Controller;
     /// A list of controllers
@@ -184,7 +188,7 @@ public:
 
 // picking with LINE/POINT does not work well :( :(
 // glBegin(GL_LINES); glVertex3d(0,0,0); glVertex3d(1.0,0,0); glEnd();            
-class FrameController : public Controller{
+class STARLIB_EXPORT FrameController : public Controller{
     Q_OBJECT
     
     /// Numeric ID of portions used for picking
@@ -386,6 +390,10 @@ public:
         /// Update the visualization
         drawArea()->updateGL();
     }
+
+    /// See http://eigen.tuxfamily.org/dox/TopicStructHavingEigenMembers.html
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } /// namespace
