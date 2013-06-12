@@ -186,7 +186,6 @@ public:
 // glBegin(GL_LINES); glVertex3d(0,0,0); glVertex3d(1.0,0,0); glEnd();            
 class FrameController : public Controller{
     Q_OBJECT
-    friend class ControllerModePlugin;
     
     /// Numeric ID of portions used for picking
     enum NAMES {SPHERE,XAXIS,YAXIS,ZAXIS};
