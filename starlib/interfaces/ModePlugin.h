@@ -42,13 +42,18 @@ public:
 /// @{ @name Rendering events (optional)
 public: 
     virtual void decorate(){}
-    virtual void drawWithNames(){}
 /// @} 
 
 /// @{ @name Selection events (optional)
 public:
-    virtual void endSelection(const QPoint&){}
-    virtual void postSelection(const QPoint&){}
+    /// @see QGLViewer::drawWithNames()
+    virtual void drawWithNames(){}
+    /// Override to change QGLViewer's default behavior
+    /// @return false (i.e. not filtered) causes QGLViewer::endSelection to be called 
+    virtual bool endSelection(const QPoint& point){ Q_UNUSED(point); return false; }
+    /// Override to change QGLViewer's default behavior
+    /// @return false (i.e. not filtered) causes QGLViewer::endSelection to be called 
+    virtual bool postSelection(const QPoint& point){ Q_UNUSED(point); return false; }
 /// @}
 
 /// @{ @name User Input Callbacks (optional)

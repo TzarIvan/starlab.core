@@ -48,7 +48,7 @@ DrawArea::DrawArea(MainWindow* mainWindow)
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
     /// Determines whether events are forwarded to Mode plugins
     installEventFilter(this);
-    
+        
     /// @todo restore trackball
     // settings()->setDefault("StarlabDrawArea/showtrackball",false);
 
@@ -242,18 +242,24 @@ void DrawArea::drawWithNames(){
         mainWindow()->getModePlugin()->drawWithNames();
 }
 
-void DrawArea::endSelection(const QPoint & p)
-{
-    if(mainWindow()->hasModePlugin())
-        mainWindow()->getModePlugin()->endSelection(p);
-    else
-        QGLViewer::endSelection(p);
+void DrawArea::endSelection(const QPoint & p){
+    /// We are forced to to this as QGLViewer has these methods as "protected"
+    /// so they will never be visible in ModePlugin
+    if(mainWindow()->hasModePlugin()){
+        bool filtered = mainWindow()->getModePlugin()->endSelection(p);
+        if(filtered) return;
+    } 
+    QGLViewer::endSelection(p);
 }
 
-void DrawArea::postSelection(const QPoint & p)
-{
-    if(mainWindow()->hasModePlugin())
-        mainWindow()->getModePlugin()->postSelection(p);
+void DrawArea::postSelection(const QPoint & p){
+    /// We are forced to to this as QGLViewer has these methods as "protected"
+    /// so they will never be visible in ModePlugin
+    if(mainWindow()->hasModePlugin()){
+        bool filtered = mainWindow()->getModePlugin()->postSelection(p);
+        if(filtered) return;
+    }
+    QGLViewer::postSelection(p);
 }
 
 DrawArea::~DrawArea(){

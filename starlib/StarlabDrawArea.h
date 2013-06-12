@@ -22,7 +22,7 @@ namespace Starlab{
 /// @brief The QGLViewer based visualization window
 class STARLIB_EXPORT DrawArea : public QGLViewer{
     Q_OBJECT
-
+    
 /// @{ static instancing
 private:
     static DrawArea* _staticInstance;
@@ -64,19 +64,12 @@ public:
     void draw_models();       ///< Draws ONLY the models in the scene (no decorators, no plugins, etc...) 
 /// @}
 
-/// @{ picking
+/// @{ Selection / Picking
 private:
     void drawWithNames();     ///< Draws to the symbols buffer
-signals:
-    void drawWithNamesNeeded();
-/// @}
-
-////// @{ Selection functions
 private:
     void endSelection(const QPoint&);
     void postSelection(const QPoint&);
-public:
-    void defaultEndSelection(const QPoint&p){ QGLViewer::endSelection(p); } ///< Needed in Mode plugins
 /// @}
     
 public:
