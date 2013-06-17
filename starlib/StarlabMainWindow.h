@@ -27,9 +27,10 @@ class STARLIB_EXPORT MainWindow : public QMainWindow{
     
 
     
-    /// @{ Core
+/// @{ Core
 public:
     MainWindow(Application *_application);
+    ~MainWindow();
 public: 
     Application* application(){ return _application; }
     /// The global settings of the application

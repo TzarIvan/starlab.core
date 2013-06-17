@@ -41,8 +41,8 @@ void DrawArea::update(){
     updateGL();
 }
 
-DrawArea::DrawArea(MainWindow* mainWindow) 
-    : _mainWindow(mainWindow){
+DrawArea::DrawArea(MainWindow* parent) 
+    : QGLViewer(parent), _mainWindow(parent){
 
     /// When document changes, refresh the rendering
     connect(document(), SIGNAL(hasChanged()), this, SLOT(update()));
@@ -95,6 +95,11 @@ DrawArea::DrawArea(MainWindow* mainWindow)
     /// Saves a static instance
     Q_ASSERT(DrawArea::_staticInstance==NULL);
     DrawArea::_staticInstance = this;
+}
+
+DrawArea::~DrawArea(){
+    qDebug() << "~DrawArea()";
+    clear();
 }
 
 void DrawArea::resetViewport(){
@@ -260,11 +265,6 @@ void DrawArea::postSelection(const QPoint & p){
         if(filtered) return;
     }
     QGLViewer::postSelection(p);
-}
-
-DrawArea::~DrawArea(){
-    // qDebug() << "StarlabDrawArea::~StarlabDrawArea()";
-    clear();
 }
 
 void DrawArea::setRenderer(Model *model, QString name){

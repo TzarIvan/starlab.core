@@ -11,6 +11,7 @@
 
 #include "GuiPlugin.h"
 #include "StarlabDrawArea.h"
+#include "ModePlugin.h"
 
 using namespace Starlab;
 
@@ -143,6 +144,15 @@ MainWindow::MainWindow(Application* _application) :
 
     /// Update the UI for the first time (e.g. load mode plugins into UI)
     update();
+
+    /// Delete MainWindow when it's closed    
+    this->setAttribute(Qt::WA_DeleteOnClose, true);
+}
+
+MainWindow::~MainWindow(){
+    // qDebug() << "~MainWindow()";
+    if(hasModePlugin())
+        getModePlugin()->destroy();
 }
 
 void MainWindow::closeEvent(QCloseEvent*){

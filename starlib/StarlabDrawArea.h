@@ -35,7 +35,8 @@ public:
 /// @{ core
 public:
     /// Constructor
-    DrawArea(MainWindow* mainWindow);
+    /// @par parent 
+    DrawArea(MainWindow* parent);
     /// Polymorphic destructor
     ~DrawArea();
 private:
