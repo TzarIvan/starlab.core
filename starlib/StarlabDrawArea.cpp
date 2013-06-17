@@ -98,7 +98,7 @@ DrawArea::DrawArea(MainWindow* parent)
 }
 
 DrawArea::~DrawArea(){
-    qDebug() << "~DrawArea()";
+    // qDebug() << "~DrawArea()";
     clear();
 }
 
