@@ -59,7 +59,7 @@ void gui_mode::update(){
     mainWindow()->modeToolbar->setVisible(showtoolbar);
 }
 
-void gui_mode::enterState(STATE state, QAction* action){
+void gui_mode::enterState(STATE state, QAction* action /*=NULL*/){
     switch(state){
     case DEFAULT: 
         // qDebug() << "[DEFAULT]";
@@ -99,6 +99,8 @@ void gui_mode::enterState(STATE state, QAction* action){
 
 void gui_mode::actionClicked(QAction *action){
     // qDebug() << QString("gui_mode::actionClicked(%1)").arg(action->text());
+    ModePlugin* plugin = qobject_cast<ModePlugin*>( action->parent() );
+    Q_ASSERT(plugin!=NULL);
     
     switch(state){
     case DEFAULT:
@@ -107,13 +109,19 @@ void gui_mode::actionClicked(QAction *action){
             return;
         /// ---------------- CREATING --------------------
         if(action!=defaultModeAction){
-            mainWindow()->setModePlugin( (ModePlugin*) action->parent() );
-            mainWindow()->getModePlugin()->create();
-            mainWindow()->resumeModePlugin();
-            drawArea()->updateGL();
-            lastActiveModeAction = action;
-            enterState(MODE,action);
-            showMessage("Creating plugin: '%s'",qPrintable(action->text()));
+            try{
+                plugin->create();
+                /// No exception? set it to GUI
+                mainWindow()->setModePlugin(plugin);
+                mainWindow()->resumeModePlugin();
+                drawArea()->updateGL();
+                lastActiveModeAction = action;
+                enterState(MODE,action);
+                showMessage("Creating plugin: '%s'",qPrintable(action->text()));
+            } catch(...) {
+                action->setChecked(false);
+                throw;
+            }
             return;              
         }
         break;
