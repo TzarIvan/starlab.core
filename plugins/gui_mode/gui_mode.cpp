@@ -107,13 +107,13 @@ void gui_mode::actionClicked(QAction *action){
     case DEFAULT:
         /// ---------------- IGNORING --------------------
         if(action==defaultModeAction)
-            return;
+            break;
         /// ---------------- CREATING --------------------
         if(action!=defaultModeAction){
             plugin = qobject_cast<ModePlugin*>( action->parent() );
             /// We can only switch to a mode plugin
             if(plugin==NULL) 
-                return;
+                break;
             try{
                 plugin->create();
                 /// No exception? set it to GUI
@@ -126,8 +126,7 @@ void gui_mode::actionClicked(QAction *action){
             } catch(...) {
                 action->setChecked(false);
                 throw;
-            }
-            return;              
+            } 
         }
         break;
     case MODE: 
@@ -139,7 +138,7 @@ void gui_mode::actionClicked(QAction *action){
             lastActiveModeAction = NULL;
             enterState(DEFAULT);
             showMessage("Terminated plugin: '%s'",qPrintable(action->text()));
-            return;            
+            break;            
         }
         /// ---------------- SUSPENSION --------------------
         if(action==defaultModeAction){
@@ -149,7 +148,7 @@ void gui_mode::actionClicked(QAction *action){
             pluginToSuspend->suspend();
             enterState(SUSPENDED,actionToSuspend);
             showMessage("Suspended plugin: '%s'",qPrintable(actionToSuspend->text()));
-            return;
+            break;
         }
         break;
     case SUSPENDED: 
@@ -161,6 +160,9 @@ void gui_mode::actionClicked(QAction *action){
         showMessage("Resumed plugin: '%s'",qPrintable(lastActiveModeAction->text()));
         break;
     }
+    
+    /// Transition state finished. Update GUI
+    drawArea()->updateGL();
 }
 
 void gui_mode::documentChanged(){  
