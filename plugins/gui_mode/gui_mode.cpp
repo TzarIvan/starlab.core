@@ -188,6 +188,8 @@ void gui_mode::documentChanged(){
         /// results in the plugin termination
         if(!iMode->documentChanged())
             iMode->destroy();
+        mainWindow()->removeModePlugin();
+        lastActiveModeAction = NULL;
         enterState(DEFAULT);
         return;    
     }
