@@ -27,3 +27,10 @@ namespace Starlab{
     typedef Eigen::Hyperplane<double,3> Plane3;
     typedef Eigen::ParametrizedLine<double,3> Ray3;
 }
+
+/// Basic render plugins names
+#include <QString>
+namespace SHADING{
+    const QString FLAT   = "Flat Shading";
+    const QString SMOOTH = "Smooth Shading";
+}
