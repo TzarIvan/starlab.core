@@ -179,9 +179,8 @@ void gui_render::liveupdate_selectedModelColor(QColor color){
 void gui_render::triggerRenderModeAction(QAction* action){
     // qDebug("gui_render::triggerRenderModeAction(\"%s\")",qPrintable(action->text()));
     Model* model = document()->selectedModel();
-    document()->pushBusy();
-        RenderPlugin* plugin = pluginManager()->getRenderPlugin(action->text());
-        model->setRenderer(plugin);
-    document()->popBusy();
+    RenderPlugin* plugin = pluginManager()->getRenderPlugin(action->text());
+    model->setRenderer(plugin);
+    drawArea()->updateGL();    
 }
 
