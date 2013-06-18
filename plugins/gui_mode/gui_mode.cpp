@@ -99,8 +99,9 @@ void gui_mode::enterState(STATE state, QAction* action /*=NULL*/){
 
 void gui_mode::actionClicked(QAction *action){
     // qDebug() << QString("gui_mode::actionClicked(%1)").arg(action->text());
-    ModePlugin* plugin = qobject_cast<ModePlugin*>( action->parent() );
-    Q_ASSERT(plugin!=NULL);
+    
+    /// @internal Only used by "CREATE" but cannot declare in a switch statement
+    ModePlugin* plugin = NULL; 
     
     switch(state){
     case DEFAULT:
@@ -109,6 +110,10 @@ void gui_mode::actionClicked(QAction *action){
             return;
         /// ---------------- CREATING --------------------
         if(action!=defaultModeAction){
+            plugin = qobject_cast<ModePlugin*>( action->parent() );
+            /// We can only switch to a mode plugin
+            if(plugin==NULL) 
+                return;
             try{
                 plugin->create();
                 /// No exception? set it to GUI
