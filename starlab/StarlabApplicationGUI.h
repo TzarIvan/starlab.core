@@ -23,11 +23,11 @@ public:
         } catch (StarlabException& e){        
             QString title = "Unmanaged StarLab Exception";
             QString message = e.message();
-            int retval = QMessageBox::critical(NULL, title, message, QMessageBox::Abort|QMessageBox::Ignore);
+            int retval = QMessageBox::critical(NULL, title, message, QMessageBox::Ignore|QMessageBox::Abort);
             if( retval == QMessageBox::Abort ){
-                qCritical() << "Terminated because aborted exception";
+                qCritical() << "Terminated because user aborted on raised exception";
                 // this->closeAllWindows();
-                this->exit(-1);
+                this->exit(0);
             }
             /// Restore pointer if it was changed
             qApp->restoreOverrideCursor();
