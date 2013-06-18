@@ -99,7 +99,8 @@ DrawArea::DrawArea(MainWindow* parent)
 
 DrawArea::~DrawArea(){
     // qDebug() << "~DrawArea()";
-    clear();
+    qDeleteAll(renderObjectList.begin(), renderObjectList.end());
+    renderObjectList.clear();
 }
 
 void DrawArea::resetViewport(){
