@@ -127,8 +127,8 @@ defineTest(StarlabTemplate){
         OTHER_FILES *= *.prf
         # even though it's not a plugin this removes the *.0.0.dylib links
         unix:CONFIG += plugin
-        # make mac libraries behave like in windows
-        mac:LIBS += -install_name @executable_path/lib"$$LIBNAME".dylib
+        # configures rpath
+        mac:QMAKE_LFLAGS += -install_name @executable_path/lib"$$LIBNAME".dylib
         # import / export directive in win32
         win32:DEFINES *= DYNAMIC_$$upper($$LIBNAME)
     }
@@ -149,7 +149,10 @@ defineTest(StarlabTemplate){
             BUNDLENAME = Starlab.app
             DESTDIR=$$STARLABPREFIX
         }
+        # PLUGINS WILL BE CLEARED ON STARLAB CLEAR
         QMAKE_CLEAN += $$PLUGINSPATH/*
+        # App will find libraries in executable folder (NOT WORKING!)
+        # mac:QMAKE_LFLAGS += -Wl,-rpath ./
     }
 
     equals(STARLAB_TEMPLATE, "modelprf"){
@@ -168,7 +171,9 @@ defineTest(StarlabTemplate){
         CONFIG += console
         CONFIG -= app_bundle
         TEMPLATE = app
-        DESTDIR = $$EXECUTABLEPATH
+        DESTDIR = $$EXECUTABLEPATH        
+        # App will find libraries in executable folder (NOT WORKING!)
+        # mac:QMAKE_LFLAGS += -Wl,-rpath ./
     }
 
     # OpenMP
