@@ -133,7 +133,7 @@ void gui_mode::actionClicked(QAction *action){
         /// ---------------- TERMINATION --------------------
         if(action==lastActiveModeAction){
             Q_ASSERT(mainWindow()->getModePlugin()!=NULL);
-            mainWindow()->getModePlugin()->destroy();
+            mainWindow()->getModePlugin()->destroy_and_signal();
             mainWindow()->removeModePlugin();
             lastActiveModeAction = NULL;
             enterState(DEFAULT);
@@ -180,7 +180,7 @@ void gui_mode::documentChanged(){
         /// If plugin didn't specify how to perform the update, simply 
         /// destroy it and re-create it from scratch.
         if(!iMode->documentChanged()){
-            iMode->destroy();
+            iMode->destroy_and_signal();
             iMode->create();
         }
         return;
@@ -189,7 +189,7 @@ void gui_mode::documentChanged(){
         /// On the other hand, when plugin is suspended, change in document just 
         /// results in the plugin termination
         if(!iMode->documentChanged())
-            iMode->destroy();
+            iMode->destroy_and_signal();
         mainWindow()->removeModePlugin();
         lastActiveModeAction = NULL;
         enterState(DEFAULT);

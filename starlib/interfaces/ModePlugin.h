@@ -9,6 +9,8 @@
  * @note If you plan to create a widget you should use a ModePluginDockWidget
  */
 class ModePlugin : public StarlabPlugin {
+    Q_OBJECT
+    
 public: 
 /// @brief can the plugin be used?
 virtual bool isApplicable() = 0;
@@ -21,12 +23,20 @@ public:
     /// Called when the user closes the edit
     /// Automatically closes the widget
     /// @todo is suspend a close?
+    /// @internal never use this in the starlab backend!!
     virtual void destroy(){}
 
     /// Called whenever the document is changed 
     /// If you return false (or if you don't overload this function) we will 
     /// just call ModePlugin::destroy() and ModePlugin::create() in succession.
     virtual bool documentChanged(){ return false; }
+    
+private:
+    friend class Starlab::MainWindow;
+    friend class gui_mode;
+    void destroy_and_signal(){ destroy(); emit destroyed(); }
+signals:
+    void destroyed();
 /// @} 
 
 /// @{ @name Support for suspension/resume
@@ -41,7 +51,12 @@ public:
 
 /// @{ @name Rendering events (optional)
 public: 
-    virtual void decorate(){}
+    /// Overload this method to draw *additionally* to the system renderer
+    /// @internal never use this in the starlab backend!!
+    virtual void decorate(){ emit decorateNeeded(); }
+signals:
+    /// When gui needs decoration this signal will be called
+    void decorateNeeded();
 /// @} 
 
 /// @{ @name Selection events (optional)
@@ -56,7 +71,7 @@ public:
     virtual bool postSelection(const QPoint& point){ Q_UNUSED(point); return false; }
 /// @}
 
-/// @{ @name User Input Callbacks (optional)
+/// @{ @name User input callbacks (optional, return value tells whether you *filtered* the event)
 public: 
     virtual bool mousePressEvent        (QMouseEvent* ) { return false; }
     virtual bool mouseMoveEvent         (QMouseEvent* ) { return false; }

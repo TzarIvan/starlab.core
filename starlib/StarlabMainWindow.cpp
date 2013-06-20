@@ -152,7 +152,7 @@ MainWindow::MainWindow(Application* _application) :
 MainWindow::~MainWindow(){
     // qDebug() << "~MainWindow()";
     if(hasModePlugin())
-        getModePlugin()->destroy();
+        getModePlugin()->destroy_and_signal();
 }
 
 void MainWindow::closeEvent(QCloseEvent*){
