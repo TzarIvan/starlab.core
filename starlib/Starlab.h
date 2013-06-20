@@ -1,4 +1,6 @@
 #pragma once
+#include "Eigen/Dense"
+#include "StarlabException.h"
 
 /** 
  * @defgroup starcore Starlab Core Classes
@@ -20,12 +22,16 @@ namespace Starlab{
 class RichParameterSet;
 
 
-/// In Starlab, Math is managed by EIGEN
-#include "Eigen/Dense"
+/// In Starlab, Math is managed by EIGEN. EIGEN types are registered by Qt
+/// in by something like "qRegisterMetaType<BBox3>("BBox3");" before being 
+/// able to be used in Signal/Slots. The registration is done in StarlabApplication().
+
 namespace Starlab{
+    typedef double Scalar;
     typedef Eigen::Vector3d Vector3;
-    typedef Eigen::Hyperplane<double,3> Plane3;
-    typedef Eigen::ParametrizedLine<double,3> Ray3;
+    typedef Eigen::Hyperplane<Scalar,3> Plane3;
+    typedef Eigen::ParametrizedLine<Scalar,3> Ray3;
+    typedef Eigen::AlignedBox3d BBox3;
 }
 
 /// Basic render plugins names
