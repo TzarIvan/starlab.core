@@ -1,4 +1,5 @@
 #pragma once
+#include "Starlab.h"
 #include "Model.h"
 #include "StarlabException.h"
 #include "starlib_global.h"
@@ -61,7 +62,7 @@ public:
     /// Basic document constructor
     Document();
     /// Compute bounding box of all the elements in the scene
-    Eigen::AlignedBox3d bbox();
+    BBox3 bbox();
     /// Add a model (if it's only one becomes selection)
     void addModel(Model* m);
     /// Remove a model, updates selection if necessary
