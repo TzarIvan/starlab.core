@@ -115,15 +115,16 @@ void gui_mode::actionClicked(QAction *action){
             if(plugin==NULL) 
                 break;
             try{
-                plugin->create();
+                showMessage("Creating plugin: '%s'",qPrintable(action->text()));
+                plugin->__internal_create();
                 /// No exception? set it to GUI
                 mainWindow()->setModePlugin(plugin);
                 mainWindow()->resumeModePlugin();
                 drawArea()->updateGL();
                 lastActiveModeAction = action;
                 enterState(MODE,action);
-                showMessage("Creating plugin: '%s'",qPrintable(action->text()));
             } catch(...) {
+                showMessage("Creating plugin: '%s' FAILED!",qPrintable(action->text()));
                 action->setChecked(false);
                 throw;
             } 
@@ -133,7 +134,7 @@ void gui_mode::actionClicked(QAction *action){
         /// ---------------- TERMINATION --------------------
         if(action==lastActiveModeAction){
             Q_ASSERT(mainWindow()->getModePlugin()!=NULL);
-            mainWindow()->getModePlugin()->destroy_and_signal();
+            mainWindow()->getModePlugin()->__internal_destroy();
             mainWindow()->removeModePlugin();
             lastActiveModeAction = NULL;
             enterState(DEFAULT);
@@ -180,8 +181,8 @@ void gui_mode::documentChanged(){
         /// If plugin didn't specify how to perform the update, simply 
         /// destroy it and re-create it from scratch.
         if(!iMode->documentChanged()){
-            iMode->destroy_and_signal();
-            iMode->create();
+            iMode->__internal_destroy();
+            iMode->__internal_create();
         }
         return;
     /// There was a suspended plugin
@@ -189,7 +190,7 @@ void gui_mode::documentChanged(){
         /// On the other hand, when plugin is suspended, change in document just 
         /// results in the plugin termination
         if(!iMode->documentChanged())
-            iMode->destroy_and_signal();
+            iMode->__internal_destroy();
         mainWindow()->removeModePlugin();
         lastActiveModeAction = NULL;
         enterState(DEFAULT);

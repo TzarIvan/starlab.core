@@ -30,13 +30,25 @@ public:
     /// If you return false (or if you don't overload this function) we will 
     /// just call ModePlugin::destroy() and ModePlugin::create() in succession.
     virtual bool documentChanged(){ return false; }
-    
+protected:
+    /// Inside your create initialize any QObject subclass with this parent for auto memory management
+    /// @internal I use QWidget instead of QObject so that I can automate Widget memory management as well
+    QWidget* parent;
+    ModePlugin() :parent(NULL){}
 private:
     friend class Starlab::MainWindow;
     friend class gui_mode;
-    void destroy_and_signal(){ destroy(); emit destroyed(); }
-signals:
-    void destroyed();
+    void __internal_create(){
+        Q_ASSERT(parent==NULL);
+        parent = new QWidget(mainWindow());
+        create();
+    }
+    void __internal_destroy(){ 
+        Q_ASSERT(parent!=NULL);
+        delete parent;
+        parent = NULL;
+        destroy();
+    }
 /// @} 
 
 /// @{ @name Support for suspension/resume
