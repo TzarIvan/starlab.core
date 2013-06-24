@@ -20,6 +20,7 @@ system(qmake -set KDTREEMATLAB  $$PWD/external/kdtree-matlab/config.prf)
 system(qmake -set OCTREE        $$PWD/external/octree/config.prf)
 system(qmake -set EIGENPATH     $$PWD/external/eigen-3.1.2)
 system(qmake -set OPENNI        $$PWD/external/openni-2.1alpha/openni.prf)
+system(qmake -set CGAL          $$PWD/external/cgal-4.2/cgal.prf)
 
 
 #--- THREE CORE BUILD APP/LIBRARIES
