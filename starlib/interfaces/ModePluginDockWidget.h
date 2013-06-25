@@ -9,10 +9,11 @@ class ModePluginDockWidget : public QDockWidget{
 
 /// @{ constructors: similar to QDockWidget but parent forced to be starlab main window
 public:
-    explicit ModePluginDockWidget(const QString &title, Starlab::MainWindow* parent = 0, Qt::WindowFlags flags = 0):
-        QDockWidget(title, (QWidget*) parent, flags), _mainWindow(parent) { setup(); }
-    explicit ModePluginDockWidget(Starlab::MainWindow *parent = 0, Qt::WindowFlags flags = 0):
-        QDockWidget((QWidget*) parent,flags), _mainWindow(parent){ setup(); }
+    explicit ModePluginDockWidget(const QString &title, StarlabMainWindow* mainWindow, QWidget* parent=0, Qt::WindowFlags flags = 0):
+        QDockWidget(title, (QWidget*) parent, flags), _mainWindow(mainWindow) { 
+        setup(); 
+    }
+    ~ModePluginDockWidget(){ qDebug() << "destroyed"; }
 private:
     Starlab::MainWindow * const _mainWindow;
 private:
