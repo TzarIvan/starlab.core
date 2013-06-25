@@ -198,5 +198,6 @@ public:
 } // namespace
 
 typedef Starlab::MainWindow StarlabMainWindow;
+typedef Starlab::MainWindow SMainWindow;
 
 Q_DECLARE_INTERFACE(Starlab::MainWindow, "Starlab::MainWindow/2.0")
