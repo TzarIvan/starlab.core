@@ -8,7 +8,7 @@
  * An example of this plugin is the one that fills the "file" menu and its Save/Load entries.
  * They are used to modularize the structure of the GUI system.
  */
-class GuiPlugin : public StarlabPlugin{
+class STARLIB_EXPORT GuiPlugin : public StarlabPlugin{
 public:
     /// Loads functionalities (menu entries and their logic) into the StarlabMainWindow
     virtual void load() = 0;

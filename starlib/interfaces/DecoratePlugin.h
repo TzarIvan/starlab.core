@@ -5,7 +5,7 @@
  * Decorate your rendering with extra stuff (i.e. normals, selection, etc..)
  * @ingroup stariface 
  */
-class DecoratePlugin : public StarlabPlugin{
+class STARLIB_EXPORT DecoratePlugin : public StarlabPlugin{
 /// @{ DecoratePlugin interface
 public:
     /// Overload it and return a new instance of your plugin    

@@ -8,7 +8,7 @@
  *
  * @note If you plan to create a widget you should use a ModePluginDockWidget
  */
-class ModePlugin : public StarlabPlugin {
+class STARLIB_EXPORT ModePlugin : public StarlabPlugin {
     Q_OBJECT
     
 public: 

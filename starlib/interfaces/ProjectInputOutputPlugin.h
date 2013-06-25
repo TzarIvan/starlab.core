@@ -13,7 +13,7 @@
  * These plugins are responsible for the I/O of a single model.
  * A plugin is associated with one and only one extension.
  */
-class ProjectInputOutputPlugin : public StarlabPlugin{
+class STARLIB_EXPORT ProjectInputOutputPlugin : public StarlabPlugin{
    
 public:
     /// Provide the path of the project to open. Resources (loadModel) to open 

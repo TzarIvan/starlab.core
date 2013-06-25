@@ -14,7 +14,7 @@ class RichParameterSet;
  * 
  * These plugins are responsible for the I/O of a single model.
  */
-class InputOutputPlugin : public StarlabPlugin{
+class STARLIB_EXPORT InputOutputPlugin : public StarlabPlugin{
    
 /// @{ basic interface
 public:

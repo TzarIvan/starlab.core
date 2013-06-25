@@ -2,7 +2,7 @@
 #include "Model.h"
 #include "StarlabPlugin.h"
 
-class FilterPlugin : public StarlabPlugin{
+class STARLIB_EXPORT FilterPlugin : public StarlabPlugin{
 public:
     virtual void applyFilter(RichParameterSet*) = 0;
     virtual void initParameters(RichParameterSet*){}

@@ -4,7 +4,7 @@
 
 /// A specialized version of a mode plugin that uses "GUI Controllers".
 /// These are editable GUI elements with whom the user can interact.
-class ControllerModePlugin : public ModePlugin{
+class STARLIB_EXPORT ControllerModePlugin : public ModePlugin{
 protected:
     Starlab::ControllerManager manager;
     
