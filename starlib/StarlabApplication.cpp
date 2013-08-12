@@ -70,6 +70,9 @@ bool Application::loadModel(QString path, InputOutputPlugin* plugin){
         document()->addModel( newModel ); 
     document()->popBusy();
 
+    /// Set as selected model
+    document()->setSelectedModel( newModel );
+
     document()->emit_resetViewport();
     
     return true;
