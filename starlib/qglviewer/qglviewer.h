@@ -918,7 +918,7 @@ void Viewer::drawWithNames() {
 
 	/*! @name Keyboard customization */
 	//@{
-protected:
+public: // CHANGE: made public to be used with public call 'setShortcut'
 	/*! Defines the different actions that can be associated with a keyboard shortcut using
 	setShortcut().
 
