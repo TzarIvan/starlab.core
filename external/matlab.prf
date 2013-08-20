@@ -15,10 +15,16 @@ macx{
         warning("DYLD_LIBRARY_PATH should point to $$MATLAB/bin/maci64")
         warning("defaulting it to $$MATLAB/bin/maci64")
         warning("NOTE: application might compile but crash on execution!!!")
-        DYLD_LIBRARY_PATH = "$$MATLAB/bin/maci64"
+        error(DYLD_LIBRARY_PATH not specified)
     }
-    LIBS += -L$$DYLD_LIBRARY_PATH
-    LIBS += -leng -lmex -lmat -lmx -lut
+    LIBFOLDER = $$MATLAB/bin/maci64
+    LIBS += /usr/lib/libm.dylib
+    LIBS += $$LIBFOLDER/libeng.dylib
+    LIBS += $$LIBFOLDER/libmat.dylib
+    LIBS += $$LIBFOLDER/libmx.dylib
+    LIBS += $$LIBFOLDER/libut.dylib
+#    LIBS += -L$$MATLAB/bin/maci64
+#    LIBS += -leng -lmat -lmx -lut
 }
 
 win32{
