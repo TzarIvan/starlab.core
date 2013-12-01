@@ -4,7 +4,7 @@ StarlabTemplate(sharedlib)
 # ---------------------------------------------
 # --               EXERNALS                  --
 # ---------------------------------------------
-include(QGLViewer/qglviewer.pri)
+include(qglviewer/qglviewer.pri)
 
 # ---------------------------------------------
 # --           PARAMETER LIBRARY             --
