@@ -1,7 +1,7 @@
 #include "PluginManager.h"
 #include <QObject>
 #include <QRegExp>
-#include <QtScript/QtScript>
+#include <QPluginLoader>
 
 #include "StarlabException.h"
 #include "StarlabSettings.h"
